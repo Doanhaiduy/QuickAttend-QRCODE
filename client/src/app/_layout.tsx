@@ -43,13 +43,14 @@ export default function RootLayout() {
 function RootLayoutNav() {
     return (
         <Stack
-            initialRouteName='(auth)'
+            initialRouteName='onBoarding'
             screenOptions={{
                 headerShown: false,
             }}
         >
             <Stack.Screen name='(auth)' />
             <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+            <Stack.Screen name='onBoarding' options={{ headerShown: false }} />
         </Stack>
     );
 }

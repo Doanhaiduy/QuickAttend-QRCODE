@@ -8,6 +8,7 @@ export default function LoginPage() {
             <Text className='font-inter'>Login Page</Text>
             <Link href={'/register'}>Register</Link>
             <Link href={'/(tabs)'}>Tabs</Link>
+            <Link href={'/onBoarding'}>onBoarding</Link>
         </View>
     );
 }
