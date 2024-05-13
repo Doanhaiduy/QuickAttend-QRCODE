@@ -7,6 +7,7 @@ module.exports = {
             black: '#000000',
             white: '#ffffff',
             transparent: 'transparent',
+            blackText: '#101317',
             primary: {
                 500: '#3085FE',
                 600: '#1E6EE6',
@@ -26,7 +27,9 @@ module.exports = {
                 900: '#404040',
             },
             error: '#FF0000',
+            error2: '#ff7f74',
             success: '#00FF00',
+            success2: '#30beb6',
         },
         fontFamily: {
             sans: ['Inter', 'sans-serif'],
