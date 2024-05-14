@@ -11,7 +11,8 @@ export default function AuthLayout() {
         >
             <Stack.Screen name='onBoarding' />
             <Stack.Screen name='login' />
-            <Stack.Screen name='register' />
+            <Stack.Screen name='signup' />
+            <Stack.Screen name='verification' />
         </Stack>
     );
 }

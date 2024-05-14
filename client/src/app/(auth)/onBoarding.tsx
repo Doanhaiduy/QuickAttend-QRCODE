@@ -5,13 +5,14 @@ import { Redirect, Stack, router } from 'expo-router';
 import ContainerComponent from '@/src/components/ContainerComponent';
 import { appColors } from '@/src/constants/appColors';
 import { appInfos } from '@/src/constants/appInfos';
+import TextComponent from '@/src/components/TextComponent';
 
 export default function OnBoardingScreen() {
     const [index, setIndex] = React.useState(0);
 
     const [isFirstTime, setIsFirstTime] = React.useState(false);
 
-    if (isFirstTime) {
+    if (!isFirstTime) {
         return <Redirect href='/login' />;
     }
 
@@ -69,10 +70,10 @@ export default function OnBoardingScreen() {
                     ]}
                 >
                     <TouchableOpacity onPress={() => router.replace('/login')}>
-                        <Text className='text-gray-600'>Skip</Text>
+                        <TextComponent className='text-gray-600'>Skip</TextComponent>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => (index < 2 ? setIndex(index + 1) : router.replace('/login'))}>
-                        <Text className='text-gray-800 font-bold'>Next</Text>
+                        <TextComponent className='text-gray-800 font-bold'>Next</TextComponent>
                     </TouchableOpacity>
                 </View>
             </View>

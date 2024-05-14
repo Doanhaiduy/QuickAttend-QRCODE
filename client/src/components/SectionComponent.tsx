@@ -7,7 +7,6 @@ interface Props extends React.ComponentProps<typeof View> {
 
 export default function SectionComponent(props: Props) {
     const { children, style } = props;
-    console.log(style);
 
     return (
         <View className='px-5 py-4' style={style}>

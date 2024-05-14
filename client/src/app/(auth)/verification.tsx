@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 
-export default function RegisterPage() {
+export default function VerificationScreen() {
     return (
         <View>
-            <Text>Register Page</Text>
+            <Text>Verification</Text>
         </View>
     );
 }

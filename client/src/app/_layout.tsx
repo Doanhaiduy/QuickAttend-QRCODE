@@ -17,8 +17,8 @@ export default function RootLayout() {
     const [appReady, setAppReady] = useState(false);
 
     const [loaded, error] = useFonts({
-        Inter100: require('../../assets/fonts/Inter-Thin.ttf'),
         Inter: require('../../assets/fonts/Inter-Regular.ttf'),
+        Inter100: require('../../assets/fonts/Inter-Thin.ttf'),
         Inter500: require('../../assets/fonts/Inter-Medium.ttf'),
         Inter600: require('../../assets/fonts/Inter-SemiBold.ttf'),
         Inter700: require('../../assets/fonts/Inter-Bold.ttf'),

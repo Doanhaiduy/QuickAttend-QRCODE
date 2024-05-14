@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
+import TextComponent from './TextComponent';
 
 interface Props extends React.ComponentProps<typeof View> {
     children: React.ReactNode;
@@ -37,7 +38,7 @@ export default function ContainerComponent(props: Props) {
     const Header = back ? (
         <View className='flex-row items-center py-4 flex-1 justify-between '>
             <Ionicons name='chevron-back' size={24} color='black' onPress={onBack} />
-            <Text className='text-lg font-bold'>{title}</Text>
+            <TextComponent className='text-lg font-bold'>{title}</TextComponent>
             <Ionicons name='chevron-back' size={24} color='transparent' />
         </View>
     ) : null;

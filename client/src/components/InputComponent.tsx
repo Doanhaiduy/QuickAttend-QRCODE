@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { appColors } from '../constants/appColors';
 import clsx from 'clsx';
+import TextComponent from './TextComponent';
 
 interface Props {
     placeholder?: string;
@@ -63,16 +64,17 @@ export default function InputComponent(props: Props) {
                         onEndEditing={onEnd}
                         onFocus={onFocus}
                         onBlur={onBlur}
-                        secureTextEntry={isPassword && isShowPassword}
+                        secureTextEntry={isPassword && !isShowPassword}
                         editable={!isDisabled}
                         keyboardType={type}
                         numberOfLines={numberOfLines}
                         multiline={multiline}
-                        className='flex-1 text-sm text-blackText'
+                        placeholderTextColor={'#A1A1A1'}
+                        className='flex-1 text-sm text-blackText placeholder:text-blackText'
                     />
                     {isPassword ? (
                         <Pressable className='pl-2' onPress={() => setIsShowPassword(!isShowPassword)}>
-                            <Ionicons name={isShowPassword ? 'eye-off' : 'eye'} size={24} color={appColors.text} />
+                            <Ionicons name={isShowPassword ? 'eye' : 'eye-off'} size={24} color={appColors.text} />
                         </Pressable>
                     ) : (
                         value && (
@@ -83,7 +85,7 @@ export default function InputComponent(props: Props) {
                     )}
                 </View>
             </View>
-            {err && <Text className='text-error text-left text-[11px] ml-2'>{err}</Text>}
+            {err && <TextComponent className='text-error text-left text-[11px] ml-2'>{err}</TextComponent>}
         </View>
     );
 }
