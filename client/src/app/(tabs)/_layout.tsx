@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
+import { Link, Redirect, Tabs } from 'expo-router';
+import { ActivityIndicator, ImageBackground, Text, View } from 'react-native';
 
 function TabBarIcon(props: { name: React.ComponentProps<typeof FontAwesome>['name']; color: string }) {
     return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
 }
 
 export default function TabLayout() {
+    const [isLogin, setIsLogin] = React.useState(false);
+
+    if (!isLogin) {
+        return <Redirect href={'/onBoarding'} />;
+    }
     return (
         <Tabs
             screenOptions={{

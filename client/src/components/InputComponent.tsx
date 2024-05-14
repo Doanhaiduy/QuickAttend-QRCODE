@@ -55,7 +55,7 @@ export default function InputComponent(props: Props) {
                 >
                     {label}
                 </Text>
-                <View className='flex-1 flex-row'>
+                <View className='flex-1 flex-row bg-white'>
                     <TextInput
                         placeholder={placeholder}
                         value={value}

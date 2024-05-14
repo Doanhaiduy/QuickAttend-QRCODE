@@ -22,10 +22,11 @@ interface Props extends React.ComponentProps<typeof View> {
     onBack?: () => void;
     style?: StyleProp<ViewStyle>;
     isModal?: boolean;
+    isOnboarding?: boolean;
 }
 
 export default function ContainerComponent(props: Props) {
-    const { children, isAuth, back, title, isScroll, iconRight, onBack, style, isModal } = props;
+    const { children, isAuth, back, title, isScroll, iconRight, onBack, style, isModal, isOnboarding } = props;
 
     const HeaderAuth = back ? (
         <View className='flex-row items-center justify-between py-4 '>
@@ -54,14 +55,17 @@ export default function ContainerComponent(props: Props) {
     );
 
     return (
-        <SafeAreaView
-            className='flex-1'
-            style={{
-                paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-            }}
-        >
-            {ReturnChildren}
-        </SafeAreaView>
+        <>
+            {isOnboarding && <SafeAreaView className='flex-0 bg-[#f5f9ff]' />}
+            <SafeAreaView
+                className='flex-1 bg-white'
+                style={{
+                    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+                }}
+            >
+                {ReturnChildren}
+            </SafeAreaView>
+        </>
     );
 }
 

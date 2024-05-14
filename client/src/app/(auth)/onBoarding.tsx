@@ -1,17 +1,23 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import ContainerComponent from '../components/ContainerComponent';
 import Swiper from 'react-native-swiper';
-import { appInfos } from '../constants/appInfos';
-import { appColors } from '../constants/appColors';
-import { router } from 'expo-router';
+import { Redirect, Stack, router } from 'expo-router';
+import ContainerComponent from '@/src/components/ContainerComponent';
+import { appColors } from '@/src/constants/appColors';
+import { appInfos } from '@/src/constants/appInfos';
 
 export default function OnBoardingScreen() {
     const [index, setIndex] = React.useState(0);
 
+    const [isFirstTime, setIsFirstTime] = React.useState(false);
+
+    if (isFirstTime) {
+        return <Redirect href='/login' />;
+    }
+
     return (
-        <ContainerComponent isAuth>
-            <View className='flex-1'>
+        <ContainerComponent isAuth isOnboarding>
+            <View className='flex-1 bg-white'>
                 <Swiper
                     loop={false}
                     onIndexChanged={(num) => setIndex(num)}
@@ -20,7 +26,7 @@ export default function OnBoardingScreen() {
                     activeDotColor={appColors.primary}
                 >
                     <Image
-                        source={require('../assets/images/onboarding-1.png')}
+                        source={require('../../assets/images/onboarding-1.png')}
                         style={{
                             flex: 1,
                             width: appInfos.sizes.WIDTH,
@@ -29,7 +35,7 @@ export default function OnBoardingScreen() {
                         }}
                     />
                     <Image
-                        source={require('../assets/images/onboarding-2.png')}
+                        source={require('../../assets/images/onboarding-2.png')}
                         style={{
                             flex: 1,
                             width: appInfos.sizes.WIDTH,
@@ -38,7 +44,7 @@ export default function OnBoardingScreen() {
                         }}
                     />
                     <Image
-                        source={require('../assets/images/onboarding-3.png')}
+                        source={require('../../assets/images/onboarding-3.png')}
                         style={{
                             flex: 1,
                             width: appInfos.sizes.WIDTH,
@@ -62,10 +68,10 @@ export default function OnBoardingScreen() {
                         },
                     ]}
                 >
-                    <TouchableOpacity onPress={() => router.push('(auth)')}>
+                    <TouchableOpacity onPress={() => router.replace('/login')}>
                         <Text className='text-gray-600'>Skip</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => (index < 2 ? setIndex(index + 1) : router.push('(auth)'))}>
+                    <TouchableOpacity onPress={() => (index < 2 ? setIndex(index + 1) : router.replace('/login'))}>
                         <Text className='text-gray-800 font-bold'>Next</Text>
                     </TouchableOpacity>
                 </View>

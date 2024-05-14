@@ -1,17 +1,21 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Slot, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
-
+import Splash from '../components/Splash';
 export { ErrorBoundary } from 'expo-router';
+
+SplashScreen.preventAutoHideAsync();
 
 export const unstable_settings = {
     initialRouteName: '(auth)',
 };
 
 export default function RootLayout() {
+    const [appReady, setAppReady] = useState(false);
+
     const [loaded, error] = useFonts({
         Inter100: require('../../assets/fonts/Inter-Thin.ttf'),
         Inter: require('../../assets/fonts/Inter-Regular.ttf'),
@@ -30,27 +34,17 @@ export default function RootLayout() {
     useEffect(() => {
         if (loaded) {
             SplashScreen.hideAsync();
+            setAppReady(true);
         }
     }, [loaded]);
 
-    if (!loaded) {
-        return null;
+    if (!appReady) {
+        return <Splash />;
     }
 
     return <RootLayoutNav />;
 }
 
 function RootLayoutNav() {
-    return (
-        <Stack
-            initialRouteName='onBoarding'
-            screenOptions={{
-                headerShown: false,
-            }}
-        >
-            <Stack.Screen name='(auth)' />
-            <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-            <Stack.Screen name='onBoarding' options={{ headerShown: false }} />
-        </Stack>
-    );
+    return <Slot />;
 }
