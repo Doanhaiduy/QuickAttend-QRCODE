@@ -7,9 +7,19 @@ import SpaceComponent from '@/src/components/SpaceComponent';
 import ButtonComponent from '@/src/components/ButtonComponent';
 import InputComponent from '@/src/components/InputComponent';
 import { useRouter } from 'expo-router';
+import { Regex } from '@/src/helpers';
 
 export default function ForgotScreen() {
     const [email, setEmail] = React.useState('');
+    const [isError, setIsError] = React.useState(false);
+
+    const handleCheckEmail = (email: string) => {
+        if (!Regex.email.test(email)) {
+            setIsError(true);
+            return;
+        }
+        setIsError(false);
+    };
 
     const router = useRouter();
     return (
@@ -30,6 +40,8 @@ export default function ForgotScreen() {
                     onChange={(val) => setEmail(val)}
                     placeholder='example@mail.com'
                     label='Email Address'
+                    onEnd={() => handleCheckEmail(email)}
+                    err={`${isError ? 'Invalid email address' : ''}`}
                 />
             </SectionComponent>
             <SectionComponent>
@@ -41,6 +53,7 @@ export default function ForgotScreen() {
                     }}
                     size='large'
                     type='primary'
+                    disabled={isError}
                 />
             </SectionComponent>
         </ContainerComponent>

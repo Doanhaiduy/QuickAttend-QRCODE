@@ -12,7 +12,7 @@ export default function OnBoardingScreen() {
 
     const [isFirstTime, setIsFirstTime] = React.useState(false);
 
-    if (!isFirstTime) {
+    if (isFirstTime) {
         return <Redirect href='/login' />;
     }
 

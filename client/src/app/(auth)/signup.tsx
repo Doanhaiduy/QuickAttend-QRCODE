@@ -10,13 +10,60 @@ import TextComponent from '@/src/components/TextComponent';
 import { Link, router } from 'expo-router';
 import ButtonComponent from '@/src/components/ButtonComponent';
 import { Ionicons } from '@expo/vector-icons';
+import { set, z } from 'zod';
+import { schemasCustom } from '@/src/utils/zod';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { sleep } from '@/src/helpers';
+import LoadingModal from '@/src/modals/LoadingModal';
+
+const schema = z
+    .object({
+        fullName: schemasCustom.fullName,
+        email: schemasCustom.email,
+        password: schemasCustom.password('SignUp'),
+        confirmPassword: schemasCustom.confirmPassword,
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords don't match",
+        path: ['confirmPassword'],
+    });
+
+type FormFields = z.infer<typeof schema>;
 
 export default function SignUpScreen() {
-    const [fullName, setFullName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+        setError,
+    } = useForm<FormFields>({
+        defaultValues: {
+            fullName: 'Đoàn Hải Duy',
+            email: 'duy@gmail.com',
+            password: '12345678a',
+            confirmPassword: '12345678a',
+        },
+        resolver: zodResolver(schema),
+    });
+
     const [isCheck, setIsCheck] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const onSubmit: SubmitHandler<FormFields> = async (data) => {
+        setIsLoading(true);
+        try {
+            await sleep(1000);
+            const { fullName, email, password } = data;
+            console.log({ fullName, email, password });
+            setIsLoading(false);
+            router.push('verification');
+        } catch (error) {
+            console.log(error);
+            setError('email', { type: 'manual', message: 'Email already exists' });
+            setIsLoading(false);
+        }
+    };
 
     return (
         <ContainerComponent isAuth isScroll>
@@ -32,31 +79,65 @@ export default function SignUpScreen() {
             </SectionComponent>
             <SpaceComponent height={4} />
             <SectionComponent>
-                <InputComponent
-                    value={fullName}
-                    onChange={(val) => setFullName(val)}
-                    placeholder='John Doe'
-                    label='Full Name'
+                <Controller
+                    control={control}
+                    name='fullName'
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <InputComponent
+                            value={value}
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            placeholder='Enter Full Name'
+                            label='Full Name'
+                            err={errors.fullName?.message}
+                        />
+                    )}
                 />
-                <InputComponent
-                    value={email}
-                    onChange={(val) => setEmail(val)}
-                    placeholder='example@mail.com'
-                    label='Email'
+                <Controller
+                    control={control}
+                    name='email'
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <InputComponent
+                            value={value}
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            placeholder='Enter Email'
+                            label='Email'
+                            err={errors.email?.message}
+                        />
+                    )}
                 />
-                <InputComponent
-                    value={password}
-                    onChange={(val) => setPassword(val)}
-                    isPassword
-                    placeholder='Enter Password'
-                    label='Password'
+
+                <Controller
+                    control={control}
+                    name='password'
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <InputComponent
+                            value={value}
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            placeholder='Enter Password'
+                            label='Password'
+                            isPassword
+                            err={errors.password?.message}
+                        />
+                    )}
                 />
-                <InputComponent
-                    value={confirmPassword}
-                    onChange={(val) => setConfirmPassword(val)}
-                    isPassword
-                    placeholder='Confirm Password'
-                    label='Confirm Password'
+
+                <Controller
+                    control={control}
+                    name='confirmPassword'
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <InputComponent
+                            value={value}
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            placeholder='Confirm Password'
+                            label='Confirm Password'
+                            isPassword
+                            err={errors.confirmPassword?.message}
+                        />
+                    )}
                 />
 
                 <Pressable className='flex-row max-w-[90%] ' onPress={() => setIsCheck(!isCheck)}>
@@ -71,14 +152,7 @@ export default function SignUpScreen() {
                 </Pressable>
             </SectionComponent>
             <SectionComponent>
-                <ButtonComponent
-                    size='large'
-                    type='primary'
-                    onPress={() => {
-                        router.push('verification');
-                    }}
-                    title='Register'
-                />
+                <ButtonComponent size='large' type='primary' onPress={handleSubmit(onSubmit)} title='Register' />
                 <SpaceComponent height={20} />
                 <TextComponent className='text-sm text-grayText text-center'>
                     Or continue with social account
@@ -101,6 +175,7 @@ export default function SignUpScreen() {
                     </Link>
                 </TextComponent>
             </SectionComponent>
+            <LoadingModal visible={isLoading} message='Registering...' />
         </ContainerComponent>
     );
 }
