@@ -11,7 +11,7 @@ import { Link, router } from 'expo-router';
 import ButtonComponent from '@/src/components/ButtonComponent';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function SignUpPage() {
+export default function SignUpScreen() {
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

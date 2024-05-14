@@ -10,7 +10,7 @@ import { StatusBar } from 'expo-status-bar';
 import SpaceComponent from '@/src/components/SpaceComponent';
 import TextComponent from '@/src/components/TextComponent';
 
-export default function LoginPage() {
+export default function LoginScreen() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 

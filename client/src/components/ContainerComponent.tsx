@@ -8,10 +8,12 @@ import {
     ViewStyle,
     StatusBar,
     ScrollView,
+    Pressable,
 } from 'react-native';
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import TextComponent from './TextComponent';
+import { useRouter } from 'expo-router';
 
 interface Props extends React.ComponentProps<typeof View> {
     children: React.ReactNode;
@@ -29,15 +31,21 @@ interface Props extends React.ComponentProps<typeof View> {
 export default function ContainerComponent(props: Props) {
     const { children, isAuth, back, title, isScroll, iconRight, onBack, style, isModal, isOnboarding } = props;
 
+    const router = useRouter();
+
     const HeaderAuth = back ? (
-        <View className='flex-row items-center justify-between py-4 '>
-            <Ionicons name='chevron-back' size={24} color='black' onPress={onBack} />
+        <View className='flex-row items-center justify-between py-4 pl-5'>
+            <Pressable onPress={() => router.back()}>
+                <Ionicons name='chevron-back' size={28} color='black' onPress={onBack} />
+            </Pressable>
         </View>
     ) : null;
 
     const Header = back ? (
         <View className='flex-row items-center py-4 flex-1 justify-between '>
-            <Ionicons name='chevron-back' size={24} color='black' onPress={onBack} />
+            <Pressable onPress={() => router.back()}>
+                <Ionicons name='chevron-back' size={24} color='black' onPress={onBack} />
+            </Pressable>
             <TextComponent className='text-lg font-bold'>{title}</TextComponent>
             <Ionicons name='chevron-back' size={24} color='transparent' />
         </View>

@@ -12,7 +12,9 @@ export default function AuthLayout() {
             <Stack.Screen name='onBoarding' />
             <Stack.Screen name='login' />
             <Stack.Screen name='signup' />
+            <Stack.Screen name='forgot' />
             <Stack.Screen name='verification' />
+            <Stack.Screen name='newPassword' />
         </Stack>
     );
 }
