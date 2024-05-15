@@ -1,15 +1,22 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
-import { Redirect, Stack } from 'expo-router';
+import React, { useEffect } from 'react';
+import { Redirect, Stack, router } from 'expo-router';
+import { useSelector } from 'react-redux';
+import { authSelector } from '@/src/redux/reducers/authReducer';
 
 export default function AuthLayout() {
+    const auth = useSelector(authSelector);
+
+    if (auth.accessToken) {
+        return <Redirect href={'/'} />;
+    }
+
     return (
         <Stack
             screenOptions={{
                 headerShown: false,
             }}
         >
-            <Stack.Screen name='onBoarding' />
             <Stack.Screen name='login' />
             <Stack.Screen name='signup' />
             <Stack.Screen name='forgot' />

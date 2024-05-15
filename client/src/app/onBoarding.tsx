@@ -1,20 +1,16 @@
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Swiper from 'react-native-swiper';
 import { Redirect, Stack, router } from 'expo-router';
 import ContainerComponent from '@/src/components/ContainerComponent';
 import { appColors } from '@/src/constants/appColors';
 import { appInfos } from '@/src/constants/appInfos';
 import TextComponent from '@/src/components/TextComponent';
+import { useSelector } from 'react-redux';
+import { authSelector } from '../redux/reducers/authReducer';
 
 export default function OnBoardingScreen() {
     const [index, setIndex] = React.useState(0);
-
-    const [isFirstTime, setIsFirstTime] = React.useState(false);
-
-    if (isFirstTime) {
-        return <Redirect href='/login' />;
-    }
 
     return (
         <ContainerComponent isAuth isOnboarding>
@@ -27,7 +23,7 @@ export default function OnBoardingScreen() {
                     activeDotColor={appColors.primary}
                 >
                     <Image
-                        source={require('../../assets/images/onboarding-1.png')}
+                        source={require('../assets/images/onboarding-1.png')}
                         style={{
                             flex: 1,
                             width: appInfos.sizes.WIDTH,
@@ -36,7 +32,7 @@ export default function OnBoardingScreen() {
                         }}
                     />
                     <Image
-                        source={require('../../assets/images/onboarding-2.png')}
+                        source={require('../assets/images/onboarding-2.png')}
                         style={{
                             flex: 1,
                             width: appInfos.sizes.WIDTH,
@@ -45,7 +41,7 @@ export default function OnBoardingScreen() {
                         }}
                     />
                     <Image
-                        source={require('../../assets/images/onboarding-3.png')}
+                        source={require('../assets/images/onboarding-3.png')}
                         style={{
                             flex: 1,
                             width: appInfos.sizes.WIDTH,

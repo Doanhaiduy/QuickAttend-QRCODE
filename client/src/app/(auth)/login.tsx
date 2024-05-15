@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Alert, Image, StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import { Link, Stack, router } from 'expo-router';
 import InputComponent from '@/src/components/InputComponent';
@@ -15,6 +15,9 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { sleep } from '@/src/helpers';
 import LoadingModal from '@/src/modals/LoadingModal';
+import authenticationAPI from '@/src/apis/authApi';
+import { useDispatch } from 'react-redux';
+import { setAuthData } from '@/src/redux/reducers/authReducer';
 
 const schema = z.object({
     email: schemasCustom.email,
@@ -31,22 +34,23 @@ export default function LoginScreen() {
         setError,
     } = useForm<FormFields>({
         defaultValues: {
-            email: 'haiduy@gmail.com',
-            password: '12345678a',
+            email: 'duy.dh.63cntt@ntu.edu.vn',
+            password: '1234567',
         },
         resolver: zodResolver(schema),
     });
 
+    const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         setIsLoading(true);
         try {
-            await sleep(1000);
             const { email, password } = data;
-            console.log({ email, password });
+            const res = await authenticationAPI.HandleAuthentication('/login', { email, password }, 'post');
+            dispatch(setAuthData(res.data));
+            Alert.alert('Success', 'Login successfully');
             setIsLoading(false);
-            router.push('home');
         } catch (error) {
             setIsLoading(false);
             setError('root', {

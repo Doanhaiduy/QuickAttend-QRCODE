@@ -5,6 +5,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import Splash from '../components/Splash';
+import { Provider } from 'react-redux';
+import store from '../redux/store';
 export { ErrorBoundary } from 'expo-router';
 
 SplashScreen.preventAutoHideAsync();
@@ -46,5 +48,9 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-    return <Slot />;
+    return (
+        <Provider store={store}>
+            <Slot />
+        </Provider>
+    );
 }
