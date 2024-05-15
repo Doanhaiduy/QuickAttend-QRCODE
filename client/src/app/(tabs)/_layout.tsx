@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import { authSelector } from '@/redux/reducers/authReducer';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Redirect, Tabs } from 'expo-router';
+import { Redirect, Tabs } from 'expo-router';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { authSelector } from '@/src/redux/reducers/authReducer';
 
 function TabBarIcon(props: { name: React.ComponentProps<typeof FontAwesome>['name']; color: string }) {
     return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;

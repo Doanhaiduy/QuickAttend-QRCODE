@@ -1,19 +1,18 @@
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import React from 'react';
 import {
     Platform,
+    Pressable,
     SafeAreaView,
+    ScrollView,
+    StatusBar,
     StyleProp,
     StyleSheet,
-    Text,
     View,
     ViewStyle,
-    StatusBar,
-    ScrollView,
-    Pressable,
 } from 'react-native';
-import React from 'react';
-import { Ionicons } from '@expo/vector-icons';
 import TextComponent from './TextComponent';
-import { useRouter } from 'expo-router';
 
 interface Props extends React.ComponentProps<typeof View> {
     children: React.ReactNode;

@@ -1,23 +1,26 @@
-import { Alert, Image, StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
-import { Link, Stack, router } from 'expo-router';
-import InputComponent from '@/src/components/InputComponent';
-import ButtonComponent from '@/src/components/ButtonComponent';
 import { Ionicons } from '@expo/vector-icons';
-import ContainerComponent from '@/src/components/ContainerComponent';
-import SectionComponent from '@/src/components/SectionComponent';
+import { Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import SpaceComponent from '@/src/components/SpaceComponent';
-import TextComponent from '@/src/components/TextComponent';
+import React, { useState } from 'react';
+import { Alert, Image, StyleSheet } from 'react-native';
 import { z } from 'zod';
-import { schemasCustom } from '@/src/utils/zod';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+
 import { zodResolver } from '@hookform/resolvers/zod';
-import { sleep } from '@/src/helpers';
-import LoadingModal from '@/src/modals/LoadingModal';
-import authenticationAPI from '@/src/apis/authApi';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+
 import { useDispatch } from 'react-redux';
-import { setAuthData } from '@/src/redux/reducers/authReducer';
+import { schemasCustom } from '@/utils/zod';
+import authenticationAPI from '@/apis/authApi';
+import { setAuthData } from '@/redux/reducers/authReducer';
+import {
+    ButtonComponent,
+    ContainerComponent,
+    InputComponent,
+    SectionComponent,
+    SpaceComponent,
+    TextComponent,
+} from '@/components';
+import LoadingModal from '@/modals/LoadingModal';
 
 const schema = z.object({
     email: schemasCustom.email,
@@ -106,6 +109,8 @@ export default function LoginScreen() {
                 <Link href='/forgot' className='text-primary-500 text-sm text-right mt-[-6px]'>
                     Forgot password?
                 </Link>
+
+                <TextComponent className='text-error text-sm text-center mt-4'>{errors.root?.message}</TextComponent>
             </SectionComponent>
             <SectionComponent>
                 <ButtonComponent size='large' title='Login' type='primary' onPress={handleSubmit(onSubmit)} />

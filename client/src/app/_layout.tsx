@@ -1,11 +1,11 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
-import { Slot, Stack } from 'expo-router';
+import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
-import Splash from '../components/Splash';
 import { Provider } from 'react-redux';
+import Splash from '../components/Splash';
 import store from '../redux/store';
 export { ErrorBoundary } from 'expo-router';
 

@@ -1,13 +1,15 @@
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import ContainerComponent from '@/src/components/ContainerComponent';
-import SectionComponent from '@/src/components/SectionComponent';
-import TextComponent from '@/src/components/TextComponent';
-import SpaceComponent from '@/src/components/SpaceComponent';
-import ButtonComponent from '@/src/components/ButtonComponent';
-import InputComponent from '@/src/components/InputComponent';
+import { Image, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Regex } from '@/src/helpers';
+import { Regex } from '@/helpers';
+import {
+    ButtonComponent,
+    ContainerComponent,
+    InputComponent,
+    SectionComponent,
+    SpaceComponent,
+    TextComponent,
+} from '@/components';
 
 export default function ForgotScreen() {
     const [email, setEmail] = React.useState('');

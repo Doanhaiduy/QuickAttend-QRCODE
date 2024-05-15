@@ -1,13 +1,10 @@
-import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect } from 'react';
+import { ContainerComponent, TextComponent } from '@/components';
+import { appColors } from '@/constants/appColors';
+import { appInfos } from '@/constants/appInfos';
+import { router } from 'expo-router';
+import React from 'react';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Swiper from 'react-native-swiper';
-import { Redirect, Stack, router } from 'expo-router';
-import ContainerComponent from '@/src/components/ContainerComponent';
-import { appColors } from '@/src/constants/appColors';
-import { appInfos } from '@/src/constants/appInfos';
-import TextComponent from '@/src/components/TextComponent';
-import { useSelector } from 'react-redux';
-import { authSelector } from '../redux/reducers/authReducer';
 
 export default function OnBoardingScreen() {
     const [index, setIndex] = React.useState(0);

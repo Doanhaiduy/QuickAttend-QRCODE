@@ -1,18 +1,15 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import ContainerComponent from '../../components/ContainerComponent';
-import TextComponent from '@/src/components/TextComponent';
-import SectionComponent from '@/src/components/SectionComponent';
-import SpaceComponent from '@/src/components/SpaceComponent';
-import InputComponent from '@/src/components/InputComponent';
-import ButtonComponent from '@/src/components/ButtonComponent';
+import { Image, StyleSheet } from 'react-native';
+
 import { router } from 'expo-router';
 import { z } from 'zod';
-import { schemasCustom } from '@/src/utils/zod';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+
 import { zodResolver } from '@hookform/resolvers/zod';
-import { sleep } from '@/src/helpers';
-import LoadingModal from '@/src/modals/LoadingModal';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { schemasCustom } from '@/utils/zod';
+import { sleep } from '@/helpers';
+import { ButtonComponent, ContainerComponent, InputComponent, SectionComponent, TextComponent } from '@/components';
+import LoadingModal from '@/modals/LoadingModal';
 
 const schema = z
     .object({

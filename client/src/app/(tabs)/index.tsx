@@ -1,5 +1,5 @@
-import ButtonComponent from '@/src/components/ButtonComponent';
-import { logout } from '@/src/redux/reducers/authReducer';
+import { ButtonComponent } from '@/components';
+import { logout } from '@/redux/reducers/authReducer';
 import { StyleSheet, Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 

@@ -1,12 +1,8 @@
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ButtonComponent, ContainerComponent, SectionComponent, SpaceComponent, TextComponent } from '@/components';
+import { appColors } from '@/constants/appColors';
 import React from 'react';
-import ContainerComponent from '@/src/components/ContainerComponent';
-import SectionComponent from '@/src/components/SectionComponent';
-import TextComponent from '@/src/components/TextComponent';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { OtpInput } from 'react-native-otp-entry';
-import { appColors } from '@/src/constants/appColors';
-import SpaceComponent from '@/src/components/SpaceComponent';
-import ButtonComponent from '@/src/components/ButtonComponent';
 export default function VerificationScreen() {
     const [otp, setOtp] = React.useState('');
 

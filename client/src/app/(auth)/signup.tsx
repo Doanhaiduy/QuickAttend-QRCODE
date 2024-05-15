@@ -1,21 +1,23 @@
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
-import ContainerComponent from '@/src/components/ContainerComponent';
-import SectionComponent from '@/src/components/SectionComponent';
-import { StatusBar } from 'expo-status-bar';
-import SpaceComponent from '@/src/components/SpaceComponent';
-import InputComponent from '@/src/components/InputComponent';
-import Checkbox from 'expo-checkbox';
-import TextComponent from '@/src/components/TextComponent';
-import { Link, router } from 'expo-router';
-import ButtonComponent from '@/src/components/ButtonComponent';
+import {
+    ButtonComponent,
+    ContainerComponent,
+    InputComponent,
+    SectionComponent,
+    SpaceComponent,
+    TextComponent,
+} from '@/components';
+import { sleep } from '@/helpers';
+import LoadingModal from '@/modals/LoadingModal';
+import { schemasCustom } from '@/utils/zod';
 import { Ionicons } from '@expo/vector-icons';
-import { set, z } from 'zod';
-import { schemasCustom } from '@/src/utils/zod';
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { sleep } from '@/src/helpers';
-import LoadingModal from '@/src/modals/LoadingModal';
+import Checkbox from 'expo-checkbox';
+import { Link, router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Image, Pressable, StyleSheet } from 'react-native';
+import { z } from 'zod';
 
 const schema = z
     .object({

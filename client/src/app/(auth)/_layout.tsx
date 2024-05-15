@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React, { useEffect } from 'react';
-import { Redirect, Stack, router } from 'expo-router';
+import { authSelector } from '@/redux/reducers/authReducer';
+import { Redirect, Stack } from 'expo-router';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
-import { authSelector } from '@/src/redux/reducers/authReducer';
 
 export default function AuthLayout() {
     const auth = useSelector(authSelector);

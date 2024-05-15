@@ -1,4 +1,4 @@
-import { ActivityIndicator, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ImageBackground, StyleSheet, View } from 'react-native';
 import React from 'react';
 
 export default function Splash() {
