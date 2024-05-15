@@ -17,5 +17,4 @@ module.exports = {
     sendEmail,
     verifyCode,
     verifyToken,
-    getTokenJwt,
 };
