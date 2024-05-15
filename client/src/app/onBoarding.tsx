@@ -1,13 +1,43 @@
 import { ContainerComponent, TextComponent } from '@/components';
 import { appColors } from '@/constants/appColors';
 import { appInfos } from '@/constants/appInfos';
-import { router } from 'expo-router';
-import React from 'react';
+import { authSelector, setAuthData } from '@/redux/reducers/authReducer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Redirect, router } from 'expo-router';
+import React, { useEffect } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Swiper from 'react-native-swiper';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function OnBoardingScreen() {
     const [index, setIndex] = React.useState(0);
+    const auth = useSelector(authSelector);
+    const dispatch = useDispatch();
+
+    const checkAuth = async () => {
+        const res = await AsyncStorage.getItem('auth');
+        if (res) {
+            const authData = JSON.parse(res);
+            console.log(authData);
+            dispatch(setAuthData(authData));
+        }
+    };
+
+    const checkTheFirstTime = async () => {
+        const res = await AsyncStorage.getItem('IsFirstTime');
+        if (res) {
+            router.replace('/login');
+        }
+    };
+
+    useEffect(() => {
+        checkAuth();
+        checkTheFirstTime();
+    }, []);
+
+    if (auth.accessToken) {
+        return <Redirect href={'/'} />;
+    }
 
     return (
         <ContainerComponent isAuth isOnboarding>

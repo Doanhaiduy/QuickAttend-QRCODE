@@ -19,6 +19,7 @@ interface Props {
     type?: 'default' | 'number-pad' | 'decimal-pad' | 'numeric' | 'email-address' | 'phone-pad';
     numberOfLines?: number;
     multiline?: boolean;
+    iconRight?: React.ReactNode;
 }
 
 export default function InputComponent(props: Props) {
@@ -38,25 +39,29 @@ export default function InputComponent(props: Props) {
         type,
         numberOfLines,
         multiline,
+        iconRight,
     } = props;
 
     const ContainerClasses = clsx(
-        'min-h-[56px] max-h-[56px] w-full px-4 py-2 rounded-[10px] border-[1px] border-primary-500 ',
+        'min-h-[56px] max-h-[56px] w-full px-4 py-2 justify-center rounded-[10px] border-[1px] border-primary-500 ',
         { 'border-error': err },
-        { 'border-gray-300': isDisabled }
+        { 'border-gray-300': isDisabled },
+        { 'max-h-[200] h-[150px] ': multiline }
     );
 
     return (
         <View className='mb-4 w-full'>
             <View className={ContainerClasses}>
-                <Text
-                    className={clsx('text-[11px] text-primary-500', {
-                        'text-error': err,
-                    })}
-                >
-                    {label}
-                </Text>
-                <View className='flex-1 flex-row bg-white'>
+                {!multiline && (
+                    <Text
+                        className={clsx('text-[11px] text-primary-500', {
+                            'text-error': err,
+                        })}
+                    >
+                        {label}
+                    </Text>
+                )}
+                <View className={`flex-1 flex-row bg-white ${multiline && 'h-[150px]'}`}>
                     <TextInput
                         placeholder={placeholder}
                         value={value}
@@ -65,25 +70,30 @@ export default function InputComponent(props: Props) {
                         onFocus={onFocus}
                         onBlur={onBlur}
                         secureTextEntry={isPassword && !isShowPassword}
-                        editable={!isDisabled}
+                        editable={!isDisabled && !iconRight}
+                        textAlignVertical='top'
                         keyboardType={type}
                         numberOfLines={numberOfLines}
                         multiline={multiline}
                         placeholderTextColor={'#A1A1A1'}
-                        className='flex-1 text-sm text-blackText placeholder:text-blackText'
+                        className={`flex-1 text-sm text-blackText placeholder:text-blackText ${
+                            multiline && 'h-[150px]'
+                        }`}
                     />
                     {isPassword ? (
                         <Pressable className='pl-2' onPress={() => setIsShowPassword(!isShowPassword)}>
                             <Ionicons name={isShowPassword ? 'eye' : 'eye-off'} size={24} color={appColors.text} />
                         </Pressable>
                     ) : (
-                        value && (
+                        value &&
+                        !iconRight && (
                             <Pressable className='pl-2' onPress={() => onChange('')}>
                                 <Ionicons name='close' size={20} color={appColors.text} />
                             </Pressable>
                         )
                     )}
                 </View>
+                {iconRight && <View className='absolute right-5'>{iconRight}</View>}
             </View>
             {err && <TextComponent className='text-error text-left text-[11px] ml-2'>{err}</TextComponent>}
         </View>

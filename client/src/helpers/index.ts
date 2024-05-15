@@ -18,3 +18,24 @@ export const obfuscateEmail = (email: string): string => {
         return `${user}${characters.replace(/./g, '*')}${domain}`;
     });
 };
+
+export const generateWeekDates = () => {
+    const weekDates = [];
+    const today = new Date();
+    const currentDay = today.getDay();
+
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - currentDay + (currentDay === 0 ? -6 : 1));
+
+    for (let i = 0; i < 7; i++) {
+        const date = new Date(startOfWeek);
+        date.setDate(startOfWeek.getDate() + i);
+
+        const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+        const dateNumber = date.getDate();
+
+        weekDates.push({ dayName, dateNumber });
+    }
+
+    return weekDates;
+};

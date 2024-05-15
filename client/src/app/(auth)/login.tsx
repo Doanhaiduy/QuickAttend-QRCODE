@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Image, StyleSheet } from 'react-native';
 import { z } from 'zod';
 
@@ -21,6 +21,7 @@ import {
     TextComponent,
 } from '@/components';
 import LoadingModal from '@/modals/LoadingModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const schema = z.object({
     email: schemasCustom.email,
@@ -37,8 +38,8 @@ export default function LoginScreen() {
         setError,
     } = useForm<FormFields>({
         defaultValues: {
-            email: 'duy.dh.63cntt@ntu.edu.vn',
-            password: '1234567',
+            email: 'haiduytbt2k3@gmail.com',
+            password: 'haiduy10',
         },
         resolver: zodResolver(schema),
     });
@@ -52,6 +53,8 @@ export default function LoginScreen() {
             const { email, password } = data;
             const res = await authenticationAPI.HandleAuthentication('/login', { email, password }, 'post');
             dispatch(setAuthData(res.data));
+            await AsyncStorage.setItem('auth', JSON.stringify(res.data));
+            await AsyncStorage.setItem('IsFirstTime', 'false');
             Alert.alert('Success', 'Login successfully');
             setIsLoading(false);
         } catch (error) {

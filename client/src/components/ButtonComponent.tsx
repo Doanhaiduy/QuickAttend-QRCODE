@@ -10,6 +10,7 @@ interface Props {
     onPress: () => void;
     icon?: React.ReactNode;
     iconFlex?: 'left' | 'right';
+    height?: number;
 }
 
 const variantContainer = {
@@ -29,7 +30,7 @@ const variantText = {
 };
 
 export default function ButtonComponent(props: Props) {
-    const { title, type, size, disabled, onPress, icon, iconFlex } = props;
+    const { title, type, size, disabled, onPress, icon, iconFlex, height } = props;
 
     return (
         <TouchableOpacity
@@ -37,10 +38,13 @@ export default function ButtonComponent(props: Props) {
             onPress={onPress}
             className={clsx(variantContainer.default, variantContainer[type], {
                 'w-full min-h-[56px]': size === 'large',
-                'max-w-[168px] min-h-[48px] px-8': size === 'medium',
+                'max-w-[168px] min-h-[48px] px-5 flex-1': size === 'medium',
                 'min-w-[145px] min-h-[40px] px-5': size === 'small',
                 'opacity-70': disabled,
             })}
+            style={{
+                height: height,
+            }}
         >
             <>
                 {icon && iconFlex !== 'right' && <View className='mr-2'>{icon}</View>}

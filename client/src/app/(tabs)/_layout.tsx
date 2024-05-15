@@ -26,7 +26,10 @@ export default function TabLayout() {
             />
             <Tabs.Screen
                 name='attendance'
-                options={{ title: 'Attendance', tabBarIcon: (props) => <TabBarIcon {...props} name='calendar' /> }}
+                options={{
+                    title: 'Attendance',
+                    tabBarIcon: (props) => <TabBarIcon {...props} name='calendar' />,
+                }}
             />
             <Tabs.Screen
                 name='notification'

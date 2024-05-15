@@ -1,4 +1,5 @@
 import { AuthType } from '@/types/Auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState: AuthType = {
@@ -17,6 +18,7 @@ const authSlice = createSlice({
             state.authData = action.payload;
         },
         logout: (state) => {
+            AsyncStorage.removeItem('auth');
             state.authData = initialState;
         },
     },

@@ -41,12 +41,14 @@ export default function ContainerComponent(props: Props) {
     ) : null;
 
     const Header = back ? (
-        <View className='flex-row items-center py-4 flex-1 justify-between '>
+        <View className='flex-row items-center py-4 flex-1 justify-between pl-5'>
             <Pressable onPress={() => router.back()}>
                 <Ionicons name='chevron-back' size={24} color='black' onPress={onBack} />
             </Pressable>
             <TextComponent className='text-lg font-bold'>{title}</TextComponent>
-            <Ionicons name='chevron-back' size={24} color='transparent' />
+            <View className='pr-5'>
+                <Ionicons name='chevron-back' size={24} color='transparent' />
+            </View>
         </View>
     ) : null;
 
