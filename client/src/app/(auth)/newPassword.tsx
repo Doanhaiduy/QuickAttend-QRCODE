@@ -1,7 +1,7 @@
 import React from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { Alert, Image, StyleSheet } from 'react-native';
 
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { z } from 'zod';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,6 +10,7 @@ import { schemasCustom } from '@/utils/zod';
 import { sleep } from '@/helpers';
 import { ButtonComponent, ContainerComponent, InputComponent, SectionComponent, TextComponent } from '@/components';
 import LoadingModal from '@/modals/LoadingModal';
+import authenticationAPI from '@/apis/authApi';
 
 const schema = z
     .object({
@@ -22,6 +23,7 @@ const schema = z
     });
 type FormFields = z.infer<typeof schema>;
 export default function NewPasswordScreen() {
+    const { email } = useLocalSearchParams();
     const {
         handleSubmit,
         formState: { errors },
@@ -37,11 +39,17 @@ export default function NewPasswordScreen() {
         setIsLoading(true);
         const { password } = data;
         try {
-            await sleep(1000);
+            const res = await authenticationAPI.HandleAuthentication(
+                '/resetPassword',
+                { email, newPassword: password },
+                'post'
+            );
             setIsLoading(false);
+            Alert.alert('Success', 'Password updated successfully');
             router.navigate('/login');
-        } catch (error) {
+        } catch (error: any) {
             setIsLoading(false);
+            setError('root', error);
         }
     };
     return (
@@ -86,6 +94,7 @@ export default function NewPasswordScreen() {
                     name='confirmPassword'
                 />
             </SectionComponent>
+            {errors.root && <TextComponent className='text-error text-center'>{errors.root.message}</TextComponent>}
             <SectionComponent>
                 <ButtonComponent title='Update Password' onPress={handleSubmit(onSubmit)} size='large' type='primary' />
             </SectionComponent>

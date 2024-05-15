@@ -1,3 +1,4 @@
+import authenticationAPI from '@/apis/authApi';
 import {
     ButtonComponent,
     ContainerComponent,
@@ -42,7 +43,7 @@ export default function SignUpScreen() {
     } = useForm<FormFields>({
         defaultValues: {
             fullName: 'Đoàn Hải Duy',
-            email: 'duy@gmail.com',
+            email: 'haiduytbt2k3@gmail.com',
             password: '12345678a',
             confirmPassword: '12345678a',
         },
@@ -55,11 +56,32 @@ export default function SignUpScreen() {
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         setIsLoading(true);
         try {
-            await sleep(1000);
-            const { fullName, email, password } = data;
-            console.log({ fullName, email, password });
-            setIsLoading(false);
-            router.push('verification');
+            if (!isCheck) {
+                setIsLoading(false);
+                setError('root', { type: 'manual', message: 'Please agree to the terms and conditions' });
+            } else {
+                const { fullName, email, password } = data;
+                const res = await authenticationAPI.HandleAuthentication(
+                    '/verification',
+                    {
+                        email,
+                        fullName,
+                    },
+                    'post'
+                );
+                setIsLoading(false);
+                console.log(res);
+                router.push({
+                    pathname: '/verification',
+                    params: {
+                        fullName,
+                        email,
+                        password,
+                        code: res.data.code,
+                        type: 'signup',
+                    },
+                });
+            }
         } catch (error) {
             console.log(error);
             setError('email', { type: 'manual', message: 'Email already exists' });
@@ -153,6 +175,7 @@ export default function SignUpScreen() {
                     </TextComponent>
                 </Pressable>
             </SectionComponent>
+            {errors.root && <TextComponent className='text-error text-center'>{errors.root.message}</TextComponent>}
             <SectionComponent>
                 <ButtonComponent size='large' type='primary' onPress={handleSubmit(onSubmit)} title='Register' />
                 <SpaceComponent height={20} />

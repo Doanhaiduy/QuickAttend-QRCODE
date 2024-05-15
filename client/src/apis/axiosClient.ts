@@ -17,7 +17,11 @@ axiosClient.interceptors.request.use(async (config: any) => {
 
 axiosClient.interceptors.response.use(
     (response) => {
-        if (response.status === 200 && response.data && response.data.status === 'success') {
+        if (
+            (response.status === 200 || response.status === 201) &&
+            response.data &&
+            response.data.status === 'success'
+        ) {
             return response.data;
         }
         throw new Error('Something went wrong');

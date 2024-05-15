@@ -10,10 +10,14 @@ import {
     SpaceComponent,
     TextComponent,
 } from '@/components';
+import authenticationAPI from '@/apis/authApi';
+import LoadingModal from '@/modals/LoadingModal';
 
 export default function ForgotScreen() {
-    const [email, setEmail] = React.useState('');
+    const [email, setEmail] = React.useState('haiduytbt2k3@gmail.com');
     const [isError, setIsError] = React.useState(false);
+    const [error, setError] = React.useState('');
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const handleCheckEmail = (email: string) => {
         if (!Regex.email.test(email)) {
@@ -21,6 +25,25 @@ export default function ForgotScreen() {
             return;
         }
         setIsError(false);
+    };
+
+    const HandleSubmit = async () => {
+        setIsLoading(true);
+        try {
+            const res = await authenticationAPI.HandleAuthentication('/forgotPassword', { email }, 'post');
+            setIsLoading(false);
+            router.push({
+                pathname: '/verification',
+                params: {
+                    email,
+                    code: res.data.code,
+                    type: 'forgot',
+                },
+            });
+        } catch (err: any) {
+            setIsLoading(false);
+            setError(err);
+        }
     };
 
     const router = useRouter();
@@ -46,18 +69,17 @@ export default function ForgotScreen() {
                     err={`${isError ? 'Invalid email address' : ''}`}
                 />
             </SectionComponent>
+            {error && <TextComponent className='text-error text-center'>{error}</TextComponent>}
             <SectionComponent>
                 <ButtonComponent
                     title='Continue'
-                    onPress={() => {
-                        // router.push('/verification');
-                        router.push('/newPassword');
-                    }}
+                    onPress={HandleSubmit}
                     size='large'
                     type='primary'
                     disabled={isError}
                 />
             </SectionComponent>
+            <LoadingModal visible={isLoading} />
         </ContainerComponent>
     );
 }
