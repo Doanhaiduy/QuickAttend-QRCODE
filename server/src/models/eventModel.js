@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { create } = require('./userModel');
 
 const Schema = new mongoose.Schema({
     eventName: {
@@ -19,6 +18,14 @@ const Schema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    locationName: {
+        type: String,
+        required: true,
+    },
+    type: {
+        type: String,
+        required: true,
+    },
     privateCode: {
         type: String,
         required: true,
@@ -26,6 +33,10 @@ const Schema = new mongoose.Schema({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        required: true,
+    },
+    QRCodeUrl: {
+        type: String,
         required: true,
     },
     endTime: {
