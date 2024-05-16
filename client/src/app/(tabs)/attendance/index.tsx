@@ -15,14 +15,16 @@ import { router } from 'expo-router';
 
 export default function AttendanceScreen() {
     return (
-        <ContainerComponent isScroll>
-            <StatusBar style='dark' />
-            <SectionComponent className='flex flex-row justify-between items-center'>
-                <Text className='font-inter700 text-xl'>Attendance</Text>
+        <ContainerComponent
+            isScroll
+            title='Attendance'
+            iconRight={
                 <Pressable onPress={() => router.push('/(tabs)/attendance/createEvent')}>
                     <Octicons name='diff-added' size={24} color='black' />
                 </Pressable>
-            </SectionComponent>
+            }
+        >
+            <StatusBar style='dark' />
             <SectionComponent className='flex flex-row flex-wrap -mt-5'>
                 <StatisticalCard type='Balance' color={appColors.primary} value={20} />
                 <StatisticalCard type='Approved' color={'#a8d344'} value={5} />
@@ -40,7 +42,11 @@ export default function AttendanceScreen() {
                 </View>
             </SectionComponent>
             <SectionComponent>
-                <DetailsAttendanceCard type='Approved' color='#a8d344' />
+                <DetailsAttendanceCard
+                    type='Approved'
+                    color='#a8d344'
+                    onPress={() => router.push('/(tabs)/attendance/20302')}
+                />
                 <DetailsAttendanceCard type='Pending' color={appColors.success2} />
                 <DetailsAttendanceCard type='Rejected' color={appColors.error2} />
             </SectionComponent>

@@ -8,7 +8,6 @@ import {
 } from '@/components';
 import { appColors } from '@/constants/appColors';
 import { Ionicons } from '@expo/vector-icons';
-import { format } from 'date-fns';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -18,7 +17,6 @@ export default function CreateEventScreen() {
     const [location, setLocation] = React.useState('Choose location');
     const [securityCode, setSecurityCode] = React.useState('');
     const [description, setDescription] = React.useState('');
-
     const [dateStart, setDateStart] = useState(new Date());
     const [dateEnd, setDateEnd] = useState(new Date());
 
@@ -83,7 +81,7 @@ export default function CreateEventScreen() {
                     value={securityCode}
                     onChange={(val) => setSecurityCode(val)}
                     label='Security Code'
-                    placeholder='Enter capacity'
+                    placeholder='Enter Security Code'
                 />
 
                 <TextComponent className='text-primary-500 text-[12px] mb-[2px]'>Description</TextComponent>

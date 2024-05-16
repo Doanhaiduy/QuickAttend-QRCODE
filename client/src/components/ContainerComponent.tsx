@@ -33,7 +33,7 @@ export default function ContainerComponent(props: Props) {
     const router = useRouter();
 
     const HeaderAuth = back ? (
-        <View className='flex-row items-center justify-between py-4 pl-5'>
+        <View className='flex-row items-center justify-between py-2 pl-5'>
             <Pressable onPress={() => router.back()}>
                 <Ionicons name='chevron-back' size={28} color='black' onPress={onBack} />
             </Pressable>
@@ -41,7 +41,7 @@ export default function ContainerComponent(props: Props) {
     ) : null;
 
     const Header = back ? (
-        <View className='flex-row items-center py-4 flex-1 justify-between pl-5'>
+        <View className='flex-row items-center py-2 justify-between pl-5'>
             <Pressable onPress={() => router.back()}>
                 <Ionicons name='chevron-back' size={24} color='black' onPress={onBack} />
             </Pressable>
@@ -52,16 +52,26 @@ export default function ContainerComponent(props: Props) {
         </View>
     ) : null;
 
+    const HeaderTittle =
+        title && !back ? (
+            <View className='flex-row items-center justify-between py-2 pl-5'>
+                <TextComponent className='text-lg font-bold'>{title}</TextComponent>
+                {iconRight && <View className='pr-5'>{iconRight}</View>}
+            </View>
+        ) : null;
+
     const ReturnChildren = isScroll ? (
-        <ScrollView className='flex-1'>
+        <>
+            {title && !back && HeaderTittle}
             {isAuth ? HeaderAuth : Header}
-            {children}
-        </ScrollView>
+            <ScrollView className='flex-1'>{children}</ScrollView>
+        </>
     ) : (
-        <View className='flex-1'>
+        <>
+            {title && !back && HeaderTittle}
             {isAuth ? HeaderAuth : Header}
-            {children}
-        </View>
+            <View className='flex-1'>{children}</View>
+        </>
     );
 
     return (

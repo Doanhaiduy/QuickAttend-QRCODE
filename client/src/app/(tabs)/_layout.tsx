@@ -1,7 +1,9 @@
 import { authSelector } from '@/redux/reducers/authReducer';
+import { Fontisto, Ionicons } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Redirect, Tabs } from 'expo-router';
 import React from 'react';
+import { Platform } from 'react-native';
 import { useSelector } from 'react-redux';
 
 function TabBarIcon(props: { name: React.ComponentProps<typeof FontAwesome>['name']; color: string }) {
@@ -18,6 +20,16 @@ export default function TabLayout() {
         <Tabs
             screenOptions={{
                 headerShown: false,
+                tabBarStyle: {
+                    height: Platform.OS === 'ios' ? 90 : 60,
+                },
+                tabBarHideOnKeyboard: true,
+                tabBarIconStyle: {
+                    marginTop: 5,
+                },
+                tabBarLabelStyle: {
+                    marginBottom: 10,
+                },
             }}
         >
             <Tabs.Screen
@@ -33,11 +45,11 @@ export default function TabLayout() {
             />
             <Tabs.Screen
                 name='notification'
-                options={{ title: 'Notification', tabBarIcon: (props) => <TabBarIcon {...props} name='bell' /> }}
+                options={{ title: 'Notification', tabBarIcon: (props) => <Ionicons {...props} name='notifications' /> }}
             />
             <Tabs.Screen
                 name='profile'
-                options={{ title: 'profile', tabBarIcon: (props) => <TabBarIcon {...props} name='pagelines' /> }}
+                options={{ title: 'profile', tabBarIcon: (props) => <Fontisto {...props} name='person' /> }}
             />
         </Tabs>
     );

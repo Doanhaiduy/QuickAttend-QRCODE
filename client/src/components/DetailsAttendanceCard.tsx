@@ -1,17 +1,18 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import TextComponent from './TextComponent';
 
 interface Props {
     type: 'Approved' | 'Pending' | 'Rejected';
     color: string;
+    onPress?: () => void;
 }
 
 export default function DetailsAttendanceCard(props: Props) {
-    const { type, color } = props;
+    const { type, color, onPress } = props;
 
     return (
-        <View className='p-4 bg-white shadow-xl rounded-[18px] my-3'>
+        <Pressable onPress={onPress} className='p-4 bg-white shadow-xl rounded-[18px] my-3'>
             <View>
                 <View className='flex-row justify-between items-center'>
                     <TextComponent className='text-base'>Date</TextComponent>
@@ -45,7 +46,7 @@ export default function DetailsAttendanceCard(props: Props) {
                     </TextComponent>
                 </View>
             </View>
-        </View>
+        </Pressable>
     );
 }
 

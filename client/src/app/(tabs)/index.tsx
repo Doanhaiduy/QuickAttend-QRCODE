@@ -9,18 +9,20 @@ import {
     TextComponent,
 } from '@/components';
 import FirstTimeModal from '@/modals/FirstTimeModal';
-import { logout } from '@/redux/reducers/authReducer';
+import { authSelector, logout } from '@/redux/reducers/authReducer';
 import { Ionicons, Octicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function HomeScreen() {
     const [isFirstTime, setIsFirstTime] = useState(false);
 
     const dispatch = useDispatch();
+    const auth = useSelector(authSelector);
 
+    console.log(auth);
     useEffect(() => {
         const checkFirstTime = async () => {
             const value = await AsyncStorage.getItem('theWelcome');
@@ -39,8 +41,8 @@ export default function HomeScreen() {
                 <View className='flex-row flex-1 items-center'>
                     <Image source={require('../../assets/images/avatar.jpg')} className='w-12 h-12 rounded-full mr-3' />
                     <View className='flex-1'>
-                        <TextComponent className='text-xl font-inter500'>Doan Hai Duy</TextComponent>
-                        <TextComponent>@doanhaiduy2325</TextComponent>
+                        <TextComponent className='text-xl font-inter500'>{auth.fullName}</TextComponent>
+                        <TextComponent>{auth.email}</TextComponent>
                     </View>
                 </View>
                 <View>

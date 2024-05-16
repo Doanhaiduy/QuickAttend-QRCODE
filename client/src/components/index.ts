@@ -6,6 +6,7 @@ import DetailsAttendanceCard from './DetailsAttendanceCard';
 import InputComponent from './InputComponent';
 import InputDateTimePicker from './InputDateTimePicker';
 import MyAttendanceCard from './MyAttendanceCard';
+import NotificationCard from './NotificationCard';
 import SectionComponent from './SectionComponent';
 import SpaceComponent from './SpaceComponent';
 import Splash from './Splash';
@@ -25,5 +26,6 @@ export {
     MyAttendanceCard,
     StatisticalCard,
     DetailsAttendanceCard,
-    InputDateTimePicker
+    InputDateTimePicker,
+    NotificationCard,
 };
