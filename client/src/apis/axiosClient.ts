@@ -1,10 +1,28 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { router } from 'expo-router';
 import queryString from 'query-string';
+import { Alert } from 'react-native';
 
 const getAccessToken = async () => {
     const res = await AsyncStorage.getItem('auth');
     return res ? JSON.parse(res).accessToken : '';
+};
+
+const HandleExpiredToken = async () => {
+    await AsyncStorage.setItem(
+        'auth',
+        JSON.stringify({
+            accessToken: 'TokenExpired',
+        })
+    );
+
+    Alert.alert('Token expired!!', 'Your token has expired, please login again', [
+        {
+            text: 'OK',
+            onPress: () => router.navigate('/login'),
+        },
+    ]);
 };
 
 const axiosClient = axios.create({
@@ -35,6 +53,10 @@ axiosClient.interceptors.response.use(
         throw new Error('Something went wrong');
     },
     (error) => {
+        if (error.response && error.response.status === 401) {
+            // Xử lý trường hợp lỗi 401 ở đây
+            HandleExpiredToken();
+        }
         throw error.response.data.message || error.message;
     }
 );

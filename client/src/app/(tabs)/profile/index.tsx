@@ -1,16 +1,15 @@
+import userAPI from '@/apis/userApi';
 import { ButtonComponent, ContainerComponent, SectionComponent, TextComponent } from '@/components';
 import { appColors } from '@/constants/appColors';
+import LoadingModal from '@/modals/LoadingModal';
 import { authSelector, logout, setAuthData } from '@/redux/reducers/authReducer';
 import { Feather, Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as ImagePicker from 'expo-image-picker';
+import { router } from 'expo-router';
+import { useState } from 'react';
 import { Image, Platform, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-
-import * as ImagePicker from 'expo-image-picker';
-import { useEffect, useState } from 'react';
-import userAPI from '@/apis/userApi';
-import LoadingModal from '@/modals/LoadingModal';
-import { router } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ProfileScreen() {
     const [isLoading, setIsLoading] = useState<boolean>(false);

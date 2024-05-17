@@ -12,6 +12,7 @@ import FirstTimeModal from '@/modals/FirstTimeModal';
 import { authSelector, logout } from '@/redux/reducers/authReducer';
 import { Ionicons, Octicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,9 +20,9 @@ import { useDispatch, useSelector } from 'react-redux';
 export default function HomeScreen() {
     const [isFirstTime, setIsFirstTime] = useState(false);
 
+    const dispatch = useDispatch();
     const auth = useSelector(authSelector);
 
-    console.log(auth);
     useEffect(() => {
         const checkFirstTime = async () => {
             const value = await AsyncStorage.getItem('theWelcome');
@@ -34,6 +35,23 @@ export default function HomeScreen() {
         checkFirstTime();
     }, []);
 
+    useEffect(() => {
+        checkTokenExpire();
+    }, []);
+
+    const checkTokenExpire = async () => {
+        const auth = await AsyncStorage.getItem('auth');
+        if (auth) {
+            if (JSON.parse(auth).accessToken === 'TokenExpired') {
+                dispatch(logout());
+                router.navigate('/login');
+            }
+        } else {
+            router.navigate('/login');
+            dispatch(logout());
+        }
+    };
+
     return (
         <ContainerComponent isScroll>
             <SectionComponent className='flex-row items-center'>
@@ -42,7 +60,7 @@ export default function HomeScreen() {
                         source={{
                             uri:
                                 auth.imageURL ||
-                                'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png',
+                                'https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png',
                         }}
                         className='w-12 h-12 rounded-full mr-3'
                     />

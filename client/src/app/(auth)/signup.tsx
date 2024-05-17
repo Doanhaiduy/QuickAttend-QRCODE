@@ -7,7 +7,6 @@ import {
     SpaceComponent,
     TextComponent,
 } from '@/components';
-import { sleep } from '@/helpers';
 import LoadingModal from '@/modals/LoadingModal';
 import { schemasCustom } from '@/utils/zod';
 import { Ionicons } from '@expo/vector-icons';

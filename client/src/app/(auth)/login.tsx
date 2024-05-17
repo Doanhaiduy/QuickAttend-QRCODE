@@ -65,6 +65,7 @@ export default function LoginScreen() {
             });
         }
     };
+
     return (
         <ContainerComponent isAuth isScroll>
             <StatusBar style='dark' />

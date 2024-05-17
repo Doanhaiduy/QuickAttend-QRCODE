@@ -1,16 +1,16 @@
-import { Alert, StyleSheet } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { ButtonComponent, ContainerComponent, InputComponent, SectionComponent, TextComponent } from '@/components';
-import { z } from 'zod';
-import { schemasCustom } from '@/utils/zod';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useDispatch, useSelector } from 'react-redux';
-import { authSelector, setAuthData } from '@/redux/reducers/authReducer';
-import LoadingModal from '@/modals/LoadingModal';
 import userAPI from '@/apis/userApi';
-import { router, useLocalSearchParams } from 'expo-router';
+import { ButtonComponent, ContainerComponent, InputComponent, SectionComponent, TextComponent } from '@/components';
+import LoadingModal from '@/modals/LoadingModal';
+import { authSelector, setAuthData } from '@/redux/reducers/authReducer';
+import { schemasCustom } from '@/utils/zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Alert, StyleSheet } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { z } from 'zod';
 
 const schema = z.object({
     fullName: schemasCustom.fullName,
@@ -40,10 +40,10 @@ export default function EditProfileScreen() {
     } = useForm<FormFields>({
         defaultValues: {
             fullName: auth.fullName || '',
-            phone: '',
+            phone: otherData?.phone || '',
             email: auth.email || '',
             username: auth.username || '',
-            address: '',
+            address: otherData?.address || '',
         },
         resolver: zodResolver(schema),
     });
