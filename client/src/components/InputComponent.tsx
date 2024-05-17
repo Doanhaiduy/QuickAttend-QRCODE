@@ -56,6 +56,7 @@ export default function InputComponent(props: Props) {
                     <Text
                         className={clsx('text-[11px] text-primary-500', {
                             'text-error': err,
+                            'text-gray-800': isDisabled,
                         })}
                     >
                         {label}
@@ -86,6 +87,7 @@ export default function InputComponent(props: Props) {
                         </Pressable>
                     ) : (
                         value &&
+                        !isDisabled &&
                         !iconRight && (
                             <Pressable className='pl-2' onPress={() => onChange('')}>
                                 <Ionicons name='close' size={20} color={appColors.text} />

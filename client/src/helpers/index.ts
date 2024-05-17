@@ -11,6 +11,7 @@ export const Regex = {
     ),
     password: new RegExp(/^(?=.*[A-Za-z])(?=.*\d)([A-Za-z\d\W_]*)$/),
     email: new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/),
+    phone: new RegExp(/^(0[0-9]{9,10})$/),
 };
 
 export const obfuscateEmail = (email: string): string => {

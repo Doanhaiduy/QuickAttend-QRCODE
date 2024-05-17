@@ -8,6 +8,7 @@ export const schemasCustom: {
     email: z.ZodString;
     password: (type: passwordType) => z.ZodString;
     confirmPassword: z.ZodString;
+    phone: z.ZodString;
 } = {
     fullName: z
         .string({
@@ -34,4 +35,8 @@ export const schemasCustom: {
     },
 
     confirmPassword: z.string().min(8),
+
+    phone: z.string().regex(Regex.phone, {
+        message: 'Phone is not valid',
+    }),
 };
