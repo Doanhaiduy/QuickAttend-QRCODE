@@ -3,45 +3,49 @@ const mongoose = require('mongoose');
 const Schema = new mongoose.Schema({
     eventName: {
         type: String,
-        required: true,
+        required: [true, 'Event name is required'],
     },
     description: {
         type: String,
-        required: true,
-    },
-    startTime: {
-        type: Date,
-        required: true,
-        default: Date.now,
+        required: [true, 'Description is required'],
     },
     location: {
-        type: String,
-        required: true,
+        latitude: {
+            type: Number,
+            required: [true, 'Latitude is required'],
+        },
+        longitude: {
+            type: Number,
+            required: [true, 'Longitude is required'],
+        },
     },
     locationName: {
         type: String,
-        required: true,
+        required: [true, 'Location name is required'],
     },
     type: {
         type: String,
-        required: true,
+        required: [true, 'Type is required'],
     },
     privateCode: {
         type: String,
-        required: true,
     },
-    createdBy: {
+    authorId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true,
+        required: [true, 'Author is required'],
     },
     QRCodeUrl: {
         type: String,
-        required: true,
+        required: [true, 'QRCodeUrl is required'],
     },
-    endTime: {
+    startAt: {
         type: Date,
-        required: true,
+        required: [true, 'Start time is required'],
+    },
+    endAt: {
+        type: Date,
+        required: [true, 'End time is required'],
         default: Date.now,
     },
     createAt: {

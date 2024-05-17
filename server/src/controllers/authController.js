@@ -11,19 +11,15 @@ const LoginUser = asyncErrorHandler(async (req, res) => {
     });
 
     if (!exitingUser) {
-        return res.status(404).json({
-            status: 'error',
-            message: 'User not found!',
-        });
+        res.status(404);
+        throw new Error('User not found!');
     }
 
     const isMatch = await bcrypt.compare(password, exitingUser.password);
 
     if (!isMatch) {
-        return res.status(401).json({
-            status: 'error',
-            message: 'Email or password is incorrect!',
-        });
+        res.status(401);
+        throw new Error('Invalid email or password');
     }
 
     res.status(200).json({
@@ -44,10 +40,8 @@ const RegisterUser = asyncErrorHandler(async (req, res) => {
     const { fullName, email, password } = req.body;
     const exitingUser = await UserModel.findOne({ email });
     if (exitingUser) {
-        return res.status(401).json({
-            status: 'error',
-            message: 'User already exists!',
-        });
+        res.status(401);
+        throw new Error('User already exists!');
     }
 
     const newHashedPassword = await hashedPassword(password);
@@ -76,10 +70,8 @@ const ForgotPassword = asyncErrorHandler(async (req, res) => {
     const { email } = req.body;
     const exitingUser = await UserModel.findOne({ email });
     if (!exitingUser) {
-        return res.status(404).json({
-            status: 'error',
-            message: 'User not found!',
-        });
+        res.status(404);
+        throw new Error('User not found!');
     }
 
     const verificationCode = Math.floor(1000 + Math.random() * 9000);
@@ -150,10 +142,8 @@ const ForgotPassword = asyncErrorHandler(async (req, res) => {
             },
         });
     } catch (error) {
-        res.status(500).json({
-            status: 'error',
-            message: 'An error occurred while sending email!',
-        });
+        res.status(500);
+        throw new Error('An error occurred while sending email!');
     }
 });
 
@@ -161,10 +151,8 @@ const Verification = asyncErrorHandler(async (req, res) => {
     const { email, fullName } = req.body;
     const exitingUser = await UserModel.findOne({ email });
     if (exitingUser) {
-        return res.status(400).json({
-            status: 'error',
-            message: 'User already exists!',
-        });
+        res.status(400);
+        throw new Error('User already exists!');
     }
 
     const verificationCode = Math.floor(1000 + Math.random() * 9000);
@@ -214,10 +202,8 @@ const Verification = asyncErrorHandler(async (req, res) => {
             },
         });
     } catch (error) {
-        res.status(500).json({
-            status: 'error',
-            message: 'An error occurred while sending email!',
-        });
+        res.status(500);
+        throw new Error('An error occurred while sending email!');
     }
 });
 
@@ -228,10 +214,8 @@ const ResetPassword = asyncErrorHandler(async (req, res) => {
     });
 
     if (!existingUser) {
-        return res.status(404).json({
-            status: 'error',
-            message: 'User not found!',
-        });
+        return res.status(404);
+        throw new Error('User not found!');
     }
 
     const newHashedPassword = await hashedPassword(newPassword);

@@ -3,7 +3,7 @@ const UserModel = require('../models/userModel');
 const asyncErrorHandler = require('express-async-handler');
 
 const GetAllUsers = asyncErrorHandler(async (req, res) => {
-    const users = await UserModel.find({});
+    const users = await UserModel.find({}).select('email fullName imageURL id username');
     res.status(200).json({
         status: 'success',
         message: 'All users fetched successfully!',
@@ -16,10 +16,8 @@ const GetUserById = asyncErrorHandler(async (req, res) => {
     const id = req.params.id;
     const user = await UserModel.findById(id);
     if (!user) {
-        return res.status(404).json({
-            status: 'error',
-            message: 'User not found!',
-        });
+        res.status(404);
+        throw new Error('User not found!');
     }
     res.status(200).json({
         status: 'success',
@@ -30,26 +28,23 @@ const GetUserById = asyncErrorHandler(async (req, res) => {
 
 const UpdateUser = asyncErrorHandler(async (req, res) => {
     const id = req.params.id;
-    const { fullName, email, password, imageURL } = req.body;
-    const user = await UserModel.findById(id);
-
-    if (!user) {
-        return res.status(404).json({
-            status: 'error',
-            message: 'User not found!',
+    const data = req.body;
+    if (id && data) {
+        const user = await UserModel.findById(id);
+        if (!user) {
+            res.status(404);
+            throw new Error('User not found!');
+        }
+        if (data.password) {
+            data.password = hashedPassword(data.password);
+        }
+        const updatedUser = await UserModel.findByIdAndUpdate(id, data, { new: true });
+        res.status(200).json({
+            status: 'success',
+            message: 'User updated successfully!',
+            data: updatedUser,
         });
     }
-
-    user.fullName = fullName || user.fullName;
-    user.email = email || user.email;
-    user.imageURL = imageURL || user.imageURL;
-    user.password = password ? await hashedPassword(password) : user.password;
-    await user.save();
-    res.status(200).json({
-        status: 'success',
-        message: 'User updated successfully!',
-        data: user,
-    });
 });
 
 module.exports = {

@@ -1,32 +1,27 @@
 const errorMiddleHandler = (err, req, res, next) => {
+    const statusCode = res.statusCode ? res.statusCode : 500;
+    console.log('doan hai duy', err.name);
     if (err.name === 'ValidationError') {
-        return res.status(400).json({
-            status: 'error',
+        let errors = {};
+
+        Object.keys(err.errors).forEach((key) => {
+            errors[key] = err.errors[key].message;
+        });
+
+        res.status(400).json({
             message: err.message,
+            statusCode: 400,
+            errors,
         });
+        next();
     }
-    if (err.name === 'CastError') {
-        return res.status(400).json({
-            status: 'error',
-            message: 'Invalid ID',
-        });
-    }
-    if (err.name === 'JsonWebTokenError') {
-        return res.status(401).json({
-            status: 'error',
-            message: 'Invalid Token',
-        });
-    }
-    if (err.name === 'TokenExpiredError') {
-        return res.status(401).json({
-            status: 'error',
-            message: 'Expired Token',
-        });
-    }
-    res.status(500).json({
-        status: 'error',
+    res.status(statusCode).json({
         message: err.message,
+        statusCode,
+        stack: err.stack,
     });
+
+    next();
 };
 
 module.exports = errorMiddleHandler;

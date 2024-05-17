@@ -5,9 +5,11 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const connectDB = require('./src/configs/db');
 const errorMiddleHandler = require('./src/middlewares/errorMiddleHandler');
+const { verifyToken } = require('./src/middlewares/authMiddleware');
 
 const UserRouter = require('./src/routers/userRouter');
 const AuthRouter = require('./src/routers/authRouter');
+const EventRouter = require('./src/routers/eventRouter');
 
 //dotenv config
 dotenv.config();
@@ -33,8 +35,9 @@ app.get('/', (req, res) => {
     res.send('Server is ready!!');
 });
 
-app.use(`${process.env.BASE_URL}/users`, UserRouter);
 app.use(`${process.env.BASE_URL}/auth`, AuthRouter);
+app.use(`${process.env.BASE_URL}/users`, verifyToken, UserRouter);
+app.use(`${process.env.BASE_URL}/events`, verifyToken, EventRouter);
 
 app.use(errorMiddleHandler);
 
