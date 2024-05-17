@@ -2,6 +2,8 @@ const { hashedPassword } = require('../helpers');
 const UserModel = require('../models/userModel');
 const asyncErrorHandler = require('express-async-handler');
 
+const { uploadImage } = require('../helpers');
+
 const GetAllUsers = asyncErrorHandler(async (req, res) => {
     const users = await UserModel.find({}).select('email fullName imageURL id username');
     res.status(200).json({
@@ -47,8 +49,25 @@ const UpdateUser = asyncErrorHandler(async (req, res) => {
     }
 });
 
+const UploadAvatar = asyncErrorHandler(async (req, res) => {
+    if (req.file && req.params.id) {
+        const imageURL = await uploadImage(req.file);
+        const user = await UserModel.findByIdAndUpdate(req.params.id, { imageURL }, { new: true });
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Avatar uploaded successfully!',
+            data: user,
+        });
+    } else {
+        res.status(400);
+        throw new Error('Invalid file or user id!');
+    }
+});
+
 module.exports = {
     UpdateUser,
     GetAllUsers,
     GetUserById,
+    UploadAvatar,
 };

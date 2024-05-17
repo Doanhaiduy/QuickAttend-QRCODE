@@ -214,7 +214,7 @@ const ResetPassword = asyncErrorHandler(async (req, res) => {
     });
 
     if (!existingUser) {
-        return res.status(404);
+        res.status(404);
         throw new Error('User not found!');
     }
 

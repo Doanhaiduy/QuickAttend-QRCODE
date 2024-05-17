@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { ref, uploadBytesResumable, getDownloadURL } = require('firebase/storage');
+const { storage } = require('../configs/firebase.config');
 
 const hashedPassword = async (password) => {
     const salt = await bcrypt.genSalt(10);
@@ -33,8 +35,33 @@ const genUsername = (fullName) => {
     return username + Math.floor(Math.random() * 10000);
 };
 
+const giveCurrentDateTime = () => {
+    const today = new Date();
+    const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    const time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+    const dateTime = date + ' ' + time;
+    return dateTime;
+};
+
+const uploadImage = async (file) => {
+    try {
+        const dateTime = giveCurrentDateTime();
+        const storageRef = ref(storage, `images/${file.originalname}${dateTime}`);
+        const metadata = {
+            contentType: file.mimetype,
+        };
+        const snapshot = await uploadBytesResumable(storageRef, file.buffer, metadata);
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        return downloadURL;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
 module.exports = {
     hashedPassword,
     getJwtToken,
     genUsername,
+    giveCurrentDateTime,
+    uploadImage,
 };

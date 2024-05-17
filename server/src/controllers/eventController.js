@@ -53,9 +53,45 @@ const GetEventById = asyncErrorHandler(async (req, res) => {
     });
 });
 
+const UpdateEvent = asyncErrorHandler(async (req, res) => {
+    const id = req.params.id;
+    const data = req.body;
+    if (id && data) {
+        const event = await EventModel.findById(id);
+        if (!event) {
+            res.status(404);
+            throw new Error('Event not found!');
+        }
+        const updatedEvent = await EventModel.findByIdAndUpdate(id, data, { new: true });
+        res.status(200).json({
+            status: 'success',
+            message: 'Event updated successfully!',
+            data: updatedEvent,
+        });
+    }
+});
+
+const DeleteEvent = asyncErrorHandler(async (req, res) => {
+    const id = req.params.id;
+    if (id) {
+        const event = await EventModel.findById(id);
+        if (!event) {
+            res.status(404);
+            throw new Error('Event not found!');
+        }
+        await EventModel.findByIdAndDelete(id);
+        res.status(200).json({
+            status: 'success',
+            message: 'Event deleted successfully!',
+        });
+    }
+});
+
 module.exports = {
     AddNewEvent,
     GetAllEvents,
     GetEventByAuthorId,
     GetEventById,
+    UpdateEvent,
+    DeleteEvent,
 };
