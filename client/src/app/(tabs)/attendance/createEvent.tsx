@@ -1,3 +1,4 @@
+import userAPI from '@/apis/userApi';
 import {
     ButtonComponent,
     ContainerComponent,
@@ -19,6 +20,15 @@ export default function CreateEventScreen() {
     const [description, setDescription] = React.useState('');
     const [dateStart, setDateStart] = useState(new Date());
     const [dateEnd, setDateEnd] = useState(new Date());
+
+    const handleAddEvent = async () => {
+        try {
+            const res = await userAPI.HandleUser('/get-all');
+            console.log(res.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <ContainerComponent isScroll back title='Add Event'>
@@ -109,6 +119,7 @@ export default function CreateEventScreen() {
                             securityCode,
                             description,
                         });
+                        handleAddEvent();
                     }}
                 />
             </SectionComponent>

@@ -57,11 +57,11 @@ export default function LoginScreen() {
             await AsyncStorage.setItem('IsFirstTime', 'false');
             Alert.alert('Success', 'Login successfully');
             setIsLoading(false);
-        } catch (error) {
+        } catch (error: any) {
             setIsLoading(false);
             setError('root', {
                 type: 'manual',
-                message: 'Email or password is incorrect',
+                message: error,
             });
         }
     };

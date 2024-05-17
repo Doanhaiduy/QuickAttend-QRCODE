@@ -3,7 +3,7 @@ import axiosClient from './axiosClient';
 
 class AuthAPI {
     HandleAuthentication = async (url: string, data?: any, method?: 'get' | 'post' | 'put' | 'delete') => {
-        return await axiosClient(`${appInfos.BASE_URL}/users/auth${url}`, {
+        return await axiosClient(`${appInfos.BASE_URL}/auth${url}`, {
             method: method || 'get',
             data,
         });

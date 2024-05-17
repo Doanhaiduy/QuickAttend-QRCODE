@@ -19,7 +19,6 @@ import { useDispatch, useSelector } from 'react-redux';
 export default function HomeScreen() {
     const [isFirstTime, setIsFirstTime] = useState(false);
 
-    const dispatch = useDispatch();
     const auth = useSelector(authSelector);
 
     console.log(auth);
@@ -39,10 +38,17 @@ export default function HomeScreen() {
         <ContainerComponent isScroll>
             <SectionComponent className='flex-row items-center'>
                 <View className='flex-row flex-1 items-center'>
-                    <Image source={require('../../assets/images/avatar.jpg')} className='w-12 h-12 rounded-full mr-3' />
+                    <Image
+                        source={{
+                            uri:
+                                auth.imageURL ||
+                                'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png',
+                        }}
+                        className='w-12 h-12 rounded-full mr-3'
+                    />
                     <View className='flex-1'>
                         <TextComponent className='text-xl font-inter500'>{auth.fullName}</TextComponent>
-                        <TextComponent>{auth.email}</TextComponent>
+                        <TextComponent>@{auth.username}</TextComponent>
                     </View>
                 </View>
                 <View>
