@@ -12,6 +12,7 @@ export default function AttendanceLayout() {
             <Stack.Screen name='index' />
             <Stack.Screen name='createEvent' />
             <Stack.Screen name='[id]' />
+            <Stack.Screen name='map' />
         </Stack>
     );
 }

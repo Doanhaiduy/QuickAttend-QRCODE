@@ -7,6 +7,7 @@ import InputComponent from './InputComponent';
 import InputDateTimePicker from './InputDateTimePicker';
 import MyAttendanceCard from './MyAttendanceCard';
 import NotificationCard from './NotificationCard';
+import SearchComponent from './SearchComponent';
 import SectionComponent from './SectionComponent';
 import SpaceComponent from './SpaceComponent';
 import Splash from './Splash';
@@ -28,4 +29,5 @@ export {
     DetailsAttendanceCard,
     InputDateTimePicker,
     NotificationCard,
+    SearchComponent,
 };

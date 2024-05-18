@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Image, Platform, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, Platform, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function ProfileScreen() {
@@ -64,7 +64,7 @@ export default function ProfileScreen() {
                 const newAuthData = { ...auth, imageURL: res?.data?.imageURL };
                 await AsyncStorage.setItem('auth', JSON.stringify(newAuthData));
                 dispatch(setAuthData(newAuthData));
-
+                Alert.alert('Success', 'Update avatar successfully');
                 setIsLoading(false);
             } catch (err) {
                 console.log(err);

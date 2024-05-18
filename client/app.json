@@ -13,9 +13,17 @@
             "backgroundColor": "#3085FE"
         },
         "ios": {
-            "supportsTablet": true
+            "supportsTablet": true,
+            "config": {
+                "googleMapsApiKey": "AIzaSyCs2GujRrlTqhK7anNsFbwm_GccRFjSsI4"
+            }
         },
         "android": {
+            "config": {
+                "googleMaps": {
+                    "apiKey": "AIzaSyCs2GujRrlTqhK7anNsFbwm_GccRFjSsI4"
+                }
+            },
             "adaptiveIcon": {
                 "foregroundImage": "./assets/images/adaptive-icon.png",
                 "backgroundColor": "#ffffff"
@@ -32,6 +40,12 @@
                 "expo-image-picker",
                 {
                     "photosPermission": "QuickAttend needs access to your photos."
+                }
+            ],
+            [
+                "expo-location",
+                {
+                    "locationAlwaysAndWhenInUsePermission": "Allow QuickAttend to use your location."
                 }
             ]
         ],

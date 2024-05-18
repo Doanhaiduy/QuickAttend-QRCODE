@@ -20,6 +20,8 @@ interface Props {
     numberOfLines?: number;
     multiline?: boolean;
     iconRight?: React.ReactNode;
+    height?: number;
+    search?: boolean;
 }
 
 export default function InputComponent(props: Props) {
@@ -40,18 +42,24 @@ export default function InputComponent(props: Props) {
         numberOfLines,
         multiline,
         iconRight,
+        height,
     } = props;
 
     const ContainerClasses = clsx(
         'min-h-[56px] max-h-[56px] w-full px-4 py-2 justify-center rounded-[10px] border-[1px] border-primary-500 ',
         { 'border-error': err },
         { 'border-gray-300': isDisabled },
-        { 'max-h-[200] h-[150px] ': multiline }
+        { 'max-h-[200px] h-[150px] ': multiline }
     );
 
     return (
         <View className='mb-4 w-full'>
-            <View className={ContainerClasses}>
+            <View
+                className={ContainerClasses}
+                style={{
+                    height: height ? height : 'auto',
+                }}
+            >
                 {!multiline && (
                     <Text
                         className={clsx('text-[11px] text-primary-500', {
@@ -62,7 +70,7 @@ export default function InputComponent(props: Props) {
                         {label}
                     </Text>
                 )}
-                <View className={`flex-1 flex-row bg-white ${multiline && 'h-[150px]'}`}>
+                <View className={`flex-1 flex-row bg-white ${multiline && 'h-[150px]'} ${iconRight && 'pr-10'}`}>
                     <TextInput
                         placeholder={placeholder}
                         value={value}
@@ -71,7 +79,7 @@ export default function InputComponent(props: Props) {
                         onFocus={onFocus}
                         onBlur={onBlur}
                         secureTextEntry={isPassword && !isShowPassword}
-                        editable={!isDisabled && !iconRight}
+                        editable={!isDisabled}
                         textAlignVertical='top'
                         keyboardType={type}
                         numberOfLines={numberOfLines}

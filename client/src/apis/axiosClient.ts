@@ -54,7 +54,6 @@ axiosClient.interceptors.response.use(
     },
     (error) => {
         if (error.response && error.response.status === 401) {
-            // Xử lý trường hợp lỗi 401 ở đây
             HandleExpiredToken();
         }
         throw error.response.data.message || error.message;
