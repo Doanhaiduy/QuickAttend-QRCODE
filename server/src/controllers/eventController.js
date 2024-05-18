@@ -1,9 +1,38 @@
 const asyncErrorHandler = require('express-async-handler');
 const EventModel = require('../models/eventModel');
+var QRCode = require('qrcode');
+const { uploadImage, encryptData, decryptData } = require('../helpers');
+
+const handleCreateQrCode = async (data) => {
+    if (data) {
+        try {
+            const jsonData = JSON.stringify(data);
+            const encryptedData = encryptData(jsonData, process.env.ENCRYPT_KEY);
+            const decryptedData = decryptData(encryptedData, process.env.ENCRYPT_KEY);
+            console.log('Decrypted data:', decryptedData);
+            let qr = await QRCode.toDataURL(JSON.stringify({ data: encryptedData }), {
+                errorCorrectionLevel: 'H',
+                margin: 1,
+                color: {
+                    dark: '#3085FE',
+                    light: '#ffffff',
+                },
+            });
+
+            const url = await uploadImage(qr, 'data_url');
+            return url;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+};
 
 const AddNewEvent = asyncErrorHandler(async (req, res) => {
     const data = req.body;
     console.log(data);
+    const QRCodeUrl = await handleCreateQrCode(data);
+    req.body.QRCodeUrl = QRCodeUrl;
+
     if (data) {
         const event = new EventModel(data);
         await event.save();

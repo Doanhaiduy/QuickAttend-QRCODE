@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-const { ref, uploadBytesResumable, getDownloadURL } = require('firebase/storage');
+const { ref, uploadBytesResumable, getDownloadURL, uploadString } = require('firebase/storage');
 const { storage } = require('../configs/firebase.config');
 
 const hashedPassword = async (password) => {
@@ -43,14 +44,22 @@ const giveCurrentDateTime = () => {
     return dateTime;
 };
 
-const uploadImage = async (file) => {
+const uploadImage = async (file, type) => {
     try {
         const dateTime = giveCurrentDateTime();
-        const storageRef = ref(storage, `images/${file.originalname}${dateTime}`);
-        const metadata = {
-            contentType: file.mimetype,
-        };
-        const snapshot = await uploadBytesResumable(storageRef, file.buffer, metadata);
+        const storageRef = ref(storage, `images/${dateTime}_${Math.random().toString(36).substring(2)}.png`);
+        let snapshot;
+
+        if (type === 'data_url') {
+            snapshot = await uploadString(storageRef, file, 'data_url');
+        }
+        if (type === 'file') {
+            const metadata = {
+                contentType: file.mimetype,
+            };
+            snapshot = await uploadBytesResumable(storageRef, file.buffer, metadata);
+        }
+
         const downloadURL = await getDownloadURL(snapshot.ref);
         return downloadURL;
     } catch (error) {
@@ -58,10 +67,27 @@ const uploadImage = async (file) => {
     }
 };
 
+function encryptData(data, key) {
+    const cipher = crypto.createCipher('aes-256-cbc', key);
+    let encrypted = cipher.update(data, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    return encrypted;
+}
+
+// Hàm giải mã dữ liệu (nếu cần)
+function decryptData(encryptedData, key) {
+    const decipher = crypto.createDecipher('aes-256-cbc', key);
+    let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    return decrypted;
+}
+
 module.exports = {
     hashedPassword,
     getJwtToken,
     genUsername,
     giveCurrentDateTime,
     uploadImage,
+    encryptData,
+    decryptData,
 };

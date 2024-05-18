@@ -6,6 +6,6 @@ const Router = express.Router();
 Router.get('/get-all', GetAllUsers);
 Router.get('/:id', GetUserById);
 Router.put('/:id', UpdateUser);
-Router.post('/upload-avatar/:id', upload.single('avatar'), UploadAvatar);
+Router.put('/upload-avatar/:id', upload.single('avatar'), UploadAvatar);
 
 module.exports = Router;

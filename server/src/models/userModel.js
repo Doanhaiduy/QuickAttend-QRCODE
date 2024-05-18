@@ -19,6 +19,12 @@ const Schema = new mongoose.Schema({
         required: true,
         unique: [true, 'Username is already exists!'],
     },
+    phone: {
+        type: String,
+    },
+    address: {
+        type: String,
+    },
     imageURL: {
         type: String,
     },

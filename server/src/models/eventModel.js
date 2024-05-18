@@ -37,7 +37,6 @@ const Schema = new mongoose.Schema({
     },
     QRCodeUrl: {
         type: String,
-        required: [true, 'QRCodeUrl is required'],
     },
     startAt: {
         type: Date,

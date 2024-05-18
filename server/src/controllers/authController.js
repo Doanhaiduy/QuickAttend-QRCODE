@@ -18,7 +18,7 @@ const LoginUser = asyncErrorHandler(async (req, res) => {
     const isMatch = await bcrypt.compare(password, exitingUser.password);
 
     if (!isMatch) {
-        res.status(401);
+        res.status(400);
         throw new Error('Invalid email or password');
     }
 
@@ -40,7 +40,7 @@ const RegisterUser = asyncErrorHandler(async (req, res) => {
     const { fullName, email, password } = req.body;
     const exitingUser = await UserModel.findOne({ email });
     if (exitingUser) {
-        res.status(401);
+        res.status(400);
         throw new Error('User already exists!');
     }
 
