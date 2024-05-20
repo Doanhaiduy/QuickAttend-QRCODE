@@ -1,5 +1,5 @@
 import eventAPI from '@/apis/eventApi';
-import IEvent from '@/app/models/event';
+import IEvent from '@/models/event';
 import {
     ButtonComponent,
     ContainerComponent,
@@ -14,15 +14,24 @@ import { authSelector } from '@/redux/reducers/authReducer';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { format } from 'date-fns-tz';
+import Checkbox from 'expo-checkbox';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
 
 export default function CreateEventScreen() {
-    const { lat, long, securityCodeParams, descriptionParams, dateStartParams, dateEndParams, eventNameParams } =
-        useLocalSearchParams();
+    const {
+        lat,
+        long,
+        securityCodeParams,
+        descriptionParams,
+        dateStartParams,
+        dateEndParams,
+        eventNameParams,
+        checkParams,
+    } = useLocalSearchParams();
     const [eventName, setEventName] = React.useState<string>(eventNameParams?.toString() || '');
     const [location, setLocation] = React.useState<string>('');
     const [securityCode, setSecurityCode] = React.useState<string>(securityCodeParams?.toString() || '');
@@ -33,11 +42,13 @@ export default function CreateEventScreen() {
     const [dateEnd, setDateEnd] = useState<Date>(dateEndParams ? new Date(dateEndParams.toString()) : new Date());
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+    const [isCheck, setIsCheck] = useState<boolean>(!!checkParams || false);
 
     const auth = useSelector(authSelector);
 
     const handleAddEvent = async () => {
         const pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+        if (!Validate()) return;
         setLoading(true);
         try {
             const event: IEvent = {
@@ -48,8 +59,8 @@ export default function CreateEventScreen() {
                     longitude: long ? +long : 0,
                 },
                 locationName: location,
-                type: 'public',
-                privateCode: securityCode,
+                type: isCheck ? 'private' : 'public',
+                privateCode: isCheck ? securityCode : undefined,
                 authorId: auth.id,
                 startAt: format(dateStart, pattern, { timeZone: 'Asia/Ho_Chi_Minh' }),
                 endAt: format(dateEnd, pattern, { timeZone: 'Asia/Ho_Chi_Minh' }),
@@ -73,10 +84,39 @@ export default function CreateEventScreen() {
         }
     };
 
+    const Validate = () => {
+        if (!eventName) {
+            setError('Event name is required');
+            setLoading(false);
+            return false;
+        }
+        if (dateStart > dateEnd) {
+            setError('Date start must be less than date end');
+            setLoading(false);
+            return false;
+        }
+        if (isCheck && !securityCode) {
+            setError('Security code is required');
+            setLoading(false);
+            return false;
+        }
+        if (!lat || !long) {
+            setError('Location is required');
+            setLoading(false);
+            return false;
+        }
+        if (!description) {
+            setError('Description is required');
+            setLoading(false);
+            return false;
+        }
+
+        return true;
+    };
     const reverseLocation = async (lat: number, long: number) => {
         try {
-            const apiKey = 'zQooxv0iylfvwq46LeAidvzavSl9RIuhgBkvBF9-0JY';
-            const api = `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${lat},${long}&lang=vi-VN&apiKey=${apiKey}`;
+            const api = `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${lat},${long}&lang=vi-VN&apiKey=${process
+                .env.EXPO_PUBLIC_HERE_LOCATION_API_KEY!}`;
             const res = await axios(api);
             if (res && res.status === 200) {
                 console.log(res.data.items[0].title);
@@ -152,6 +192,7 @@ export default function CreateEventScreen() {
                                 description,
                                 dateStart: dateStart.toISOString(),
                                 dateEnd: dateEnd.toISOString(),
+                                check: isCheck.toString(),
                             },
                         });
                     }}
@@ -166,13 +207,20 @@ export default function CreateEventScreen() {
                         )}
                     </View>
                 </TouchableOpacity>
-
-                <InputComponent
-                    value={securityCode}
-                    onChange={(val) => setSecurityCode(val)}
-                    label='Security Code'
-                    placeholder='Enter Security Code'
-                />
+                <SectionComponent className='px-0 flex-row items-center pt-0'>
+                    <Checkbox value={isCheck} onValueChange={setIsCheck} className='mr-2' />
+                    <Pressable onPress={() => setIsCheck(!isCheck)}>
+                        <TextComponent className='text-primary-500'>Private Event</TextComponent>
+                    </Pressable>
+                </SectionComponent>
+                {isCheck && (
+                    <InputComponent
+                        value={securityCode}
+                        onChange={(val) => setSecurityCode(val)}
+                        label='Security Code'
+                        placeholder='Enter Security Code'
+                    />
+                )}
 
                 <TextComponent className='text-primary-500 text-[12px] mb-[2px]'>Description</TextComponent>
                 <InputComponent
@@ -191,16 +239,6 @@ export default function CreateEventScreen() {
                     type='primary'
                     size='large'
                     onPress={() => {
-                        const timeStart = dateStart.getTime();
-                        const timeEnd = dateEnd.getTime();
-                        console.log({
-                            eventName,
-                            timeStart,
-                            timeEnd,
-                            location,
-                            securityCode,
-                            description,
-                        });
                         handleAddEvent();
                     }}
                 />

@@ -58,7 +58,6 @@ export default function AttendanceScreen() {
         };
         fetchData();
     }, []);
-
     useEffect(() => {
         handleGetEvents();
     }, [activeTab]);

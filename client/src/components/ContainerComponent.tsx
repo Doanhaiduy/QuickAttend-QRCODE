@@ -4,6 +4,7 @@ import React from 'react';
 import {
     Platform,
     Pressable,
+    RefreshControl,
     SafeAreaView,
     ScrollView,
     StatusBar,
@@ -13,6 +14,7 @@ import {
     ViewStyle,
 } from 'react-native';
 import TextComponent from './TextComponent';
+import { appColors } from '@/constants/appColors';
 
 interface Props extends React.ComponentProps<typeof View> {
     children: React.ReactNode;
@@ -31,6 +33,14 @@ export default function ContainerComponent(props: Props) {
     const { children, isAuth, back, title, isScroll, iconRight, onBack, style, isModal, isOnboarding } = props;
 
     const router = useRouter();
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 1000);
+    }, []);
 
     const HeaderAuth = back ? (
         <View className='flex-row items-center justify-between py-2 pl-5'>
@@ -64,7 +74,19 @@ export default function ContainerComponent(props: Props) {
         <>
             {title && !back && HeaderTittle}
             {isAuth ? HeaderAuth : Header}
-            <ScrollView className='flex-1'>{children}</ScrollView>
+            <ScrollView
+                className='flex-1'
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                        size={20}
+                        tintColor={appColors.primary}
+                    />
+                }
+            >
+                {children}
+            </ScrollView>
         </>
     ) : (
         <>

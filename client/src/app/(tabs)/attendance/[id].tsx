@@ -4,8 +4,9 @@ import { ButtonComponent, ContainerComponent, SectionComponent, TextComponent } 
 import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import eventAPI from '@/apis/eventApi';
-import IEvent from '@/app/models/event';
+import IEvent from '@/models/event';
 import { format } from 'date-fns';
+import { checkTimeStatus } from '@/helpers';
 
 export default function EventDetails() {
     const { eventId, id } = useLocalSearchParams();
@@ -48,12 +49,16 @@ export default function EventDetails() {
                 </View>
                 <View className='py-3 border-b-[0.5px] border-gray-200'>
                     <TextComponent className='text-[12px] text-grayText mb-[2px]'>Status</TextComponent>
-                    <TextComponent className='text-base text-blackText'>Live</TextComponent>
+                    <TextComponent className='text-base text-blackText'>
+                        {checkTimeStatus(new Date(event?.startAt ?? new Date()), new Date(event?.endAt ?? new Date()))}
+                    </TextComponent>
                 </View>
-                <View className='py-3 border-b-[0.5px] border-gray-200'>
-                    <TextComponent className='text-[12px] text-grayText mb-[2px]'>Security Code</TextComponent>
-                    <TextComponent className='text-base text-blackText'>{event?.privateCode}</TextComponent>
-                </View>
+                {event?.type === 'private' && (
+                    <View className='py-3 border-b-[0.5px] border-gray-200'>
+                        <TextComponent className='text-[12px] text-grayText mb-[2px]'>Security Code</TextComponent>
+                        <TextComponent className='text-base text-blackText'>{event?.privateCode}</TextComponent>
+                    </View>
+                )}
                 <View className='py-3 border-b-[0.5px] border-gray-200'>
                     <TextComponent className='text-[12px] text-grayText mb-[2px]'>Description</TextComponent>
                     <TextComponent className='text-base text-blackText'>{event?.description}</TextComponent>

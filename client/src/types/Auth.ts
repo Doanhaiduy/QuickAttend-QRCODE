@@ -5,8 +5,8 @@ interface AuthType {
 }
 
 enum TimeStatus {
-    Upcoming = 'upcoming',
-    Ongoing = 'ongoing',
-    Expired = 'expired',
+    Upcoming = 'Upcoming',
+    Ongoing = 'Ongoing',
+    Expired = 'Expired',
 }
 export { AuthType, TimeStatus };

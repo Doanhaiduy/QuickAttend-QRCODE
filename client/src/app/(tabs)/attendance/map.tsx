@@ -7,7 +7,9 @@ import MapView, { Marker } from 'react-native-maps';
 
 import Geocoder from 'react-native-geocoding';
 import LoadingModal from '@/modals/LoadingModal';
-Geocoder.init('AIzaSyCs2GujRrlTqhK7anNsFbwm_GccRFjSsI4', { language: 'en' });
+import { useSelector } from 'react-redux';
+import { authSelector } from '@/redux/reducers/authReducer';
+Geocoder.init(process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY!, { language: 'en' });
 
 export default function MapScreen() {
     const [location, setLocation] = useState<{
@@ -15,7 +17,8 @@ export default function MapScreen() {
         long: number;
     }>();
     const [isLoading, setIsLoading] = useState(false);
-    const { lat, long, eventName, securityCode, description, dateStart, dateEnd } = useLocalSearchParams();
+    const { lat, long, eventName, securityCode, description, dateStart, dateEnd, check } = useLocalSearchParams();
+    const auth = useSelector(authSelector);
 
     useEffect(() => {
         (async () => {
@@ -91,6 +94,7 @@ export default function MapScreen() {
                 descriptionParams: description,
                 dateStartParams: dateStart,
                 dateEndParams: dateEnd,
+                checkParams: check,
             },
         });
     };
@@ -143,7 +147,7 @@ export default function MapScreen() {
                                 longitude: location?.long || 0,
                             }}
                             // image={require('../../../assets/images/avatar.jpg')}
-                            title='Current Location'
+                            title={auth.fullName || 'You'}
                             description="You're here"
                             draggable
                             onDragEnd={(e) => {
@@ -153,10 +157,20 @@ export default function MapScreen() {
                                 });
                             }}
                         >
-                            <Image
-                                source={require('../../../assets/images/avatar.jpg')}
-                                style={{ height: 35, width: 35 }}
-                            />
+                            <View className='p-1 rounded-full bg-primary-500/20'>
+                                <View className='p-1 rounded-full bg-primary-500/50'>
+                                    <View className='p-1 rounded-full bg-primary-500/80'>
+                                        <Image
+                                            source={{
+                                                uri:
+                                                    auth.imageURL ||
+                                                    'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png',
+                                            }}
+                                            style={{ height: 25, width: 25, borderRadius: 100 }}
+                                        />
+                                    </View>
+                                </View>
+                            </View>
                         </Marker>
                     </MapView>
                     <View className='absolute top-[70%] w-full  items-center justify-center'>

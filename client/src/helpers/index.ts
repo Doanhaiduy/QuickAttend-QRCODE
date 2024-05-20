@@ -45,11 +45,14 @@ export const generateWeekDates = () => {
 };
 
 export const checkTimeStatus = (startAt: Date, endAt: Date): TimeStatus => {
-    const formatStarAt = format(startAt, 'yyyy-MM-dd HH:mm');
-    const formatEndAt = format(endAt, 'yyyy-MM-dd HH:mm');
-    const now = new Date();
-    const formatNow = format(now, 'yyyy-MM-dd HH:mm');
-    if (formatNow > formatEndAt) return TimeStatus.Passed;
-    if (formatNow < formatStarAt) return TimeStatus.Upcoming;
-    return TimeStatus.Ongoing;
+    const currentTime = new Date();
+    const startTime = new Date(startAt);
+    const endTime = new Date(endAt);
+    if (currentTime < startTime) {
+        return TimeStatus.Upcoming;
+    } else if (currentTime > startTime && currentTime < endTime) {
+        return TimeStatus.Ongoing;
+    } else {
+        return TimeStatus.Expired;
+    }
 };
