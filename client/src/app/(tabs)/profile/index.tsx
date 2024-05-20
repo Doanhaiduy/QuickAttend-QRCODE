@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Image, Platform, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, Platform, Pressable, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function ProfileScreen() {
@@ -47,7 +47,6 @@ export default function ProfileScreen() {
                 const mimeType = avatar.mimeType;
                 const formData = new FormData();
 
-                console.log('fixbug: ', { avatar: avatar.uri.replace('file://', '') });
                 formData.append(
                     'avatar',
                     JSON.parse(
@@ -164,24 +163,7 @@ export default function ProfileScreen() {
                     <Ionicons name='chevron-forward' size={24} color='black' />
                 </TouchableOpacity>
             </SectionComponent>
-            <LoadingModal visible={isLoading} />
+            <LoadingModal visible={isLoading} message='Uploading...' />
         </ContainerComponent>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
-    },
-});

@@ -3,7 +3,7 @@ import React from 'react';
 import TextComponent from './TextComponent';
 
 interface Props {
-    type: 'Balance' | 'Approved' | 'Pending' | 'Rejected';
+    type: 'Total' | 'Upcoming' | 'Ongoing' | 'Expired';
     value: number;
     color: string;
 }

@@ -35,6 +35,7 @@ export default function InputDateTimePicker(props: Props) {
                         mode={type}
                         display='default'
                         onChange={(e, val) => {
+                            console.log(val?.toLocaleString());
                             onChange(e, val);
                             setShow(false);
                         }}
@@ -42,6 +43,7 @@ export default function InputDateTimePicker(props: Props) {
                         accentColor={appColors.primary}
                         minimumDate={new Date()}
                         textColor='red'
+                        timeZoneName='GMT+7'
                     />
                 )}
             </View>

@@ -1,4 +1,5 @@
-import userAPI from '@/apis/userApi';
+import eventAPI from '@/apis/eventApi';
+import IEvent from '@/app/models/event';
 import {
     ButtonComponent,
     ContainerComponent,
@@ -8,29 +9,67 @@ import {
     TextComponent,
 } from '@/components';
 import { appColors } from '@/constants/appColors';
+import LoadingModal from '@/modals/LoadingModal';
+import { authSelector } from '@/redux/reducers/authReducer';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
+import { format } from 'date-fns-tz';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { useSelector } from 'react-redux';
 
 export default function CreateEventScreen() {
-    const [eventName, setEventName] = React.useState('');
-    const [location, setLocation] = React.useState('Choose location');
-    const [securityCode, setSecurityCode] = React.useState('');
-    const [description, setDescription] = React.useState('');
-    const [dateStart, setDateStart] = useState(new Date());
-    const [dateEnd, setDateEnd] = useState(new Date());
+    const { lat, long, securityCodeParams, descriptionParams, dateStartParams, dateEndParams, eventNameParams } =
+        useLocalSearchParams();
+    const [eventName, setEventName] = React.useState<string>(eventNameParams?.toString() || '');
+    const [location, setLocation] = React.useState<string>('');
+    const [securityCode, setSecurityCode] = React.useState<string>(securityCodeParams?.toString() || '');
+    const [description, setDescription] = React.useState<string>(descriptionParams?.toString() || '');
+    const [dateStart, setDateStart] = useState<Date>(
+        dateStartParams ? new Date(dateStartParams.toString()) : new Date()
+    );
+    const [dateEnd, setDateEnd] = useState<Date>(dateEndParams ? new Date(dateEndParams.toString()) : new Date());
+    const [error, setError] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
-    const { lat, long } = useLocalSearchParams();
+    const auth = useSelector(authSelector);
 
     const handleAddEvent = async () => {
+        const pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+        setLoading(true);
         try {
-            const res = await userAPI.HandleUser('/get-all');
-            console.log(res.data);
-        } catch (error) {
-            console.log(error);
+            const event: IEvent = {
+                eventName,
+                description,
+                location: {
+                    latitude: lat ? +lat : 0,
+                    longitude: long ? +long : 0,
+                },
+                locationName: location,
+                type: 'public',
+                privateCode: securityCode,
+                authorId: auth.id,
+                startAt: format(dateStart, pattern, { timeZone: 'Asia/Ho_Chi_Minh' }),
+                endAt: format(dateEnd, pattern, { timeZone: 'Asia/Ho_Chi_Minh' }),
+            };
+            const res = await eventAPI.HandleEvent('/create', event, 'post');
+            if (res && res.data) {
+                console.log(res.data);
+                Alert.alert('Success', 'Create event success');
+                router.push({
+                    pathname: `/attendance/${res.data.eventName}`,
+                    params: {
+                        eventId: res.data._id,
+                    },
+                });
+                setLoading(false);
+            }
+            setLoading(false);
+        } catch (error: string | any) {
+            setError(error);
+            setLoading(false);
         }
     };
 
@@ -108,6 +147,11 @@ export default function CreateEventScreen() {
                                 lat,
                                 long,
                                 locationName: location,
+                                eventName,
+                                securityCode,
+                                description,
+                                dateStart: dateStart.toISOString(),
+                                dateEnd: dateEnd.toISOString(),
                             },
                         });
                     }}
@@ -139,6 +183,7 @@ export default function CreateEventScreen() {
                     height={150}
                     multiline
                 />
+                {error && <TextComponent className='text-error text-left'>{error}</TextComponent>}
             </SectionComponent>
             <SectionComponent>
                 <ButtonComponent
@@ -160,6 +205,7 @@ export default function CreateEventScreen() {
                     }}
                 />
             </SectionComponent>
+            <LoadingModal visible={loading} message='Creating event...' />
         </ContainerComponent>
     );
 }

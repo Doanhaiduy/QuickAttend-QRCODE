@@ -13,28 +13,28 @@ import { authSelector, logout } from '@/redux/reducers/authReducer';
 import { Ionicons, Octicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
+const checkFirstTime = async () => {
+    const value = await AsyncStorage.getItem('theWelcome');
+    console.log('tf', value);
+    if (value === null) {
+        await AsyncStorage.setItem('theWelcome', 'false');
+        return true;
+    } else {
+        return false;
+    }
+};
+
+const initialValue = checkFirstTime();
+
 export default function HomeScreen() {
-    const [isFirstTime, setIsFirstTime] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(!!initialValue);
 
     const dispatch = useDispatch();
     const auth = useSelector(authSelector);
-
-    useEffect(() => {
-        const checkFirstTime = async () => {
-            const value = await AsyncStorage.getItem('theWelcome');
-            if (value === null) {
-                setIsFirstTime(true);
-                await AsyncStorage.setItem('theWelcome', 'false');
-            }
-        };
-
-        checkFirstTime();
-    }, []);
-
     useEffect(() => {
         checkTokenExpire();
     }, []);
@@ -51,7 +51,11 @@ export default function HomeScreen() {
             dispatch(logout());
         }
     };
-
+    console.log(!!initialValue);
+    const modal = useMemo(
+        () => <FirstTimeModal visible={isModalVisible} onClose={() => setIsModalVisible(false)} />,
+        []
+    );
     return (
         <ContainerComponent isScroll>
             <SectionComponent className='flex-row items-center'>
@@ -89,7 +93,6 @@ export default function HomeScreen() {
                         <TextComponent className='text-lg font-inter500 ml-4 mb-4'>Today Attendance</TextComponent>
                     )}
                     ItemSeparatorComponent={() => <View className='h-4 w-4' />}
-                    // columnWrapperStyle={{ justifyContent: 'space-between' }}
                     numColumns={2}
                     scrollEnabled={false}
                 />
@@ -110,12 +113,10 @@ export default function HomeScreen() {
                         </View>
                     )}
                     ItemSeparatorComponent={() => <View className='h-4 w-4' />}
-                    // columnWrapperStyle={{ justifyContent: 'space-between' }}
-                    // numColumns={2}
                     scrollEnabled={false}
                 />
             </SectionComponent>
-            <FirstTimeModal visible={isFirstTime} />
+            {modal}
         </ContainerComponent>
     );
 }

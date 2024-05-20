@@ -4,10 +4,11 @@ import React from 'react';
 import { ActivityIndicator, Image, Modal, StyleSheet, View } from 'react-native';
 interface Props {
     visible: boolean;
+    onClose: () => void;
 }
 
 export default function FirstTimeModal(props: Props) {
-    const { visible } = props;
+    const { visible, onClose } = props;
     const [isVisible, setIsVisible] = React.useState(visible);
 
     return (
@@ -22,7 +23,7 @@ export default function FirstTimeModal(props: Props) {
                     <SpaceComponent height={20} />
                     <ButtonComponent
                         onPress={() => {
-                            setIsVisible(false);
+                            setIsVisible(!visible);
                         }}
                         title='Get Started'
                         type='primary'

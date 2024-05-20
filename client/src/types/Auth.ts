@@ -4,4 +4,9 @@ interface AuthType {
     accessToken: string;
 }
 
-export { AuthType };
+enum TimeStatus {
+    Upcoming = 'upcoming',
+    Ongoing = 'ongoing',
+    Expired = 'expired',
+}
+export { AuthType, TimeStatus };

@@ -128,7 +128,9 @@ export default function LoginScreen() {
                     type='outline'
                     icon={<Ionicons name='logo-google' size={24} color={'#000'} />}
                     title='Google'
-                    onPress={() => {}}
+                    onPress={async () => {
+                        await AsyncStorage.clear();
+                    }}
                 />
             </SectionComponent>
             <SpaceComponent height={68} />

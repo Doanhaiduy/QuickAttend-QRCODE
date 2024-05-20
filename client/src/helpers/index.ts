@@ -1,3 +1,6 @@
+import { TimeStatus } from '@/types/Auth';
+import { format } from 'date-fns';
+
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export const checkHasErr = (data: object) => {
     return Object.values({ ...data }).some(
@@ -39,4 +42,14 @@ export const generateWeekDates = () => {
     }
 
     return weekDates;
+};
+
+export const checkTimeStatus = (startAt: Date, endAt: Date): TimeStatus => {
+    const formatStarAt = format(startAt, 'yyyy-MM-dd HH:mm');
+    const formatEndAt = format(endAt, 'yyyy-MM-dd HH:mm');
+    const now = new Date();
+    const formatNow = format(now, 'yyyy-MM-dd HH:mm');
+    if (formatNow > formatEndAt) return TimeStatus.Passed;
+    if (formatNow < formatStarAt) return TimeStatus.Upcoming;
+    return TimeStatus.Ongoing;
 };
