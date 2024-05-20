@@ -40,7 +40,7 @@ const giveCurrentDateTime = () => {
     const today = new Date();
     const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     const time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
-    const dateTime = date + ' ' + time;
+    const dateTime = date + time;
     return dateTime;
 };
 
@@ -67,20 +67,33 @@ const uploadImage = async (file, type) => {
     }
 };
 
-function encryptData(data, key) {
+const encryptData = (data, key) => {
     const cipher = crypto.createCipher('aes-256-cbc', key);
     let encrypted = cipher.update(data, 'utf8', 'hex');
     encrypted += cipher.final('hex');
     return encrypted;
-}
+};
 
 // Hàm giải mã dữ liệu (nếu cần)
-function decryptData(encryptedData, key) {
+const decryptData = (encryptedData, key) => {
     const decipher = crypto.createDecipher('aes-256-cbc', key);
     let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
     return decrypted;
-}
+};
+
+const checkTimeStatus = (startAt, endAt) => {
+    const currentTime = new Date();
+    const startTime = new Date(startAt);
+    const endTime = new Date(endAt);
+    if (currentTime < startTime) {
+        return 'upcoming';
+    } else if (currentTime > startTime && currentTime < endTime) {
+        return 'ongoing';
+    } else {
+        return 'expired';
+    }
+};
 
 module.exports = {
     hashedPassword,
@@ -90,4 +103,7 @@ module.exports = {
     uploadImage,
     encryptData,
     decryptData,
+    checkTimeStatus,
 };
+
+('https://firebasestorage.googleapis.com/v0/b/quickattend-dbb9b.appspot.com/o/images%2F2024-5-1913%3A50%3A56_8dkw9i6oqyc.png?alt=media&token=611147b6-63b3-4ddc-84ca-326023ff7af4');

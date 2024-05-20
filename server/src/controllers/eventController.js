@@ -1,7 +1,7 @@
 const asyncErrorHandler = require('express-async-handler');
 const EventModel = require('../models/eventModel');
 var QRCode = require('qrcode');
-const { uploadImage, encryptData, decryptData } = require('../helpers');
+const { uploadImage, encryptData, decryptData, checkTimeStatus } = require('../helpers');
 
 const handleCreateQrCode = async (data) => {
     if (data) {
@@ -10,14 +10,17 @@ const handleCreateQrCode = async (data) => {
             const encryptedData = encryptData(jsonData, process.env.ENCRYPT_KEY);
             const decryptedData = decryptData(encryptedData, process.env.ENCRYPT_KEY);
             console.log('Decrypted data:', decryptedData);
-            let qr = await QRCode.toDataURL(JSON.stringify({ data: encryptedData }), {
-                errorCorrectionLevel: 'H',
-                margin: 1,
-                color: {
-                    dark: '#3085FE',
-                    light: '#ffffff',
-                },
-            });
+            let qr = await QRCode.toDataURL(
+                JSON.stringify({ data: encryptedData, message: 'https://doanhaiduy.website' }),
+                {
+                    errorCorrectionLevel: 'H',
+                    margin: 1,
+                    color: {
+                        dark: '#000000',
+                        light: '#ffffff',
+                    },
+                }
+            );
 
             const url = await uploadImage(qr, 'data_url');
             return url;
@@ -48,15 +51,49 @@ const AddNewEvent = asyncErrorHandler(async (req, res) => {
 });
 
 const GetAllEvents = asyncErrorHandler(async (req, res) => {
-    const events = await EventModel.find({});
+    const { status } = req.query;
+    let events = await EventModel.find().sort({ startAt: -1 });
+
+    if (status === 'upcoming' || status === 'ongoing' || status === 'expired') {
+        events = events.filter((event) => {
+            const eventStatus = checkTimeStatus(event.startAt, event.endAt);
+            console.log(eventStatus, status);
+            return eventStatus === status;
+        });
+    }
+
     res.status(200).json({
         status: 'success',
-        message: 'All events fetched successfully!',
+        message: 'Events fetched successfully!',
         count: events.length,
         data: events,
     });
 });
 
+const GetAnalyticEvent = asyncErrorHandler(async (req, res) => {
+    const currentTime = new Date();
+
+    const total = await EventModel.countDocuments();
+
+    const upcoming = await EventModel.countDocuments({ startAt: { $gt: currentTime } });
+
+    const ongoing = await EventModel.countDocuments({ startAt: { $lte: currentTime }, endAt: { $gte: currentTime } });
+
+    const expired = await EventModel.countDocuments({ endAt: { $lt: currentTime } });
+
+    const analytic = {
+        total,
+        upcoming,
+        ongoing,
+        expired,
+    };
+
+    res.json({
+        status: 'success',
+        message: 'Analytic fetched successfully!',
+        data: analytic,
+    });
+});
 const GetEventByAuthorId = asyncErrorHandler(async (req, res) => {
     const authorId = req.params.authorId;
     const events = await EventModel.find({ authorId });
@@ -116,6 +153,25 @@ const DeleteEvent = asyncErrorHandler(async (req, res) => {
     }
 });
 
+const GetQRCodeById = asyncErrorHandler(async (req, res) => {
+    const id = req.params.id;
+    if (id) {
+        const event = await EventModel.findById(id);
+        if (!event) {
+            res.status(404);
+            throw new Error('Event not found!');
+        }
+        res.status(200).json({
+            status: 'success',
+            message: 'QR code fetched successfully!',
+            data: event.QRCodeUrl,
+        });
+    } else {
+        res.status(404);
+        throw new Error('Invalid id');
+    }
+});
+
 module.exports = {
     AddNewEvent,
     GetAllEvents,
@@ -123,4 +179,6 @@ module.exports = {
     GetEventById,
     UpdateEvent,
     DeleteEvent,
+    GetQRCodeById,
+    GetAnalyticEvent,
 };
