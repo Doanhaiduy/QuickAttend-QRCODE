@@ -27,20 +27,23 @@ interface Props extends React.ComponentProps<typeof View> {
     style?: StyleProp<ViewStyle>;
     isModal?: boolean;
     isOnboarding?: boolean;
+    handleRefresh?: () => void;
 }
 
 export default function ContainerComponent(props: Props) {
-    const { children, isAuth, back, title, isScroll, iconRight, onBack, style, isModal, isOnboarding } = props;
+    const { children, isAuth, back, title, isScroll, iconRight, onBack, style, isModal, isOnboarding, handleRefresh } =
+        props;
 
     const router = useRouter();
     const [refreshing, setRefreshing] = React.useState(false);
 
-    const onRefresh = React.useCallback(() => {
+    const onRefresh = () => {
         setRefreshing(true);
         setTimeout(() => {
+            handleRefresh && handleRefresh();
             setRefreshing(false);
         }, 1000);
-    }, []);
+    };
 
     const HeaderAuth = back ? (
         <View className='flex-row items-center justify-between py-2 pl-5'>
@@ -64,7 +67,12 @@ export default function ContainerComponent(props: Props) {
 
     const HeaderTittle =
         title && !back ? (
-            <View className='flex-row items-center justify-between py-2 pl-5'>
+            <View
+                className='flex-row items-center justify-between py-2 pl-5'
+                style={{
+                    zIndex: 999,
+                }}
+            >
                 <TextComponent className='text-lg font-bold'>{title}</TextComponent>
                 {iconRight && <View className='pr-5'>{iconRight}</View>}
             </View>

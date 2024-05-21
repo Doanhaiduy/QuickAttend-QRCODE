@@ -1,5 +1,5 @@
 import { TimeStatus } from '@/types/Auth';
-import { format } from 'date-fns';
+import CryptoJS from 'crypto-js';
 
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export const checkHasErr = (data: object) => {
@@ -54,5 +54,17 @@ export const checkTimeStatus = (startAt: Date, endAt: Date): TimeStatus => {
         return TimeStatus.Ongoing;
     } else {
         return TimeStatus.Expired;
+    }
+};
+
+export const decryptData = (cipherText: string, key: string) => {
+    try {
+        const bytes = CryptoJS.AES.decrypt(cipherText, key);
+        if (bytes.sigBytes > 0) {
+            const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+            return decryptedData;
+        }
+    } catch (error) {
+        return error;
     }
 };

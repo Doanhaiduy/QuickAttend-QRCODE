@@ -60,7 +60,7 @@ export default function CreateEventScreen() {
                 },
                 locationName: location,
                 type: isCheck ? 'private' : 'public',
-                privateCode: isCheck ? securityCode : undefined,
+                privateCode: isCheck ? securityCode : '',
                 authorId: auth.id,
                 startAt: format(dateStart, pattern, { timeZone: 'Asia/Ho_Chi_Minh' }),
                 endAt: format(dateEnd, pattern, { timeZone: 'Asia/Ho_Chi_Minh' }),
@@ -132,6 +132,7 @@ export default function CreateEventScreen() {
             reverseLocation(+lat, +long);
         }
     }, []);
+
     return (
         <ContainerComponent isScroll back title='Add Event'>
             <StatusBar style='dark' />

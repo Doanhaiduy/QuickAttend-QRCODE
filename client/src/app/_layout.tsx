@@ -7,6 +7,8 @@ import 'react-native-reanimated';
 import { Provider } from 'react-redux';
 import Splash from '../components/Splash';
 import store from '../redux/store';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Host } from 'react-native-portalize';
 export { ErrorBoundary } from 'expo-router';
 
 SplashScreen.preventAutoHideAsync();
@@ -50,7 +52,11 @@ export default function RootLayout() {
 function RootLayoutNav() {
     return (
         <Provider store={store}>
-            <Slot />
+            <GestureHandlerRootView className='flex-1'>
+                <Host>
+                    <Slot />
+                </Host>
+            </GestureHandlerRootView>
         </Provider>
     );
 }

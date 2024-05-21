@@ -1,23 +1,25 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import React, { useEffect } from 'react';
+import eventAPI from '@/apis/eventApi';
 import {
     ButtonComponent,
     ContainerComponent,
     DetailsAttendanceCard,
+    InputComponent,
     SectionComponent,
     SpaceComponent,
     StatisticalCard,
     TextComponent,
 } from '@/components';
-import { Octicons } from '@expo/vector-icons';
 import { appColors } from '@/constants/appColors';
-import { StatusBar } from 'expo-status-bar';
-import { router } from 'expo-router';
-import eventAPI from '@/apis/eventApi';
 import { TimeStatus } from '@/types/Auth';
-import { checkTimeStatus } from '@/helpers';
-import { format } from 'date-fns';
-import { ActivityIndicator } from 'react-native';
+import { Ionicons, Octicons } from '@expo/vector-icons';
+import { set } from 'date-fns';
+import { router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import React, { useEffect } from 'react';
+import { ActivityIndicator, Modal, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Modalize } from 'react-native-modalize';
+import { Portal } from 'react-native-portalize';
+
 interface Analytic {
     total: number;
     upcoming: number;
@@ -30,6 +32,22 @@ export default function AttendanceScreen() {
     const [activeTab, setActiveTab] = React.useState<TimeStatus>(TimeStatus.Ongoing);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [dataAnalytic, setDataAnalytic] = React.useState<Analytic>();
+    const [modalVisible, setModalVisible] = React.useState<boolean>(false);
+    const [eventCode, setEventCode] = React.useState<string>('BRCBOD');
+    const [error, setError] = React.useState<string>('');
+    const modalizeRef = React.useRef<Modalize>(null);
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        handleGetEvents();
+    }, [activeTab]);
+
+    const onOpen = () => {
+        modalizeRef.current?.open();
+    };
 
     const handleGetEvents = async () => {
         setIsLoading(true);
@@ -44,29 +62,51 @@ export default function AttendanceScreen() {
             setIsLoading(false);
         }
     };
+    const fetchData = async () => {
+        try {
+            const res = await eventAPI.HandleEvent('/get-analytic');
+            if (res && res.data) {
+                setDataAnalytic(res.data);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-    useEffect(() => {
-        const fetchData = async () => {
+    const handleRefresh = () => {
+        fetchData();
+        handleGetEvents();
+    };
+
+    const handleContinue = async () => {
+        if (eventCode !== '') {
             try {
-                const res = await eventAPI.HandleEvent('/get-analytic');
+                const res = await eventAPI.HandleEvent(`/eventCode/${eventCode}`);
                 if (res && res.data) {
-                    setDataAnalytic(res.data);
+                    setModalVisible(false);
+                    setEventCode('');
+                    router.push({
+                        pathname: `/attendance/scanQR`,
+                        params: {
+                            data: JSON.stringify(res.data),
+                        },
+                    });
                 }
             } catch (error) {
-                console.log(error);
+                setError('Event code is not valid');
             }
-        };
-        fetchData();
-    }, []);
-    useEffect(() => {
-        handleGetEvents();
-    }, [activeTab]);
+        } else {
+            setError('Event code is not valid');
+        }
+    };
+
     return (
         <ContainerComponent
+            handleRefresh={handleRefresh}
             isScroll
             title='Attendance'
             iconRight={
-                <Pressable onPress={() => router.push('/(tabs)/attendance/createEvent')}>
+                <Pressable onPress={onOpen}>
                     <Octicons name='diff-added' size={24} color='black' />
                 </Pressable>
             }
@@ -144,6 +184,79 @@ export default function AttendanceScreen() {
                     <TextComponent>No event found</TextComponent>
                 )}
             </SectionComponent>
+            <Portal>
+                <Modalize
+                    ref={modalizeRef}
+                    adjustToContentHeight
+                    childrenStyle={{
+                        borderTopRightRadius: 50,
+                        borderTopLeftRadius: 50,
+                        paddingBottom: 30,
+                        paddingTop: 20,
+                    }}
+                >
+                    <View className=' shadow-xl  gap-5 p-3'>
+                        <TouchableOpacity
+                            className='flex-row py-2 items-center'
+                            onPress={() => {
+                                router.push('/(tabs)/attendance/createEvent');
+                                modalizeRef.current?.close();
+                            }}
+                        >
+                            <Ionicons name='create-sharp' size={24} color='black' />
+                            <TextComponent className='text-base font-medium ml-2'>Create Event</TextComponent>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            className='flex-row pb-2 items-center'
+                            onPress={() => {
+                                setModalVisible(true);
+                                modalizeRef.current?.close();
+                            }}
+                        >
+                            <Ionicons name='checkbox' size={22} color='black' />
+                            <TextComponent className='text-base font-medium ml-2'>Attendance </TextComponent>
+                        </TouchableOpacity>
+                    </View>
+                </Modalize>
+            </Portal>
+            <Modal
+                visible={modalVisible}
+                style={{
+                    flex: 1,
+                }}
+                transparent
+                statusBarTranslucent
+                animationType='fade'
+            >
+                <View className='flex-1 bg-black/80'>
+                    <View className='bg-white h-1/3  my-auto mx-5 rounded-[30px] p-5'>
+                        <TextComponent className='text-xl font-bold text-center'>Enter the Event Code</TextComponent>
+                        <TextComponent className=' my-5 text-sm'>
+                            Please enter the code that was given to you by the event organizer to check in:
+                        </TextComponent>
+                        <InputComponent
+                            placeholder='Enter the Event Code'
+                            label='Event Code'
+                            value={eventCode}
+                            err={error}
+                            onChange={(val) => {
+                                setEventCode(val);
+                                setError('');
+                            }}
+                        />
+                        <View className='flex-row items-center justify-center mt-4'>
+                            <ButtonComponent
+                                title='Cancel'
+                                onPress={() => setModalVisible(false)}
+                                type='error'
+                                size='small'
+                            />
+                            <SpaceComponent width={8} />
+                            <ButtonComponent title='Continue' onPress={handleContinue} type='success' size='small' />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </ContainerComponent>
     );
 }

@@ -19,6 +19,7 @@ export default function AttendanceLayout() {
                     presentation: 'modal',
                 }}
             />
+            <Stack.Screen name='scanQR' />
         </Stack>
     );
 }
