@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
-const crypto = require('crypto');
+// const crypto = require('crypto');
+const CryptoJS = require('crypto-js');
+
 const jwt = require('jsonwebtoken');
 const { ref, uploadBytesResumable, getDownloadURL, uploadString } = require('firebase/storage');
 const { storage } = require('../configs/firebase.config');
@@ -68,18 +70,20 @@ const uploadImage = async (file, type) => {
 };
 
 const encryptData = (data, key) => {
-    const cipher = crypto.createCipher('aes-256-cbc', key);
-    let encrypted = cipher.update(data, 'utf8', 'hex');
-    encrypted += cipher.final('hex');
-    return encrypted;
+    const cipherText = CryptoJS.AES.encrypt(data, key).toString();
+    return cipherText;
 };
 
-// Hàm giải mã dữ liệu (nếu cần)
-const decryptData = (encryptedData, key) => {
-    const decipher = crypto.createDecipher('aes-256-cbc', key);
-    let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
-    return decrypted;
+const decryptData = (cipherText, key) => {
+    try {
+        const bytes = CryptoJS.AES.decrypt(cipherText, key);
+        if (bytes.sigBytes > 0) {
+            const originalText = bytes.toString(CryptoJS.enc.Utf8);
+            return originalText;
+        }
+    } catch (error) {
+        return 'error';
+    }
 };
 
 const checkTimeStatus = (startAt, endAt) => {
@@ -87,11 +91,11 @@ const checkTimeStatus = (startAt, endAt) => {
     const startTime = new Date(startAt);
     const endTime = new Date(endAt);
     if (currentTime < startTime) {
-        return 'upcoming';
+        return 'Upcoming';
     } else if (currentTime > startTime && currentTime < endTime) {
-        return 'ongoing';
+        return 'Ongoing';
     } else {
-        return 'expired';
+        return 'Expired';
     }
 };
 

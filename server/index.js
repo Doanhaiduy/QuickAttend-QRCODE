@@ -10,6 +10,7 @@ const { verifyToken } = require('./src/middlewares/authMiddleware');
 const UserRouter = require('./src/routers/userRouter');
 const AuthRouter = require('./src/routers/authRouter');
 const EventRouter = require('./src/routers/eventRouter');
+const AttendanceRouter = require('./src/routers/AttendanceRouter');
 
 //dotenv config
 dotenv.config();
@@ -38,6 +39,7 @@ app.get('/', (req, res) => {
 app.use(`${process.env.BASE_URL}/auth`, AuthRouter);
 app.use(`${process.env.BASE_URL}/users`, verifyToken, UserRouter);
 app.use(`${process.env.BASE_URL}/events`, verifyToken, EventRouter);
+app.use(`${process.env.BASE_URL}/attendances`, verifyToken, AttendanceRouter);
 
 app.use(errorMiddleHandler);
 

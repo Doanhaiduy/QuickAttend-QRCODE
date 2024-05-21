@@ -5,6 +5,9 @@ const Schema = new mongoose.Schema({
         type: String,
         required: [true, 'Event name is required'],
     },
+    eventCode: {
+        type: String,
+    },
     description: {
         type: String,
         required: [true, 'Description is required'],
@@ -29,6 +32,18 @@ const Schema = new mongoose.Schema({
     },
     privateCode: {
         type: String,
+        validate: {
+            validator: function (value) {
+                if (this.type === 'private') {
+                    return value != null && value.trim().length > 0;
+                }
+                return true;
+            },
+            message: 'Private code is required when type is private',
+        },
+    },
+    distanceLimit: {
+        type: Number,
     },
     authorId: {
         type: mongoose.Schema.Types.ObjectId,

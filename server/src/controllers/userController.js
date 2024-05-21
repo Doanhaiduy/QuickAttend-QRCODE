@@ -3,6 +3,7 @@ const UserModel = require('../models/userModel');
 const asyncErrorHandler = require('express-async-handler');
 
 const { uploadImage } = require('../helpers');
+const mongoose = require('mongoose');
 
 const GetAllUsers = asyncErrorHandler(async (req, res) => {
     const users = await UserModel.find({}).select('email fullName imageURL id username');
@@ -16,6 +17,10 @@ const GetAllUsers = asyncErrorHandler(async (req, res) => {
 
 const GetUserById = asyncErrorHandler(async (req, res) => {
     const id = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        res.status(400);
+        throw new Error('Invalid user ID');
+    }
     const user = await UserModel.findById(id);
     if (!user) {
         res.status(404);
@@ -30,6 +35,10 @@ const GetUserById = asyncErrorHandler(async (req, res) => {
 
 const UpdateUser = asyncErrorHandler(async (req, res) => {
     const id = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        res.status(400);
+        throw new Error('Invalid user ID');
+    }
     const data = req.body;
     if (id && data) {
         const user = await UserModel.findById(id);
@@ -54,6 +63,10 @@ const UpdateUser = asyncErrorHandler(async (req, res) => {
 
 const UploadAvatar = asyncErrorHandler(async (req, res) => {
     if (req.file && req.params.id) {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            res.status(400);
+            throw new Error('Invalid user ID');
+        }
         const imageURL = await uploadImage(req.file, 'file');
         const user = await UserModel.findByIdAndUpdate(req.params.id, { imageURL }, { new: true });
 

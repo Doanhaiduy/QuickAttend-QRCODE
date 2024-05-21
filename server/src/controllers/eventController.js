@@ -2,6 +2,7 @@ const asyncErrorHandler = require('express-async-handler');
 const EventModel = require('../models/eventModel');
 var QRCode = require('qrcode');
 const { uploadImage, encryptData, decryptData, checkTimeStatus } = require('../helpers');
+const mongoose = require('mongoose');
 
 const handleCreateQrCode = async (data) => {
     if (data) {
@@ -31,8 +32,9 @@ const handleCreateQrCode = async (data) => {
 };
 
 const AddNewEvent = asyncErrorHandler(async (req, res) => {
+    const eventCode = Math.random().toString(36).substring(7).toUpperCase();
+    req.body.eventCode = eventCode;
     const data = req.body;
-    console.log(data);
     const QRCodeUrl = await handleCreateQrCode(data);
     req.body.QRCodeUrl = QRCodeUrl;
 
@@ -54,10 +56,9 @@ const GetAllEvents = asyncErrorHandler(async (req, res) => {
     const { status } = req.query;
     let events = await EventModel.find().sort({ startAt: -1 });
 
-    if (status === 'upcoming' || status === 'ongoing' || status === 'expired') {
+    if (status === 'Upcoming' || status === 'Ongoing' || status === 'Expired') {
         events = events.filter((event) => {
             const eventStatus = checkTimeStatus(event.startAt, event.endAt);
-            console.log(eventStatus, status);
             return eventStatus === status;
         });
     }
@@ -94,8 +95,13 @@ const GetAnalyticEvent = asyncErrorHandler(async (req, res) => {
         data: analytic,
     });
 });
+
 const GetEventByAuthorId = asyncErrorHandler(async (req, res) => {
     const authorId = req.params.authorId;
+    if (!mongoose.Types.ObjectId.isValid(authorId)) {
+        res.status(400);
+        throw new Error('Invalid author ID');
+    }
     const events = await EventModel.find({ authorId });
     res.status(200).json({
         status: 'success',
@@ -107,7 +113,26 @@ const GetEventByAuthorId = asyncErrorHandler(async (req, res) => {
 
 const GetEventById = asyncErrorHandler(async (req, res) => {
     const id = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        res.status(400);
+        throw new Error('Invalid event ID');
+    }
     const event = await EventModel.findById(id);
+    if (!event) {
+        res.status(404);
+        throw new Error('Event not found!');
+    }
+    res.status(200).json({
+        status: 'success',
+        message: 'Event fetched successfully!',
+        data: event,
+    });
+});
+
+const GetEventByCode = asyncErrorHandler(async (req, res) => {
+    const eventCode = req.params.eventCode;
+
+    const event = await EventModel.findOne({ eventCode: eventCode.toUpperCase() });
     if (!event) {
         res.status(404);
         throw new Error('Event not found!');
@@ -121,6 +146,10 @@ const GetEventById = asyncErrorHandler(async (req, res) => {
 
 const UpdateEvent = asyncErrorHandler(async (req, res) => {
     const id = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        res.status(400);
+        throw new Error('Invalid id');
+    }
     const data = req.body;
     if (id && data) {
         const event = await EventModel.findById(id);
@@ -139,6 +168,10 @@ const UpdateEvent = asyncErrorHandler(async (req, res) => {
 
 const DeleteEvent = asyncErrorHandler(async (req, res) => {
     const id = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        res.status(400);
+        throw new Error('Invalid event id');
+    }
     if (id) {
         const event = await EventModel.findById(id);
         if (!event) {
@@ -155,6 +188,10 @@ const DeleteEvent = asyncErrorHandler(async (req, res) => {
 
 const GetQRCodeById = asyncErrorHandler(async (req, res) => {
     const id = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        res.status(400);
+        throw new Error('Invalid event id');
+    }
     if (id) {
         const event = await EventModel.findById(id);
         if (!event) {
@@ -181,4 +218,5 @@ module.exports = {
     DeleteEvent,
     GetQRCodeById,
     GetAnalyticEvent,
+    GetEventByCode,
 };
