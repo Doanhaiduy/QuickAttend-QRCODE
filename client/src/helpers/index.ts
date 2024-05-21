@@ -60,11 +60,18 @@ export const checkTimeStatus = (startAt: Date, endAt: Date): TimeStatus => {
 export const decryptData = (cipherText: string, key: string) => {
     try {
         const bytes = CryptoJS.AES.decrypt(cipherText, key);
-        if (bytes.sigBytes > 0) {
-            const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+        const decryptedString = bytes.toString(CryptoJS.enc.Utf8);
+
+        if (!decryptedString) {
+            return null;
+        }
+        try {
+            const decryptedData = JSON.parse(decryptedString);
             return decryptedData;
+        } catch (jsonError) {
+            return null;
         }
     } catch (error) {
-        return error;
+        return null;
     }
 };

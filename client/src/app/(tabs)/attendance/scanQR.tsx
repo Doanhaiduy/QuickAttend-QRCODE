@@ -1,14 +1,28 @@
-import { Alert, Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Button, Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { ButtonComponent, ContainerComponent, InputComponent, SectionComponent, TextComponent } from '@/components';
+import {
+    ButtonComponent,
+    ContainerComponent,
+    InputComponent,
+    SectionComponent,
+    SpaceComponent,
+    TextComponent,
+} from '@/components';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { set } from 'date-fns';
 import { appColors } from '@/constants/appColors';
 import { Portal } from 'react-native-portalize';
 import { Modalize } from 'react-native-modalize';
-import { decryptData } from '@/helpers';
+import { decryptData, sleep } from '@/helpers';
+import attendanceAPI from '@/apis/attendanceApi';
+import { useSelector } from 'react-redux';
+import { authSelector } from '@/redux/reducers/authReducer';
+import LoadingModal from '@/modals/LoadingModal';
+
+import * as Location from 'expo-location';
+import { getDistance } from 'geolib';
 
 export default function ScanQRScreen() {
     const [permission, requestPermission] = useCameraPermissions();
@@ -17,11 +31,43 @@ export default function ScanQRScreen() {
     const [isPrivate, setIsPrivate] = useState(false);
     const [privateCode, setPrivateCode] = useState('');
     const [error, setError] = useState('');
+    const [errorModal, setErrorModal] = useState('');
     const [dataScan, setDataScan] = useState<any>();
-    const modalizeRef = React.useRef<Modalize>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const onOpen = () => {
-        modalizeRef.current?.open();
+    const modalizeSuccessRef = React.useRef<Modalize>(null);
+    const modalizeCancelRef = React.useRef<Modalize>(null);
+
+    const auth = useSelector(authSelector);
+
+    const onOpenSuccess = () => {
+        modalizeSuccessRef.current?.open();
+    };
+
+    const onOpenCancel = () => {
+        modalizeCancelRef.current?.open();
+    };
+
+    const getCurrentLocation: any = async () => {
+        const permission = await Location.requestForegroundPermissionsAsync();
+        if (!permission.canAskAgain || permission.status === 'denied') {
+            Alert.alert('Permission Required', 'Please enable location permission to use this feature', [
+                {
+                    text: 'Close',
+                    onPress: () => router.back(),
+                },
+                {
+                    text: 'Open Settings',
+                    onPress: () => Linking.openSettings(),
+                },
+            ]);
+        } else {
+            if (permission.status === 'granted') {
+                const location = await Location.getCurrentPositionAsync({});
+                console.log(location.coords);
+                return { lat: location.coords.latitude, long: location.coords.longitude };
+            }
+        }
     };
 
     useEffect(() => {
@@ -64,13 +110,80 @@ export default function ScanQRScreen() {
         );
     }
 
+    const validCheck = async (dataDecrypt: any) => {
+        const dataParse = JSON.parse(data as string);
+        if (dataDecrypt?.eventCode !== dataParse?.eventCode) {
+            setErrorModal('Invalid QR code');
+            onOpenCancel();
+            return false;
+        }
+
+        const currentLocation: {
+            lat: number;
+            long: number;
+        } = await getCurrentLocation();
+
+        const distance = getDistance(
+            { latitude: currentLocation.lat, longitude: currentLocation.long },
+            { latitude: dataDecrypt?.location?.latitude, longitude: dataDecrypt?.location?.longitude }
+        );
+
+        if (distance < dataDecrypt?.distanceLimit) {
+            setErrorModal('You are too far from the event location');
+            onOpenCancel();
+            return false;
+        }
+        return true;
+    };
+
+    const handelAddAttendance = async (dataDecrypt: any) => {
+        setIsLoading(true);
+        const checked = await validCheck(dataDecrypt);
+        if (checked) {
+            try {
+                const data = {
+                    userId: auth.id,
+                    eventCode: dataDecrypt?.eventCode,
+                    attendanceTime: new Date().toISOString(),
+                    location: {
+                        latitude: 0,
+                        longitude: 0,
+                    },
+                    locationName: 'HCM',
+                };
+                // const res = await attendanceAPI.HandleAttendance('/create', data, 'post');
+                setIsLoading(false);
+                onOpenSuccess();
+            } catch (error: any) {
+                setIsLoading(false);
+                setErrorModal(error);
+                onOpenCancel();
+            }
+        }
+    };
+
     const handleBarCodeScanned = ({ type, data }: any) => {
         setScanned(true);
-        const cipherText = JSON.parse(data).data;
-        const dataDecrypt = decryptData(cipherText, process.env.EXPO_PUBLIC_ENCRYPT_KEY!);
-        setDataScan(dataDecrypt);
-        console.log(dataDecrypt);
-        onOpen();
+        try {
+            const parsedData = JSON.parse(data);
+            if (!parsedData.data) {
+                setErrorModal('Invalid QR code');
+                onOpenCancel();
+                return;
+            }
+            const cipherText = parsedData.data;
+            const dataDecrypt = decryptData(cipherText, process.env.EXPO_PUBLIC_ENCRYPT_KEY!);
+            if (dataDecrypt) {
+                setDataScan(dataDecrypt);
+                handelAddAttendance(dataDecrypt);
+            } else {
+                setErrorModal('Invalid QR code');
+                onOpenCancel();
+            }
+        } catch (error: any) {
+            setErrorModal('Invalid QR code');
+            onOpenCancel();
+        }
     };
 
     return (
@@ -112,11 +225,13 @@ export default function ScanQRScreen() {
                     </View>
                 </CameraView>
             )}
-            {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
             <Portal>
                 <Modalize
-                    ref={modalizeRef}
+                    ref={modalizeSuccessRef}
                     adjustToContentHeight
+                    onOverlayPress={() => {
+                        router.dismissAll();
+                    }}
                     childrenStyle={{
                         borderTopRightRadius: 50,
                         borderTopLeftRadius: 50,
@@ -141,9 +256,9 @@ export default function ScanQRScreen() {
                         <View>
                             <ButtonComponent
                                 title='Done'
-                                onPress={() => {
-                                    modalizeRef.current?.close();
-                                    setScanned(false);
+                                onPress={async () => {
+                                    modalizeSuccessRef.current?.close();
+                                    router.dismissAll();
                                 }}
                                 type='primary'
                                 size='large'
@@ -152,6 +267,48 @@ export default function ScanQRScreen() {
                     </View>
                 </Modalize>
             </Portal>
+            <Portal>
+                <Modalize
+                    ref={modalizeCancelRef}
+                    adjustToContentHeight
+                    childrenStyle={{
+                        borderTopRightRadius: 50,
+                        borderTopLeftRadius: 50,
+                        paddingBottom: 30,
+                        paddingTop: 20,
+                    }}
+                >
+                    <View className='shadow-xl gap-5 p-3 bg-white'>
+                        <View className='border-[2px] border-white rounded-full items-center'>
+                            <Ionicons name='close-circle' size={100} color={appColors.error2} />
+                        </View>
+                        <View className='justify-center items-center'>
+                            <TextComponent className='text-center text-xl font-bold'>Failed attendance</TextComponent>
+                            <TextComponent className='mt-2 text-center text-sm max-w-[70%] '>
+                                You have failed to take attendance! Please try again.
+                            </TextComponent>
+                            <TextComponent className='mt-2 text-center text-sm max-w-[70%] text-error'>
+                                {errorModal}
+                            </TextComponent>
+                        </View>
+
+                        <View className='flex-row justify-center'>
+                            <SpaceComponent width={6} />
+                            <ButtonComponent
+                                title='Try Again'
+                                onPress={async () => {
+                                    modalizeCancelRef.current?.close();
+                                    await sleep(1000);
+                                    setScanned(false);
+                                }}
+                                type='primary'
+                                size='small'
+                            />
+                        </View>
+                    </View>
+                </Modalize>
+            </Portal>
+            <LoadingModal visible={isLoading} message='Analyzing QR code...' />
         </ContainerComponent>
     );
 }

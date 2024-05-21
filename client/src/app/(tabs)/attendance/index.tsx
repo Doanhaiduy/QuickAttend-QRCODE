@@ -33,7 +33,7 @@ export default function AttendanceScreen() {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [dataAnalytic, setDataAnalytic] = React.useState<Analytic>();
     const [modalVisible, setModalVisible] = React.useState<boolean>(false);
-    const [eventCode, setEventCode] = React.useState<string>('BRCBOD');
+    const [eventCode, setEventCode] = React.useState<string>('');
     const [error, setError] = React.useState<string>('');
     const modalizeRef = React.useRef<Modalize>(null);
 
