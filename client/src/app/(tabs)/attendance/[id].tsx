@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { ButtonComponent, ContainerComponent, SectionComponent, SpaceComponent, TextComponent } from '@/components';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -14,16 +14,17 @@ export default function EventDetails() {
 
     useEffect(() => {
         const fetchEvent = async () => {
-            const res = await eventAPI.HandleEvent(`/${eventId}`);
-            if (res && res.data) {
-                console.log('=====================', res.data);
-                setEvent(res.data);
-            } else {
-                console.log('error');
+            try {
+                const res = await eventAPI.HandleEvent(`/${eventId}`);
+                if (res && res.data) {
+                    setEvent(res.data);
+                }
+            } catch (error) {
+                console.log('error', error);
             }
         };
         fetchEvent();
-    }, []);
+    }, [eventId]);
     return (
         <ContainerComponent back isScroll title={`Event Details ${id}`}>
             <SectionComponent>

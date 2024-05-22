@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { ContainerComponent, NotificationCard, SectionComponent } from '@/components';
+import { ContainerComponent, NotificationCard, SectionComponent, TodayListEvent } from '@/components';
 
 export default function NotificationScreen() {
     return (

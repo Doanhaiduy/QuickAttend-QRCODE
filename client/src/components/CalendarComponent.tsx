@@ -3,9 +3,9 @@ import React from 'react';
 import TextComponent from './TextComponent';
 import SpaceComponent from './SpaceComponent';
 import { generateWeekDates } from '@/helpers';
-import { appColors } from '@/constants/appColors';
 
-export default function CalendarComponent() {
+export default function CalendarComponent(props: { onDatePress?: (date: string) => void; date: string }) {
+    const { onDatePress, date } = props;
     const weekDates = generateWeekDates();
     console.log();
     return (
@@ -17,9 +17,10 @@ export default function CalendarComponent() {
                 ItemSeparatorComponent={() => <SpaceComponent width={15} />}
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => {
-                    const isToday = item.dateNumber === new Date().getDate();
+                    const isToday = item.fullDate === date;
                     return (
                         <TouchableOpacity
+                            onPress={() => onDatePress?.(item.fullDate)}
                             className={`items-center justify-center p-5  border-[0.5px] border-gray-200 rounded-[14px] ${
                                 isToday ? 'bg-primary-500' : 'bg-white'
                             }`}

@@ -1,12 +1,13 @@
 import {
-    AttendanceCard,
-    ButtonComponent,
     CalendarComponent,
     ContainerComponent,
+    EventCard,
+    ListAttendanceHome,
     MyAttendanceCard,
     SectionComponent,
     SpaceComponent,
     TextComponent,
+    TodayListEvent,
 } from '@/components';
 import FirstTimeModal from '@/modals/FirstTimeModal';
 import { authSelector, logout } from '@/redux/reducers/authReducer';
@@ -14,7 +15,7 @@ import { Ionicons, Octicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Image, Pressable, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 const checkFirstTime = async () => {
@@ -32,6 +33,8 @@ const initialValue = checkFirstTime();
 
 export default function HomeScreen() {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(!!initialValue);
+    const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
+    console.log(date);
 
     const dispatch = useDispatch();
     const auth = useSelector(authSelector);
@@ -51,13 +54,11 @@ export default function HomeScreen() {
             dispatch(logout());
         }
     };
-    console.log(!!initialValue);
-    const modal = useMemo(
-        () => <FirstTimeModal visible={isModalVisible} onClose={() => setIsModalVisible(false)} />,
-        []
-    );
+    const modal = () => <FirstTimeModal visible={isModalVisible} onClose={() => setIsModalVisible(false)} />;
+
     return (
         <ContainerComponent isScroll>
+            <StatusBar barStyle='dark-content' />
             <SectionComponent className='flex-row items-center'>
                 <View className='flex-row flex-1 items-center'>
                     <Image
@@ -80,43 +81,21 @@ export default function HomeScreen() {
                 </View>
             </SectionComponent>
             <SectionComponent>
-                <CalendarComponent />
-            </SectionComponent>
-            <SectionComponent className='bg-gray-100 rounded-[25px]'>
-                <FlatList
-                    data={[12, 3, 4, 5]}
-                    showsVerticalScrollIndicator={false}
-                    keyExtractor={(item) => item.toString()}
-                    renderItem={() => <AttendanceCard />}
-                    contentContainerStyle={{ marginHorizontal: -8 }}
-                    ListHeaderComponent={() => (
-                        <TextComponent className='text-lg font-inter500 ml-4 mb-4'>Today Attendance</TextComponent>
-                    )}
-                    ItemSeparatorComponent={() => <View className='h-4 w-4' />}
-                    numColumns={2}
-                    scrollEnabled={false}
+                <CalendarComponent
+                    onDatePress={(fulDate) => {
+                        setDate(fulDate);
+                    }}
+                    date={date}
                 />
+            </SectionComponent>
+            <SectionComponent className='bg-gray-100 rounded-[25px] min-h-[70vh]'>
+                <TodayListEvent date={date} />
+
                 <SpaceComponent height={40} />
 
-                <FlatList
-                    data={[12, 3, 4, 5]}
-                    showsVerticalScrollIndicator={false}
-                    keyExtractor={(item) => item.toString()}
-                    renderItem={() => <MyAttendanceCard />}
-                    contentContainerStyle={{ marginHorizontal: -8 }}
-                    ListHeaderComponent={() => (
-                        <View className='flex-row justify-between items-center'>
-                            <TextComponent className='text-lg font-inter500 ml-4 mb-4 '>Your Activity</TextComponent>
-                            <Pressable className='mr-4'>
-                                <TextComponent className='text-primary-500'>View All</TextComponent>
-                            </Pressable>
-                        </View>
-                    )}
-                    ItemSeparatorComponent={() => <View className='h-4 w-4' />}
-                    scrollEnabled={false}
-                />
+                <ListAttendanceHome />
             </SectionComponent>
-            {modal}
+            {/* {modal()} */}
         </ContainerComponent>
     );
 }

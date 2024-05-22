@@ -38,8 +38,9 @@ export const generateWeekDates = () => {
 
         const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
         const dateNumber = date.getDate();
+        const dateFormat = date.toISOString().split('T')[0];
 
-        weekDates.push({ dayName, dateNumber });
+        weekDates.push({ dayName, dateNumber, fullDate: dateFormat });
     }
 
     return weekDates;

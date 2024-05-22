@@ -4,14 +4,14 @@ import TextComponent from './TextComponent';
 import userAPI from '@/apis/userApi';
 import { format } from 'date-fns';
 
-export interface data {
+interface Data {
     attendanceTime: string;
     distance: number;
     locationName: string;
     userId: string;
 }
 
-export default function AttendancePersonItem(props: { data: data }) {
+export default function AttendancePersonItem(props: { data: Data }) {
     const { data } = props;
     const [user, setUser] = useState<any>({});
 

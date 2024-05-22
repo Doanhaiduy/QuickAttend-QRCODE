@@ -1,4 +1,4 @@
-import AttendanceCard from './AttendanceCard';
+import EventCard from './EventCard';
 import AttendancePersonItem from './AttendancePersonItem';
 import ButtonComponent from './ButtonComponent';
 import CalendarComponent from './CalendarComponent';
@@ -14,6 +14,8 @@ import SpaceComponent from './SpaceComponent';
 import Splash from './Splash';
 import StatisticalCard from './StatisticalCard';
 import TextComponent from './TextComponent';
+import TodayListEvent from './TodayListEvent';
+import ListAttendanceHome from './ListAttendanceHome';
 
 export {
     ButtonComponent,
@@ -24,7 +26,7 @@ export {
     Splash,
     TextComponent,
     CalendarComponent,
-    AttendanceCard,
+    EventCard,
     MyAttendanceCard,
     StatisticalCard,
     DetailsAttendanceCard,
@@ -32,4 +34,6 @@ export {
     NotificationCard,
     SearchComponent,
     AttendancePersonItem,
+    TodayListEvent,
+    ListAttendanceHome,
 };
