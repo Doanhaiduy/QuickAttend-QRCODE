@@ -1,4 +1,5 @@
 import AttendanceCard from './AttendanceCard';
+import AttendancePersonItem from './AttendancePersonItem';
 import ButtonComponent from './ButtonComponent';
 import CalendarComponent from './CalendarComponent';
 import ContainerComponent from './ContainerComponent';
@@ -30,4 +31,5 @@ export {
     InputDateTimePicker,
     NotificationCard,
     SearchComponent,
+    AttendancePersonItem,
 };

@@ -15,7 +15,6 @@ import { checkTimeStatus } from '@/helpers';
 import { authSelector } from '@/redux/reducers/authReducer';
 import { TimeStatus } from '@/types/Auth';
 import { FontAwesome, Ionicons, Octicons } from '@expo/vector-icons';
-import { set } from 'date-fns';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
@@ -58,7 +57,7 @@ export default function AttendanceScreen() {
     const handleGetEvents = async () => {
         setIsLoading(true);
         try {
-            const res = await eventAPI.HandleEvent(`/get-all?status=${activeTab}?authorId=${auth.id}`);
+            const res = await eventAPI.HandleEvent(`/get-all?status=${activeTab}&authorId=${auth.id}`);
             if (res && res.data) {
                 setEvents(res.data);
             }
