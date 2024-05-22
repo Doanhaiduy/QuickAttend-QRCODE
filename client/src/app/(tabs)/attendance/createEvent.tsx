@@ -31,9 +31,11 @@ export default function CreateEventScreen() {
         dateEndParams,
         eventNameParams,
         checkParams,
+        distanceLimitParams,
     } = useLocalSearchParams();
     const [eventName, setEventName] = React.useState<string>(eventNameParams?.toString() || '');
     const [location, setLocation] = React.useState<string>('');
+    const [distanceLimit, setDistanceLimit] = React.useState<string>(distanceLimitParams?.toString() || '');
     const [securityCode, setSecurityCode] = React.useState<string>(securityCodeParams?.toString() || '');
     const [description, setDescription] = React.useState<string>(descriptionParams?.toString() || '');
     const [dateStart, setDateStart] = useState<Date>(
@@ -60,6 +62,7 @@ export default function CreateEventScreen() {
                 },
                 locationName: location,
                 type: isCheck ? 'private' : 'public',
+                distanceLimit: +distanceLimit,
                 privateCode: isCheck ? securityCode : '',
                 authorId: auth.id,
                 startAt: format(dateStart, pattern, { timeZone: 'Asia/Ho_Chi_Minh' }),
@@ -188,6 +191,7 @@ export default function CreateEventScreen() {
                                 lat,
                                 long,
                                 locationName: location,
+                                distanceLimit,
                                 eventName,
                                 securityCode,
                                 description,
@@ -222,7 +226,13 @@ export default function CreateEventScreen() {
                         placeholder='Enter Security Code'
                     />
                 )}
-
+                <InputComponent
+                    value={distanceLimit}
+                    onChange={(val) => setDistanceLimit(val)}
+                    label='Distance Limit (m)'
+                    type='numeric'
+                    placeholder='Enter distance limit'
+                />
                 <TextComponent className='text-primary-500 text-[12px] mb-[2px]'>Description</TextComponent>
                 <InputComponent
                     value={description}

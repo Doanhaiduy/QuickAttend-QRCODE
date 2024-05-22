@@ -20,6 +20,7 @@ export default function AttendanceLayout() {
                 }}
             />
             <Stack.Screen name='scanQR' />
+            <Stack.Screen name='list/[id]' />
         </Stack>
     );
 }

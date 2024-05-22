@@ -1,3 +1,4 @@
+import attendanceAPI from '@/apis/attendanceApi';
 import eventAPI from '@/apis/eventApi';
 import {
     ButtonComponent,
@@ -10,8 +11,10 @@ import {
     TextComponent,
 } from '@/components';
 import { appColors } from '@/constants/appColors';
+import { checkTimeStatus } from '@/helpers';
+import { authSelector } from '@/redux/reducers/authReducer';
 import { TimeStatus } from '@/types/Auth';
-import { Ionicons, Octicons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons, Octicons } from '@expo/vector-icons';
 import { set } from 'date-fns';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -19,6 +22,7 @@ import React, { useEffect } from 'react';
 import { ActivityIndicator, Modal, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
+import { useSelector } from 'react-redux';
 
 interface Analytic {
     total: number;
@@ -37,6 +41,8 @@ export default function AttendanceScreen() {
     const [error, setError] = React.useState<string>('');
     const modalizeRef = React.useRef<Modalize>(null);
 
+    const auth = useSelector(authSelector);
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -52,7 +58,7 @@ export default function AttendanceScreen() {
     const handleGetEvents = async () => {
         setIsLoading(true);
         try {
-            const res = await eventAPI.HandleEvent(`/get-all?status=${activeTab}`);
+            const res = await eventAPI.HandleEvent(`/get-all?status=${activeTab}?authorId=${auth.id}`);
             if (res && res.data) {
                 setEvents(res.data);
             }
@@ -73,6 +79,17 @@ export default function AttendanceScreen() {
         }
     };
 
+    const checkAttendance = async () => {
+        try {
+            const res = await attendanceAPI.HandleAttendance(`/event/${eventCode}/user/${auth.id}`);
+            if (res && res.data) {
+                return res.data.hasAttendance;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     const handleRefresh = () => {
         fetchData();
         handleGetEvents();
@@ -83,14 +100,24 @@ export default function AttendanceScreen() {
             try {
                 const res = await eventAPI.HandleEvent(`/eventCode/${eventCode}`);
                 if (res && res.data) {
-                    setModalVisible(false);
-                    setEventCode('');
-                    router.push({
-                        pathname: `/attendance/scanQR`,
-                        params: {
-                            data: JSON.stringify(res.data),
-                        },
-                    });
+                    if (checkTimeStatus(new Date(res.data.startAt), new Date(res.data.endAt)) === TimeStatus.Ongoing) {
+                        const checkHasAttendance = await checkAttendance();
+                        if (checkHasAttendance) {
+                            setError('You have already checked in');
+                            return;
+                        }
+                        setModalVisible(false);
+                        setEventCode('');
+                        setError('');
+                        router.push({
+                            pathname: `/attendance/scanQR`,
+                            params: {
+                                data: JSON.stringify(res.data),
+                            },
+                        });
+                    } else {
+                        setError('Event is not ongoing');
+                    }
                 }
             } catch (error) {
                 setError('Event code is not valid');
@@ -166,6 +193,7 @@ export default function AttendanceScreen() {
                                 startAt: event.startAt,
                                 location: event.locationName,
                                 description: event.description,
+                                code: event.eventCode,
                             }}
                             key={event._id}
                             type={event.type}
@@ -181,7 +209,10 @@ export default function AttendanceScreen() {
                         />
                     ))
                 ) : (
-                    <TextComponent>No event found</TextComponent>
+                    <SectionComponent className='items-center justify-center'>
+                        <FontAwesome name='frown-o' size={74} color={appColors.black} />
+                        <TextComponent className='font-medium text-lg'>No event found!</TextComponent>
+                    </SectionComponent>
                 )}
             </SectionComponent>
             <Portal>

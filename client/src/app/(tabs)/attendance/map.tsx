@@ -17,7 +17,8 @@ export default function MapScreen() {
         long: number;
     }>();
     const [isLoading, setIsLoading] = useState(false);
-    const { lat, long, eventName, securityCode, description, dateStart, dateEnd, check } = useLocalSearchParams();
+    const { lat, long, eventName, securityCode, description, dateStart, dateEnd, check, distanceLimit } =
+        useLocalSearchParams();
     const auth = useSelector(authSelector);
 
     useEffect(() => {
@@ -90,6 +91,7 @@ export default function MapScreen() {
                 lat: location?.lat,
                 long: location?.long,
                 eventNameParams: eventName,
+                distanceLimitParams: distanceLimit,
                 securityCodeParams: securityCode,
                 descriptionParams: description,
                 dateStartParams: dateStart,

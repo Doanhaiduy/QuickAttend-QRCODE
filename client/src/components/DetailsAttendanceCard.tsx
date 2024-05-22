@@ -8,6 +8,7 @@ interface Data {
     startAt: string;
     location: string;
     description: string;
+    code: string;
 }
 interface Props {
     type: 'Approved' | 'Pending' | 'Rejected';
@@ -24,14 +25,16 @@ export default function DetailsAttendanceCard(props: Props) {
         <Pressable onPress={onPress} className='p-4 bg-white shadow-xl rounded-[18px] my-3'>
             <View>
                 <View className='flex-row justify-between items-center'>
-                    <TextComponent className='text-base font-bold'>{data.title}</TextComponent>
+                    <TextComponent className='text-lg font-bold max-w-[70%]'>
+                        {data.title.toLocaleUpperCase()} - {data.code}
+                    </TextComponent>
                     <View
-                        className='px-4 py-2  rounded-xl'
+                        className='px-4 py-2  rounded-xl items-center w-[80px]'
                         style={{
                             backgroundColor: `${color}1A`,
                         }}
                     >
-                        <TextComponent className=' font-medium' style={{ color }}>
+                        <TextComponent className=' font-medium ' style={{ color }}>
                             {type}
                         </TextComponent>
                     </View>

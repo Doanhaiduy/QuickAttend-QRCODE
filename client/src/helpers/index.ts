@@ -1,4 +1,5 @@
 import { TimeStatus } from '@/types/Auth';
+import axios from 'axios';
 import CryptoJS from 'crypto-js';
 
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

@@ -11,7 +11,6 @@ import {
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
-import { set } from 'date-fns';
 import { appColors } from '@/constants/appColors';
 import { Portal } from 'react-native-portalize';
 import { Modalize } from 'react-native-modalize';
@@ -23,6 +22,7 @@ import LoadingModal from '@/modals/LoadingModal';
 
 import * as Location from 'expo-location';
 import { getDistance } from 'geolib';
+import axios from 'axios';
 
 export default function ScanQRScreen() {
     const [permission, requestPermission] = useCameraPermissions();
@@ -37,6 +37,12 @@ export default function ScanQRScreen() {
 
     const modalizeSuccessRef = React.useRef<Modalize>(null);
     const modalizeCancelRef = React.useRef<Modalize>(null);
+    let location:
+        | {
+              lat: number;
+              long: number;
+          }
+        | undefined;
 
     const auth = useSelector(authSelector);
 
@@ -46,6 +52,32 @@ export default function ScanQRScreen() {
 
     const onOpenCancel = () => {
         modalizeCancelRef.current?.open();
+    };
+
+    useEffect(() => {
+        const CheckPrivate = async () => {
+            const dataParse = JSON.parse(data as string);
+            const { type } = dataParse;
+            if (type === 'private') {
+                setIsPrivate(true);
+            }
+        };
+        CheckPrivate();
+    }, []);
+
+    const reverseLocation = async (lat: number, long: number) => {
+        try {
+            const api = `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${lat},${long}&lang=vi-VN&apiKey=${process
+                .env.EXPO_PUBLIC_HERE_LOCATION_API_KEY!}`;
+            const res = await axios(api);
+            if (res && res.status === 200) {
+                console.log(res.data.items[0].title);
+                return res.data.items[0].title;
+            }
+        } catch (error) {
+            console.log(error);
+            return 'Not found location';
+        }
     };
 
     const getCurrentLocation: any = async () => {
@@ -70,24 +102,13 @@ export default function ScanQRScreen() {
         }
     };
 
-    useEffect(() => {
-        const CheckPrivate = async () => {
-            const dataParse = JSON.parse(data as string);
-            const { type } = dataParse;
-            if (type === 'private') {
-                setIsPrivate(true);
-            }
-        };
-        CheckPrivate();
-    }, []);
-
     const handleVerificationCode = () => {
         const dataParse = JSON.parse(data as string);
         if (privateCode === '') {
             setError('Please enter the private code');
             return;
         }
-        if (privateCode !== dataParse.privateCode) {
+        if (privateCode.toLocaleUpperCase() !== dataParse.privateCode.toLocaleUpperCase()) {
             setError('The private code is incorrect');
             return;
         } else {
@@ -114,6 +135,7 @@ export default function ScanQRScreen() {
         const dataParse = JSON.parse(data as string);
         if (dataDecrypt?.eventCode !== dataParse?.eventCode) {
             setErrorModal('Invalid QR code');
+            setIsLoading(false);
             onOpenCancel();
             return false;
         }
@@ -123,22 +145,35 @@ export default function ScanQRScreen() {
             long: number;
         } = await getCurrentLocation();
 
+        if (currentLocation) {
+            location = currentLocation;
+        }
+
         const distance = getDistance(
             { latitude: currentLocation.lat, longitude: currentLocation.long },
             { latitude: dataDecrypt?.location?.latitude, longitude: dataDecrypt?.location?.longitude }
         );
 
-        if (distance < dataDecrypt?.distanceLimit) {
-            setErrorModal('You are too far from the event location');
+        console.log('Distance: ', distance, dataDecrypt?.distanceLimit);
+
+        if (distance > dataDecrypt?.distanceLimit && dataDecrypt?.distanceLimit !== 0) {
+            setErrorModal(
+                `You are too far from the event location, you need to be closer ${
+                    distance - dataDecrypt?.distanceLimit
+                }(m) to attendance!`
+            );
+            setIsLoading(false);
             onOpenCancel();
             return false;
         }
+
         return true;
     };
 
     const handelAddAttendance = async (dataDecrypt: any) => {
         setIsLoading(true);
         const checked = await validCheck(dataDecrypt);
+        console.log('location', location);
         if (checked) {
             try {
                 const data = {
@@ -146,12 +181,16 @@ export default function ScanQRScreen() {
                     eventCode: dataDecrypt?.eventCode,
                     attendanceTime: new Date().toISOString(),
                     location: {
-                        latitude: 0,
-                        longitude: 0,
+                        latitude: location?.lat || 0,
+                        longitude: location?.long || 0,
                     },
-                    locationName: 'HCM',
+                    locationName: await reverseLocation(location?.lat || 0, location?.long || 0),
+                    distance: getDistance(
+                        { latitude: location?.lat || 0, longitude: location?.long || 0 },
+                        { latitude: dataDecrypt?.location?.latitude, longitude: dataDecrypt?.location?.longitude }
+                    ),
                 };
-                // const res = await attendanceAPI.HandleAttendance('/create', data, 'post');
+                const res = await attendanceAPI.HandleAttendance('/create', data, 'post');
                 setIsLoading(false);
                 onOpenSuccess();
             } catch (error: any) {
@@ -188,7 +227,7 @@ export default function ScanQRScreen() {
 
     return (
         <ContainerComponent back title='Scan QR'>
-            {!isPrivate ? (
+            {isPrivate ? (
                 <SectionComponent className=''>
                     <TextComponent className='text-xl font-bold '>Enter Private Code</TextComponent>
                     <TextComponent className=' my-5 text-sm'>

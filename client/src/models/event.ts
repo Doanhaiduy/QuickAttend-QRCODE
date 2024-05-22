@@ -8,12 +8,14 @@ interface IEvent {
     description: string;
     location: ILocation;
     locationName: string;
+    distanceLimit: number;
     type: string;
     privateCode?: string;
     authorId: string;
     QRCodeUrl?: string;
     startAt: string;
     endAt: string;
+    eventCode?: string;
 }
 
 export default IEvent;

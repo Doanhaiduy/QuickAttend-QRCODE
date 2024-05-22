@@ -16,7 +16,7 @@ interface Props {
 const variantContainer = {
     default: 'rounded-[10px] shadow-md flex flex-row items-center justify-center min-h-[56px]',
     primary: 'bg-primary-500',
-    outline: 'bg-[#fbfbfb] ',
+    outline: 'bg-[#fbfbfb] border-primary-500 border-[2px]',
     error: 'bg-error2',
     success: 'bg-success2',
 };

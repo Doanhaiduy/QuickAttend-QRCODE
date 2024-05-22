@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { ButtonComponent, ContainerComponent, SectionComponent, TextComponent } from '@/components';
+import { ButtonComponent, ContainerComponent, SectionComponent, SpaceComponent, TextComponent } from '@/components';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import eventAPI from '@/apis/eventApi';
@@ -28,6 +28,10 @@ export default function EventDetails() {
         <ContainerComponent back isScroll title={`Event Details ${id}`}>
             <SectionComponent>
                 <View className='pb-3 border-b-[0.5px] border-gray-200'>
+                    <TextComponent className='text-[12px] text-grayText mb-[2px]'>Event Code</TextComponent>
+                    <TextComponent className='text-base text-blackText'>{event?.eventCode}</TextComponent>
+                </View>
+                <View className='pb-3 border-b-[0.5px] border-gray-200'>
                     <TextComponent className='text-[12px] text-grayText mb-[2px]'>Event Name</TextComponent>
                     <TextComponent className='text-base text-blackText'>{event?.eventName}</TextComponent>
                 </View>
@@ -53,10 +57,20 @@ export default function EventDetails() {
                         {checkTimeStatus(new Date(event?.startAt ?? new Date()), new Date(event?.endAt ?? new Date()))}
                     </TextComponent>
                 </View>
-                {event?.type === 'private' && (
+                <View className='py-3 border-b-[0.5px] border-gray-200'>
+                    <TextComponent className='text-[12px] text-grayText mb-[2px]'>Distance limit</TextComponent>
+                    <TextComponent className='text-base text-blackText'>
+                        {event?.distanceLimit ? `${event?.distanceLimit}m` : 'No limit'}
+                    </TextComponent>
+                </View>
+                {event?.type === 'private' ? (
                     <View className='py-3 border-b-[0.5px] border-gray-200'>
                         <TextComponent className='text-[12px] text-grayText mb-[2px]'>Security Code</TextComponent>
                         <TextComponent className='text-base text-blackText'>{event?.privateCode}</TextComponent>
+                    </View>
+                ) : (
+                    <View className='py-3 border-b-[0.5px] border-gray-200'>
+                        <TextComponent className='text-base text-blackText'>Public event</TextComponent>
                     </View>
                 )}
                 <View className='py-3 border-b-[0.5px] border-gray-200'>
@@ -79,6 +93,19 @@ export default function EventDetails() {
                     }}
                     icon={<Ionicons name='chevron-forward' size={24} color='white' />}
                     iconFlex='right'
+                />
+                <SpaceComponent height={10} />
+                <ButtonComponent
+                    title='LIST ATTENDANCE'
+                    icon={<Ionicons name='chevron-forward' size={24} color='white' />}
+                    iconFlex='right'
+                    type='primary'
+                    size='large'
+                    onPress={() => {
+                        router.push({
+                            pathname: `/attendance/list/${eventId}`,
+                        });
+                    }}
                 />
             </SectionComponent>
         </ContainerComponent>
