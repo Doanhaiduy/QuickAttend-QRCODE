@@ -71,7 +71,7 @@ export default function AttendanceScreen() {
     };
     const fetchData = async () => {
         try {
-            const res = await eventAPI.HandleEvent('/get-analytic');
+            const res = await eventAPI.HandleEvent(`/get-analytic?authorId=${auth.id}`);
             if (res && res.data) {
                 setDataAnalytic(res.data);
             }

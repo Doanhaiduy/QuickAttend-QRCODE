@@ -1,3 +1,4 @@
+import attendanceAPI from '@/apis/attendanceApi';
 import {
     CalendarComponent,
     ContainerComponent,
@@ -29,15 +30,27 @@ const saveModalState = async () => {
 export default function HomeScreen() {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
-    console.log(date);
-
+    const [data, setData] = useState<any[]>();
     const dispatch = useDispatch();
     const auth = useSelector(authSelector);
 
     useEffect(() => {
         checkTokenExpire();
         checkModalState();
+        fetchDataAttendance();
     }, []);
+
+    const fetchDataAttendance = async () => {
+        try {
+            const res = await attendanceAPI.HandleAttendance(`/user/${auth?.id}`);
+            if (res && res.data) {
+                setData(res.data);
+            }
+            console.log(res.data);
+        } catch (error) {
+            console.log('error', error);
+        }
+    };
 
     const checkTokenExpire = async () => {
         const auth = await AsyncStorage.getItem('auth');
@@ -70,7 +83,7 @@ export default function HomeScreen() {
     };
 
     return (
-        <ContainerComponent isScroll>
+        <ContainerComponent isScroll handleRefresh={fetchDataAttendance}>
             <StatusBar barStyle='dark-content' />
             <SectionComponent className='flex-row items-center'>
                 <View className='flex-row flex-1 items-center'>
@@ -106,7 +119,7 @@ export default function HomeScreen() {
 
                 <SpaceComponent height={40} />
 
-                <ListAttendanceHome />
+                <ListAttendanceHome data={data ?? []} />
             </SectionComponent>
             <FirstTimeModal visible={isModalVisible} onClose={handleCloseModal} />
         </ContainerComponent>

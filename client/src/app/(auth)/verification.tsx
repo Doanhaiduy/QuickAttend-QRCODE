@@ -7,6 +7,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, Image, Pressable, StyleSheet, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { OtpInput } from 'react-native-otp-entry';
 import { useDispatch } from 'react-redux';
 import { set } from 'zod';
@@ -57,52 +58,54 @@ export default function VerificationScreen() {
 
     return (
         <ContainerComponent isAuth isScroll back>
-            <SectionComponent>
-                <TextComponent className='text-[28px] font-inter700 mb-2'>
-                    {t('verification.enterVerificationCode')}
-                </TextComponent>
-                <TextComponent className=' text-grayText text-base'>
-                    {t('verification.verificationCodeSent')}
-                </TextComponent>
-            </SectionComponent>
-            <SectionComponent className='w-[100%] h-[250px]'>
-                <Image source={require('../../assets/images/verification.png')} className='w-full h-full' />
-            </SectionComponent>
-            <SpaceComponent height={20} />
-            <SectionComponent>
-                <OtpInput
-                    numberOfDigits={4}
-                    autoFocus
-                    focusColor={appColors.primary}
-                    onTextChange={(text) => setOtp(text)}
-                    onFilled={(code) => handleVerify(code)}
-                    theme={{
-                        pinCodeContainerStyle: {
-                            width: 70,
-                            height: 70,
-                            backgroundColor: appColors.white,
-                            borderColor: error ? appColors.error : appColors.primary,
-                        },
-                    }}
-                />
-                <View className='flex-row items-end self-end mt-4'>
-                    <TextComponent className='mr-1'>{t('verification.didNotReceiveCode')}</TextComponent>
-                    <Pressable className='' onPress={() => {}}>
-                        <TextComponent className='text-primary-500'>{t('verification.resend')}</TextComponent>
-                    </Pressable>
-                </View>
-                {error && <TextComponent className='text-error mt-2 text-center'>{error}</TextComponent>}
-            </SectionComponent>
-            <SpaceComponent height={80} />
-            <SectionComponent>
-                <ButtonComponent
-                    title={t('verification.verify')}
-                    onPress={() => handleVerify(otp)}
-                    size='large'
-                    type='primary'
-                />
-            </SectionComponent>
-            <LoadingModal visible={isLoading} />
+            <KeyboardAwareScrollView>
+                <SectionComponent>
+                    <TextComponent className='text-[28px] font-inter700 mb-2'>
+                        {t('verification.enterVerificationCode')}
+                    </TextComponent>
+                    <TextComponent className=' text-grayText text-base'>
+                        {t('verification.verificationCodeSent')}
+                    </TextComponent>
+                </SectionComponent>
+                <SectionComponent className='w-[100%] h-[250px]'>
+                    <Image source={require('../../assets/images/verification.png')} className='w-full h-full' />
+                </SectionComponent>
+                <SpaceComponent height={20} />
+                <SectionComponent>
+                    <OtpInput
+                        numberOfDigits={4}
+                        autoFocus
+                        focusColor={appColors.primary}
+                        onTextChange={(text) => setOtp(text)}
+                        onFilled={(code) => handleVerify(code)}
+                        theme={{
+                            pinCodeContainerStyle: {
+                                width: 70,
+                                height: 70,
+                                backgroundColor: appColors.white,
+                                borderColor: error ? appColors.error : appColors.primary,
+                            },
+                        }}
+                    />
+                    <View className='flex-row items-end self-end mt-4'>
+                        <TextComponent className='mr-1'>{t('verification.didNotReceiveCode')}</TextComponent>
+                        <Pressable className='' onPress={() => {}}>
+                            <TextComponent className='text-primary-500'>{t('verification.resend')}</TextComponent>
+                        </Pressable>
+                    </View>
+                    {error && <TextComponent className='text-error mt-2 text-center'>{error}</TextComponent>}
+                </SectionComponent>
+                <SpaceComponent height={80} />
+                <SectionComponent>
+                    <ButtonComponent
+                        title={t('verification.verify')}
+                        onPress={() => handleVerify(otp)}
+                        size='large'
+                        type='primary'
+                    />
+                </SectionComponent>
+                <LoadingModal visible={isLoading} />
+            </KeyboardAwareScrollView>
         </ContainerComponent>
     );
 }

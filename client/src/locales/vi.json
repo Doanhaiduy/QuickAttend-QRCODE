@@ -46,7 +46,7 @@
     },
     "signUp": {
         "registerAccount": "Đăng ký tài khoản",
-        "toQuickAttend": "đến QuickAttend",
+        "toQuickAttend": "đến",
         "helloRegisterToContinue": "Xin chào, hãy đăng ký để tiếp tục",
         "enterFullName": "Nhập họ và tên",
         "fullNameLabel": "Họ và tên",

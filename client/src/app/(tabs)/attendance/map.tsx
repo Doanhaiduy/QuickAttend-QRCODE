@@ -93,7 +93,22 @@ export default function MapScreen() {
     };
 
     const handleSubmitLocation = () => {
-        router.replace({
+        console.log(
+            '===========',
+            {
+                lat: location?.lat,
+                long: location?.long,
+                eventNameParams: eventName,
+                distanceLimitParams: distanceLimit,
+                securityCodeParams: securityCode,
+                descriptionParams: description,
+                dateStartParams: dateStart,
+                dateEndParams: dateEnd,
+                checkParams: check,
+            },
+            '---======='
+        );
+        router.navigate({
             pathname: '/attendance/createEvent',
             params: {
                 lat: location?.lat,

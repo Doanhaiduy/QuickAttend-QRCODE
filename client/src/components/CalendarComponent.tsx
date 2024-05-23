@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import TextComponent from './TextComponent';
 import SpaceComponent from './SpaceComponent';
 import { generateWeekDates } from '@/helpers';
@@ -9,12 +9,31 @@ export default function CalendarComponent(props: { onDatePress?: (date: string) 
     const { onDatePress, date } = props;
     const { t } = useTranslation();
     const weekDates = generateWeekDates(t('lang'));
+
+    const flatListRef = useRef<FlatList | null>(null);
+    const activeIndex =
+        weekDates.findIndex((item) => item.fullDate === date) > 1
+            ? weekDates.findIndex((item) => item.fullDate === date)
+            : 2;
+
+    useEffect(() => {
+        flatListRef.current?.scrollToIndex({ index: activeIndex - 2, animated: true });
+    }, [date]);
+
     console.log();
     return (
         <View>
             <FlatList
+                ref={flatListRef}
                 data={weekDates}
                 horizontal
+                initialScrollIndex={activeIndex - 2}
+                onScrollToIndexFailed={(info) => {
+                    const wait = new Promise((resolve) => setTimeout(resolve, 500));
+                    wait.then(() => {
+                        flatListRef.current?.scrollToIndex({ index: info.index, animated: true });
+                    });
+                }}
                 keyExtractor={(item) => item.dateNumber.toString()}
                 ItemSeparatorComponent={() => <SpaceComponent width={15} />}
                 showsHorizontalScrollIndicator={false}

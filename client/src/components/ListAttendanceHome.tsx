@@ -1,31 +1,12 @@
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import MyAttendanceCard from './MyAttendanceCard';
 import TextComponent from './TextComponent';
-import { authSelector } from '@/redux/reducers/authReducer';
-import { useSelector } from 'react-redux';
-import attendanceAPI from '@/apis/attendanceApi';
 import { useTranslation } from 'react-i18next';
 
-export default function ListAttendanceHome() {
-    const [data, setData] = useState<any[]>();
-    const auth = useSelector(authSelector);
+export default function ListAttendanceHome(props: { data: any[] }) {
+    const { data } = props;
     const { t } = useTranslation();
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await attendanceAPI.HandleAttendance(`/user/${auth?.id}`);
-                if (res && res.data) {
-                    setData(res.data);
-                }
-                console.log(res.data);
-            } catch (error) {
-                console.log('error', error);
-            }
-        };
-        fetchData();
-    }, []);
 
     return (
         <>

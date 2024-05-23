@@ -50,6 +50,7 @@ export default function ForgotScreen() {
     };
 
     const router = useRouter();
+
     return (
         <ContainerComponent isAuth isScroll back>
             <SectionComponent>

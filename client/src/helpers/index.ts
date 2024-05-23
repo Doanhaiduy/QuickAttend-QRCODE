@@ -42,7 +42,6 @@ export const generateWeekDates = (lang: string) => {
 
         weekDates.push({ dayName, dateNumber, fullDate: dateFormat });
     }
-
     return weekDates;
 };
 
