@@ -3,11 +3,9 @@ import { Alert, Image, StyleSheet } from 'react-native';
 
 import { router, useLocalSearchParams } from 'expo-router';
 import { z } from 'zod';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { schemasCustom } from '@/utils/zod';
-import { sleep } from '@/helpers';
 import { ButtonComponent, ContainerComponent, InputComponent, SectionComponent, TextComponent } from '@/components';
 import LoadingModal from '@/modals/LoadingModal';
 import authenticationAPI from '@/apis/authApi';
@@ -23,6 +21,7 @@ const schema = z
         message: "Passwords don't match",
         path: ['confirmPassword'],
     });
+
 type FormFields = z.infer<typeof schema>;
 export default function NewPasswordScreen() {
     const { email } = useLocalSearchParams();
@@ -48,11 +47,14 @@ export default function NewPasswordScreen() {
                 'post'
             );
             setIsLoading(false);
-            Alert.alert('Success', t('forgot.successPasswordUpdated'));
+            Alert.alert('Success', t('newPassword.successPasswordUpdated'));
             router.navigate('/login');
         } catch (error: any) {
             setIsLoading(false);
-            setError('root', error);
+            setError('root', {
+                type: 'manual',
+                message: error,
+            });
         }
     };
     return (

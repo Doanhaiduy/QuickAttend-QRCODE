@@ -12,6 +12,9 @@ export default function ProfileLayout() {
             <Stack.Screen name='index' />
             <Stack.Screen name='editProfile' />
             <Stack.Screen name='language' />
+            <Stack.Screen name='termsConditions' />
+            <Stack.Screen name='privacyPolicy' />
+            <Stack.Screen name='changePassword' />
         </Stack>
     );
 }

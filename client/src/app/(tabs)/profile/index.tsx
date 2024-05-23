@@ -131,16 +131,30 @@ export default function ProfileScreen() {
                     </View>
                     <Ionicons name='chevron-forward' size={24} color='black' />
                 </TouchableOpacity>
-                <TouchableOpacity className='flex-row flex-1 justify-between py-3 items-center border-b-[0.5px] border-gray-100'>
+                <TouchableOpacity
+                    className='flex-row flex-1 justify-between py-3 items-center border-b-[0.5px] border-gray-100'
+                    onPress={() => {
+                        router.push({
+                            pathname: '/profile/changePassword',
+                        });
+                    }}
+                >
                     <View className='flex-row items-center gap-4'>
                         <View className='justify-center items-center p-4 bg-gray-500/10 rounded-full'>
-                            <Ionicons name='settings' size={20} color='black' />
+                            <Ionicons name='key' size={20} color='black' />
                         </View>
-                        <TextComponent className='text-base font-inter700'>{t('profile.settingsButton')}</TextComponent>
+                        <TextComponent className='text-base font-inter700'>{t('profile.changePassword')}</TextComponent>
                     </View>
                     <Ionicons name='chevron-forward' size={24} color='black' />
                 </TouchableOpacity>
-                <TouchableOpacity className='flex-row flex-1 justify-between py-3 items-center border-b-[0.5px] border-gray-100'>
+                <TouchableOpacity
+                    className='flex-row flex-1 justify-between py-3 items-center border-b-[0.5px] border-gray-100'
+                    onPress={() => {
+                        router.push({
+                            pathname: '/profile/termsConditions',
+                        });
+                    }}
+                >
                     <View className='flex-row items-center gap-4'>
                         <View className='justify-center items-center p-4 bg-gray-500/10 rounded-full'>
                             <Ionicons name='help-circle' size={20} color='black' />
@@ -151,7 +165,14 @@ export default function ProfileScreen() {
                     </View>
                     <Ionicons name='chevron-forward' size={20} color='black' />
                 </TouchableOpacity>
-                <TouchableOpacity className='flex-row flex-1 justify-between py-3 items-center border-b-[0.5px] border-gray-100'>
+                <TouchableOpacity
+                    className='flex-row flex-1 justify-between py-3 items-center border-b-[0.5px] border-gray-100'
+                    onPress={() => {
+                        router.push({
+                            pathname: '/profile/privacyPolicy',
+                        });
+                    }}
+                >
                     <View className='flex-row items-center gap-4'>
                         <View className='justify-center items-center p-4 bg-gray-500/10 rounded-full'>
                             <Ionicons name='shield-checkmark' size={20} color='black' />

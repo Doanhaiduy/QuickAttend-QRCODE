@@ -231,6 +231,7 @@
         "editProfileButton": "Edit Profile",
         "languageButton": "Language",
         "settingsButton": "Settings",
+        "changePassword": "Change Password",
         "termsAndConditionsButton": "Terms & Conditions",
         "privacyPolicyButton": "Privacy Policy",
         "logoutButton": "Log out",
@@ -249,5 +250,48 @@
         "congratulations": "Congratulations 🎉",
         "accountReady": "Your account is ready to use",
         "getStarted": "Get Started"
+    },
+    "changePassword": {
+        "currentPasswordRequired": "Current password is required",
+        "signUp": "Sign Up",
+        "passwordsDontMatch": "Passwords don't match",
+        "newPasswordSuccessPasswordUpdated": "Password successfully updated",
+        "changePasswordTitle": "Change Password",
+        "currentPassword": "Current Password",
+        "enterCurrentPassword": "Enter your current password",
+        "newPassword": "New Password",
+        "enterNewPassword": "Enter your new password",
+        "confirmPassword": "Confirm Password",
+        "enterNewPasswordAgain": "Enter your new password again",
+        "changePasswordButton": "Change Password"
+    },
+    "termsAndConditions": {
+        "termsAndConditionsTitle": "Terms & Conditions",
+        "lastUpdated": "Last updated: May 24, 2024",
+        "readTermsCarefully": "Please read these terms and conditions carefully before using Our Service.",
+        "conditionsOfUsesTitle": "Conditions of Uses",
+        "conditionsOfUsesText": "We will provide their services to you, which are subject to the conditions stated below in this document. Every time you visit this website, use its services or make a purchase, you accept the following conditions. This is why we urge you to read them carefully.",
+        "termsOfUseTitle": "Terms of Use",
+        "termsOfUseText": "By accessing this website, you are agreeing to be bound by these website Terms and Conditions of Use and agree that you are responsible for the agreement with any applicable local laws. If you disagree with any of these terms, you are prohibited from accessing this site. The materials contained in this website are protected by copyright and trade mark law.",
+        "communicationTitle": "Communication",
+        "communicationText": "The entire communication with us is electronic. Every time you send us an email or visit our website, you are going to be communicating with us. You hereby consent to receive communications from us. If you subscribe to the news on our website, you are going to receive regular emails from us. We will continue to communicate with you by posting news and notices on our website and by sending you emails. You also agree that all notices, disclosures, agreements and other communications we provide to you electronically meet the legal requirements that such communications be in writing."
+    },
+    "privatePolicy": {
+        "privacyPolicyTitle": "Privacy Policy",
+        "lastUpdated": "Last updated: May 24, 2024",
+        "readPrivacyPolicy": "Please read these privacy policy carefully before using Our Service.",
+        "privacyPolicyText": "Your privacy is important to us. It is our policy to respect your privacy regarding any information we may collect from you across our website, https://www.doanhaiduy.website, and other sites we own and operate.",
+        "informationCollectionTitle": "Information Collection and Use",
+        "informationCollectionText": "For a better experience while using our Service, we may require you to provide us with certain personally identifiable information, including but not limited to your name, phone number, and postal address. The information that we collect will be used to contact or identify you.",
+        "logDataTitle": "Log Data",
+        "logDataText": "We want to inform you that whenever you visit our Service, we collect information that your browser sends to us that is called Log Data. This Log Data may include information such as your computer’s Internet Protocol (“IP”) address, browser version, pages of our Service that you visit, the time and date of your visit, the time spent on those pages, and other statistics.",
+        "cookiesTitle": "Cookies",
+        "cookiesText": "Cookies are files with a small amount of data that is commonly used as an anonymous unique identifier. These are sent to your browser from the website that you visit and are stored on your computer’s hard drive. Our website uses these “cookies” to collection information and to improve our Service. You have the option to either accept or refuse these cookies and know when a cookie is being sent to your computer. If you choose to refuse our cookies, you may not be able to use some portions of our Service.",
+        "serviceProvidersTitle": "Service Providers",
+        "serviceProvidersText": "We may employ third-party companies and individuals due to the following reasons:",
+        "serviceProviderReason1": "To facilitate our Service",
+        "serviceProviderReason2": "To provide the Service on our behalf",
+        "serviceProviderReason3": "To perform Service-related services",
+        "serviceProviderReason4": "To assist us in analyzing how our Service is used."
     }
 }
