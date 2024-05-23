@@ -34,7 +34,11 @@ export default function TodayListEvent(props: { date: string }) {
                 renderItem={({ item, index }) => <EventCard data={item} />}
                 contentContainerStyle={{ marginHorizontal: -8 }}
                 ListHeaderComponent={() => (
-                    <TextComponent className='text-lg font-inter500 ml-4 mb-4'>{t('home.todayEvent')}</TextComponent>
+                    <TextComponent className='text-lg font-inter500 ml-4 mb-4'>
+                        {date === new Date().toISOString().split('T')[0]
+                            ? t('home.todayEvent')
+                            : `${t('attendance.event')} ${date}`}
+                    </TextComponent>
                 )}
                 ItemSeparatorComponent={() => <View className='h-4 w-4' />}
                 numColumns={2}

@@ -56,7 +56,7 @@ export default function LoginScreen() {
             const res = await authenticationAPI.HandleAuthentication('/login', { email, password }, 'post');
             dispatch(setAuthData(res.data));
             await AsyncStorage.setItem('auth', JSON.stringify(res.data));
-            await AsyncStorage.setItem('IsFirstTime', 'false');
+            // await AsyncStorage.setItem('IsFirstTime', 'false');
             Alert.alert('Success', t('successLogin'));
             setIsLoading(false);
         } catch (error: any) {
@@ -74,7 +74,9 @@ export default function LoginScreen() {
             <SectionComponent>
                 <Image source={require('../../assets/images/logo.png')} className='w-[80px] h-[80px]' />
                 <SpaceComponent height={20} />
-                <TextComponent className='text-[28px] font-inter700'>{t('login.welcomeBack')} </TextComponent>
+                <TextComponent className='text-[28px] max-w-[80%] font-inter700'>
+                    {t('login.welcomeBack')}{' '}
+                </TextComponent>
                 <TextComponent className='text-[28px] font-inter700'>
                     {t('login.toQuickAttend')}{' '}
                     <TextComponent className='text-primary-500 font-inter700'>QuickAttend</TextComponent>

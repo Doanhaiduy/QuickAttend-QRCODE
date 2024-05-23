@@ -8,11 +8,13 @@ import IEvent from '@/models/event';
 import { format } from 'date-fns';
 import { checkTimeStatus } from '@/helpers';
 import { useTranslation } from 'react-i18next';
+import getDateFnsLocale from '@/utils/dateFns';
 
 export default function EventDetails() {
     const { eventId, id } = useLocalSearchParams();
     const [event, setEvent] = useState<IEvent>();
     const { t } = useTranslation();
+    const locale = getDateFnsLocale();
 
     useEffect(() => {
         const fetchEvent = async () => {
@@ -29,42 +31,46 @@ export default function EventDetails() {
     }, [eventId]);
     return (
         <ContainerComponent back isScroll title={`${t('detailsEvent.eventDetailsTitle')} ${id}`}>
-            <SectionComponent>
-                <View className='pb-3 border-b-[0.5px] border-gray-200'>
+            <SectionComponent className=''>
+                <View className='pb-1 border-b-[0.5px] border-gray-200'>
                     <TextComponent className='text-[12px] text-grayText mb-[2px]'>
                         {t('detailsEvent.eventCode')}
                     </TextComponent>
                     <TextComponent className='text-base text-blackText'>{event?.eventCode}</TextComponent>
                 </View>
-                <View className='pb-3 border-b-[0.5px] border-gray-200'>
+                <View className='py-3 pb-1 border-b-[0.5px] border-gray-200'>
                     <TextComponent className='text-[12px] text-grayText mb-[2px]'>
                         {t('detailsEvent.eventName')}
                     </TextComponent>
                     <TextComponent className='text-base text-blackText'>{event?.eventName}</TextComponent>
                 </View>
-                <View className='py-3 border-b-[0.5px] border-gray-200'>
+                <View className='py-3 pb-1 border-b-[0.5px] border-gray-200'>
                     <TextComponent className='text-[12px] text-grayText mb-[2px]'>
                         {t('detailsEvent.location')}
                     </TextComponent>
                     <TextComponent className='text-base text-blackText'>{event?.locationName}</TextComponent>
                 </View>
-                <View className='py-3 border-b-[0.5px] border-gray-200'>
+                <View className='py-3 pb-1 border-b-[0.5px] border-gray-200'>
                     <TextComponent className='text-[12px] text-grayText mb-[2px]'>
                         {t('detailsEvent.timeStart')}
                     </TextComponent>
                     <TextComponent className='text-base text-blackText'>
-                        {format(event?.startAt ?? new Date(), 'MMM dd, yyyy H:mm')}
+                        {format(event?.startAt ?? new Date(), 'MMM dd, yyyy H:mm', {
+                            locale,
+                        })}
                     </TextComponent>
                 </View>
-                <View className='py-3 border-b-[0.5px] border-gray-200'>
+                <View className='py-3 pb-1 border-b-[0.5px] border-gray-200'>
                     <TextComponent className='text-[12px] text-grayText mb-[2px]'>
                         {t('detailsEvent.timeEnd')}
                     </TextComponent>
                     <TextComponent className='text-base text-blackText'>
-                        {format(event?.endAt ?? new Date(), 'MMM dd, yyyy H:mm')}
+                        {format(event?.endAt ?? new Date(), 'MMM dd, yyyy H:mm', {
+                            locale,
+                        })}
                     </TextComponent>
                 </View>
-                <View className='py-3 border-b-[0.5px] border-gray-200'>
+                <View className='py-3 pb-1 border-b-[0.5px] border-gray-200'>
                     <TextComponent className='text-[12px] text-grayText mb-[2px]'>
                         {t('detailsEvent.status')}
                     </TextComponent>
@@ -72,7 +78,7 @@ export default function EventDetails() {
                         {checkTimeStatus(new Date(event?.startAt ?? new Date()), new Date(event?.endAt ?? new Date()))}
                     </TextComponent>
                 </View>
-                <View className='py-3 border-b-[0.5px] border-gray-200'>
+                <View className='py-3 pb-1 border-b-[0.5px] border-gray-200'>
                     <TextComponent className='text-[12px] text-grayText mb-[2px]'>
                         {t('detailsEvent.distanceLimit')}
                     </TextComponent>
@@ -81,20 +87,20 @@ export default function EventDetails() {
                     </TextComponent>
                 </View>
                 {event?.type === 'private' ? (
-                    <View className='py-3 border-b-[0.5px] border-gray-200'>
+                    <View className='py-3 pb-1 border-b-[0.5px] border-gray-200'>
                         <TextComponent className='text-[12px] text-grayText mb-[2px]'>
                             {t('detailsEvent.securityCode')}
                         </TextComponent>
                         <TextComponent className='text-base text-blackText'>{event?.privateCode}</TextComponent>
                     </View>
                 ) : (
-                    <View className='py-3 border-b-[0.5px] border-gray-200'>
+                    <View className='py-3 pb-1 border-b-[0.5px] border-gray-200'>
                         <TextComponent className='text-base text-blackText'>
                             {t('detailsEvent.publicEvent')}
                         </TextComponent>
                     </View>
                 )}
-                <View className='py-3 border-b-[0.5px] border-gray-200'>
+                <View className='py-3 pb-1 border-b-[0.5px] border-gray-200'>
                     <TextComponent className='text-[12px] text-grayText mb-[2px]'>
                         {t('detailsEvent.description')}
                     </TextComponent>

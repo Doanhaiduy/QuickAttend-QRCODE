@@ -136,6 +136,8 @@
         "successEventCreated": "Create event success"
     },
     "attendance": {
+        "event": "Event",
+        "totalTitle": "Total",
         "attendanceTitle": "Attendance",
         "ongoingButtonTitle": "OnGoing",
         "upcomingButtonTitle": "Coming",
@@ -158,7 +160,9 @@
         "errorInvalidCode": "Event code is not valid",
         "quantity": "Quantity: ",
         "noAttendance": "No attendance",
-        "listAttendanceTitle": "List Attendance"
+        "listAttendanceTitle": "List Attendance",
+        "private": "Private",
+        "public": "Public"
     },
     "map": {
         "permissionRequired": "Permission Required",

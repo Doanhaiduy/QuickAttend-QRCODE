@@ -10,11 +10,17 @@ interface Props {
 
 export default function FirstTimeModal(props: Props) {
     const { visible, onClose } = props;
-    const [isVisible, setIsVisible] = React.useState(visible);
     const { t } = useTranslation();
 
     return (
-        <Modal style={{ flex: 1 }} visible={isVisible} transparent statusBarTranslucent animationType='slide'>
+        <Modal
+            style={{ flex: 1 }}
+            visible={visible}
+            transparent
+            statusBarTranslucent
+            animationType='slide'
+            onRequestClose={onClose}
+        >
             <View className='flex-1 bg-black/70'>
                 <View className='bg-white h-1/2 items-center justify-center my-auto mx-5 rounded-[30px] p-5'>
                     <Image source={require('../assets/images/welcome.png')} className='w-full h-1/2' />
@@ -26,9 +32,7 @@ export default function FirstTimeModal(props: Props) {
                     </TextComponent>
                     <SpaceComponent height={20} />
                     <ButtonComponent
-                        onPress={() => {
-                            setIsVisible(!visible);
-                        }}
+                        onPress={onClose}
                         title={t('modalWelcome.getStarted')}
                         type='primary'
                         size='large'

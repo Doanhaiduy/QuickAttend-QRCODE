@@ -17,7 +17,7 @@
         "continue": "Tiếp tục"
     },
     "login": {
-        "welcomeBack": "Chào mừng bạn quay trở lại",
+        "welcomeBack": "Chào mừng bạn quay trở lại 👋",
         "toQuickAttend": "bắt đầu với",
         "helloLoginToContinue": "Xin chào, hãy đăng nhập để tiếp tục",
         "enterEmail": "Nhập Email",
@@ -136,6 +136,8 @@
         "successEventCreated": "Tạo sự kiện thành công"
     },
     "attendance": {
+        "event": "Sự kiện",
+        "totalTitle": "Tổng",
         "attendanceTitle": "Điểm danh",
         "ongoingButtonTitle": "Đang diễn ra",
         "upcomingButtonTitle": "Sắp tới",
@@ -158,7 +160,9 @@
         "errorInvalidCode": "Mã sự kiện không hợp lệ",
         "quantity": "Số lượng: ",
         "noAttendance": "Không có người tham gia",
-        "listAttendanceTitle": "Danh sách điểm danh"
+        "listAttendanceTitle": "Danh sách điểm danh",
+        "private": "Riêng tư",
+        "public": "Công khai"
     },
     "map": {
         "permissionRequired": "Yêu cầu quyền",
@@ -242,7 +246,7 @@
         "justNow": "Vừa xong"
     },
     "modalWelcome": {
-        "congratulations": "Chúc mừng ",
+        "congratulations": "Chúc mừng 🎉",
         "accountReady": "Tài khoản của bạn đã sẵn sàng sử dụng",
         "getStarted": "Bắt đầu"
     }

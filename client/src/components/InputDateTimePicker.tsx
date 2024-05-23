@@ -4,6 +4,7 @@ import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/dat
 import TextComponent from './TextComponent';
 import { format } from 'date-fns';
 import { appColors } from '@/constants/appColors';
+import getDateFnsLocale from '@/utils/dateFns';
 
 interface Props {
     type: 'date' | 'time';
@@ -16,6 +17,7 @@ interface Props {
 
 export default function InputDateTimePicker(props: Props) {
     const { type, value, onChange, label, placeholder, iconRight } = props;
+    const locale = getDateFnsLocale();
 
     const [show, setShow] = useState(false);
 
@@ -25,7 +27,11 @@ export default function InputDateTimePicker(props: Props) {
                 <TouchableOpacity onPress={() => setShow(true)}>
                     <TextComponent className='text-primary-500 text-[11px] mb-1'>{label}</TextComponent>
                     <TextComponent>
-                        {type === 'date' ? format(value, 'MMM dd, yyyy') : format(value, 'H:mm ')}
+                        {type === 'date'
+                            ? format(value, 'MMM dd, yyyy', {
+                                  locale,
+                              })
+                            : format(value, 'H:mm ')}
                     </TextComponent>
                 </TouchableOpacity>
                 {show && (

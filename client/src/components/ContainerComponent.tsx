@@ -84,6 +84,7 @@ export default function ContainerComponent(props: Props) {
             {isAuth ? HeaderAuth : Header}
             <ScrollView
                 className='flex-1'
+                keyboardShouldPersistTaps='handled'
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}

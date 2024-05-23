@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { ButtonComponent, ContainerComponent, LanguageItem, SectionComponent } from '@/components';
 // import { handleChangeLanguage, i18n } from '@/utils/i18n';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { sleep } from '@/helpers';
 import { router } from 'expo-router';

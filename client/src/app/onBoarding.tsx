@@ -26,16 +26,16 @@ export default function OnBoardingScreen() {
         }
     };
 
-    const checkTheFirstTime = async () => {
-        const res = await AsyncStorage.getItem('IsFirstTime');
-        if (res) {
-            router.replace('/login');
-        }
-    };
+    // const checkTheFirstTime = async () => {
+    //     const res = await AsyncStorage.getItem('IsFirstTime');
+    //     if (res) {
+    //         router.replace('/login');
+    //     }
+    // };
 
     useEffect(() => {
         checkAuth();
-        checkTheFirstTime();
+        // checkTheFirstTime();
     }, []);
 
     if (auth.accessToken) {

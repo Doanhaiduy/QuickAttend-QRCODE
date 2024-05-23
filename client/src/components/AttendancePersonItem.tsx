@@ -4,6 +4,7 @@ import TextComponent from './TextComponent';
 import userAPI from '@/apis/userApi';
 import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
+import getDateFnsLocale from '@/utils/dateFns';
 
 interface Data {
     attendanceTime: string;
@@ -16,6 +17,7 @@ export default function AttendancePersonItem(props: { data: Data }) {
     const { data } = props;
     const [user, setUser] = useState<any>({});
     const { t } = useTranslation();
+    const locale = getDateFnsLocale();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,7 +47,9 @@ export default function AttendancePersonItem(props: { data: Data }) {
                         <TextComponent className='text-sm font-normal'>@{user.username || ''}</TextComponent>
                     </TextComponent>
                     <TextComponent className='font-bold mt-1'>
-                        {format(new Date(data.attendanceTime), 'MMM dd, yyyy - p')}
+                        {format(new Date(data.attendanceTime), 'MMM dd, yyyy - p', {
+                            locale,
+                        })}
                     </TextComponent>
                 </View>
             </View>

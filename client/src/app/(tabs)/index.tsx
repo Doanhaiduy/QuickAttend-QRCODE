@@ -18,21 +18,16 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { FlatList, Image, Pressable, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-const checkFirstTime = async () => {
-    const value = await AsyncStorage.getItem('theWelcome');
-    console.log('tf', value);
-    if (value === null) {
-        await AsyncStorage.setItem('theWelcome', 'false');
-        return true;
-    } else {
-        return false;
+const saveModalState = async () => {
+    try {
+        await AsyncStorage.setItem('firstTimeModalShown', 'true');
+    } catch (error) {
+        console.error('Failed to save the modal state:', error);
     }
 };
 
-const initialValue = checkFirstTime();
-
 export default function HomeScreen() {
-    const [isModalVisible, setIsModalVisible] = useState<boolean>(!!initialValue);
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
     console.log(date);
 
@@ -41,6 +36,7 @@ export default function HomeScreen() {
 
     useEffect(() => {
         checkTokenExpire();
+        checkModalState();
     }, []);
 
     const checkTokenExpire = async () => {
@@ -55,7 +51,23 @@ export default function HomeScreen() {
             dispatch(logout());
         }
     };
-    const modal = () => <FirstTimeModal visible={isModalVisible} onClose={() => setIsModalVisible(false)} />;
+
+    const checkModalState = async () => {
+        try {
+            const modalState = await AsyncStorage.getItem('firstTimeModalShown');
+            console.log(modalState);
+            if (modalState === null) {
+                setIsModalVisible(true);
+            }
+        } catch (error) {
+            console.error('Failed to check the modal state:', error);
+        }
+    };
+
+    const handleCloseModal = () => {
+        setIsModalVisible(false);
+        saveModalState();
+    };
 
     return (
         <ContainerComponent isScroll>
@@ -96,7 +108,7 @@ export default function HomeScreen() {
 
                 <ListAttendanceHome />
             </SectionComponent>
-            {/* {modal()} */}
+            <FirstTimeModal visible={isModalVisible} onClose={handleCloseModal} />
         </ContainerComponent>
     );
 }

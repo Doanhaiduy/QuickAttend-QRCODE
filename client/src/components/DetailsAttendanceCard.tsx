@@ -4,6 +4,7 @@ import TextComponent from './TextComponent';
 import { format, formatDistanceToNow } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
+import getDateFnsLocale from '@/utils/dateFns';
 interface Data {
     title: string;
     startAt: string;
@@ -12,7 +13,7 @@ interface Data {
     code: string;
 }
 interface Props {
-    type: 'Approved' | 'Pending' | 'Rejected';
+    type: string;
     color: string;
     onPress?: () => void;
     data: Data;
@@ -21,6 +22,7 @@ interface Props {
 export default function DetailsAttendanceCard(props: Props) {
     const { type, color, onPress, data } = props;
     const { t } = useTranslation();
+    const locale = getDateFnsLocale();
 
     return (
         <Pressable onPress={onPress} className='p-4 bg-white shadow-xl rounded-[18px] my-3'>
@@ -30,20 +32,23 @@ export default function DetailsAttendanceCard(props: Props) {
                         {data.title.toLocaleUpperCase()} - {data.code}
                     </TextComponent>
                     <View
-                        className='px-4 py-2  rounded-xl items-center w-[80px]'
+                        className='px-2 py-2  rounded-xl items-center w-[90px]'
                         style={{
                             backgroundColor: `${color}1A`,
                         }}
                     >
                         <TextComponent className=' font-medium ' style={{ color }}>
-                            {type}
+                            {type === 'private' ? t('attendance.private') : t('attendance.public')}
                         </TextComponent>
                     </View>
                 </View>
                 <TextComponent className='text-lg font-inter700'>
-                    {format(data?.startAt, 'MMM dd, yyyy')} -{' '}
+                    {format(data?.startAt, 'MMM dd, yyyy', {
+                        locale,
+                    })}{' '}
+                    -{' '}
                     <TextComponent className='text-base font-medium'>
-                        ({formatDistanceToNow(data?.startAt, { addSuffix: true })})
+                        ({formatDistanceToNow(data?.startAt, { addSuffix: true, locale })})
                     </TextComponent>
                 </TextComponent>
                 <View className='h-[0.5px] w-full bg-gray-200 my-5' />
@@ -51,7 +56,11 @@ export default function DetailsAttendanceCard(props: Props) {
             <View className='flex-row items-start justify-center gap-1'>
                 <View className=' mr-4'>
                     <TextComponent className='text-base font-inter700'>{t('attendance.timeLabel')}</TextComponent>
-                    <TextComponent className='text-sm '>{format(data?.startAt, 'p')}</TextComponent>
+                    <TextComponent className='text-sm '>
+                        {format(data?.startAt, 'p', {
+                            locale,
+                        })}
+                    </TextComponent>
                 </View>
                 <View className='flex-1'>
                     <TextComponent className='text-base font-inter700'>{t('attendance.locationLabel')}</TextComponent>

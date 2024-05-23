@@ -156,7 +156,7 @@ export default function AttendanceScreen() {
                         onPress={() => {
                             setActiveTab(TimeStatus.Ongoing);
                         }}
-                        title='OnGoing'
+                        title={t('attendance.ongoingButtonTitle')}
                     />
 
                     <SpaceComponent width={5} />
@@ -167,7 +167,7 @@ export default function AttendanceScreen() {
                         onPress={() => {
                             setActiveTab(TimeStatus.Upcoming);
                         }}
-                        title='Coming'
+                        title={t('attendance.upcomingButtonTitle')}
                     />
                     <SpaceComponent width={5} />
                     <ButtonComponent
@@ -177,7 +177,7 @@ export default function AttendanceScreen() {
                         onPress={() => {
                             setActiveTab(TimeStatus.Expired);
                         }}
-                        title='Expired'
+                        title={t('attendance.expiredButtonTitle')}
                     />
                 </View>
             </SectionComponent>

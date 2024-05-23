@@ -14,7 +14,7 @@ interface Props {
 }
 
 const variantContainer = {
-    default: 'rounded-[10px] shadow-md flex flex-row items-center justify-center min-h-[56px]',
+    default: 'rounded-[10px] shadow-md flex flex-row items-center  justify-center min-h-[56px]',
     primary: 'bg-primary-500',
     outline: 'bg-[#fbfbfb] border-primary-500 border-[2px]',
     error: 'bg-error2',
@@ -22,8 +22,8 @@ const variantContainer = {
 };
 
 const variantText = {
-    default: 'text-white',
-    primary: 'text-white text-base',
+    default: 'text-white text-center text-base font-semibold',
+    primary: 'text-white text-base ',
     outline: 'text-blackText',
     error: 'text-white',
     success: 'text-white',

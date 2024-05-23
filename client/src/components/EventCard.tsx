@@ -7,6 +7,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import TextComponent from './TextComponent';
 import { useTranslation } from 'react-i18next';
+import getDateFnsLocale from '@/utils/dateFns';
 // import { vi } from 'date-fns/locale';
 
 interface Data {
@@ -19,12 +20,13 @@ interface Data {
 
 export default function EventCard(props: { data: Data }) {
     const { data } = props;
+    const locale = getDateFnsLocale();
 
     return (
         <TouchableOpacity
             className='h-[135px] bg-white p-4 rounded-[14px] flex-1 mx-2'
             onPress={() => {
-                router.navigate({
+                router.push({
                     pathname: `/attendance/${data.eventCode}`,
                     params: { eventId: data._id },
                 });
@@ -42,7 +44,9 @@ export default function EventCard(props: { data: Data }) {
                 </View>
             </View>
             <TextComponent className='font-inter700 text-xl my-2'>
-                {format(new Date(data.startAt), 'hh:mm a')}
+                {format(new Date(data.startAt), 'hh:mm a', {
+                    locale,
+                })}
             </TextComponent>
             <TextComponent className=''>
                 {checkTimeStatus(new Date(data.startAt ?? new Date()), new Date(data.endAt ?? new Date()))}
