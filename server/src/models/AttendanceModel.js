@@ -15,10 +15,13 @@ const Schema = new mongoose.Schema({
         type: String,
         required: [true, 'User full name is required'],
     },
+    distance: {
+        type: Number,
+    },
     status: {
         type: String,
         required: [true, 'Status is required'],
-        default: 'pending',
+        default: 'Success',
     },
     attendanceTime: {
         type: Date,

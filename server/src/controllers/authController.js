@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const { handleSendMail } = require('../utils/nodemailer');
 const asyncErrorHandler = require('express-async-handler');
 
+const mongoose = require('mongoose');
+
 const LoginUser = asyncErrorHandler(async (req, res) => {
     const { email, password } = req.body;
     const exitingUser = await UserModel.findOne({
@@ -227,10 +229,49 @@ const ResetPassword = asyncErrorHandler(async (req, res) => {
     });
 });
 
+const ChangePassword = asyncErrorHandler(async (req, res) => {
+    const { id, currentPassword, newPassword } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        res.status(400);
+        throw new Error('Invalid user id');
+    }
+
+    const existingUser = await UserModel.findById(id);
+
+    if (!existingUser) {
+        res.status(404);
+        throw new Error('User not found!');
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, existingUser.password);
+
+    if (!isMatch) {
+        res.status(400);
+        throw new Error('Invalid current password');
+    }
+
+    const isMatchNewPassword = await bcrypt.compare(newPassword, existingUser.password);
+    if (isMatchNewPassword) {
+        res.status(400);
+        throw new Error('New password cannot be the same as the current password');
+    }
+
+    const newHashedPassword = await hashedPassword(newPassword);
+    existingUser.password = newHashedPassword;
+    await existingUser.save();
+
+    res.status(200).json({
+        status: 'success',
+        message: 'Password changed successfully!',
+    });
+});
+
 module.exports = {
     LoginUser,
     RegisterUser,
     ForgotPassword,
     Verification,
     ResetPassword,
+    ChangePassword,
 };

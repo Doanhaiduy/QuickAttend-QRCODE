@@ -53,13 +53,24 @@ const AddNewEvent = asyncErrorHandler(async (req, res) => {
 });
 
 const GetAllEvents = asyncErrorHandler(async (req, res) => {
-    const { status } = req.query;
+    const { status, authorId, date } = req.query;
     let events = await EventModel.find().sort({ startAt: -1 });
 
     if (status === 'Upcoming' || status === 'Ongoing' || status === 'Expired') {
         events = events.filter((event) => {
             const eventStatus = checkTimeStatus(event.startAt, event.endAt);
             return eventStatus === status;
+        });
+    }
+
+    if (authorId) {
+        events = events.filter((event) => event.authorId.toString() === authorId);
+    }
+
+    if (date) {
+        const currentDate = new Date(date);
+        events = events.filter((event) => {
+            return event.startAt.toDateString() === currentDate.toDateString();
         });
     }
 
@@ -72,15 +83,28 @@ const GetAllEvents = asyncErrorHandler(async (req, res) => {
 });
 
 const GetAnalyticEvent = asyncErrorHandler(async (req, res) => {
+    const { authorId } = req.query;
+
     const currentTime = new Date();
 
-    const total = await EventModel.countDocuments();
+    let total = await EventModel.countDocuments();
 
-    const upcoming = await EventModel.countDocuments({ startAt: { $gt: currentTime } });
+    let upcoming = await EventModel.countDocuments({ startAt: { $gt: currentTime } });
 
-    const ongoing = await EventModel.countDocuments({ startAt: { $lte: currentTime }, endAt: { $gte: currentTime } });
+    let ongoing = await EventModel.countDocuments({ startAt: { $lte: currentTime }, endAt: { $gte: currentTime } });
 
-    const expired = await EventModel.countDocuments({ endAt: { $lt: currentTime } });
+    let expired = await EventModel.countDocuments({ endAt: { $lt: currentTime } });
+
+    if (authorId) {
+        total = await EventModel.countDocuments({ authorId });
+        upcoming = await EventModel.countDocuments({ authorId, startAt: { $gt: currentTime } });
+        ongoing = await EventModel.countDocuments({
+            authorId,
+            startAt: { $lte: currentTime },
+            endAt: { $gte: currentTime },
+        });
+        expired = await EventModel.countDocuments({ authorId, endAt: { $lt: currentTime } });
+    }
 
     const analytic = {
         total,

@@ -40,7 +40,7 @@ const GetAttendanceId = asyncErrorHandler(async (req, res) => {
 });
 
 const CreateAttendance = asyncErrorHandler(async (req, res) => {
-    const { eventCode, userId, status, attendanceTime, location, locationName } = req.body;
+    const { eventCode, userId, status, attendanceTime, location, locationName, distance } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
         res.status(400);
@@ -67,6 +67,7 @@ const CreateAttendance = asyncErrorHandler(async (req, res) => {
         attendanceTime,
         location,
         locationName,
+        distance,
     });
 
     const newAttendance = await attendance.save();
@@ -94,14 +95,22 @@ const CheckUserAttendance = asyncErrorHandler(async (req, res) => {
     const attendance = await AttendanceModel.findOne({ eventId: event._id, userId });
 
     if (!attendance) {
-        res.status(200).json({
-            hasAttendance: false,
+        return res.status(200).json({
+            status: 'success',
+            message: 'User has not attended this event',
+            data: {
+                hasAttendance: false,
+            },
         });
     }
 
     res.status(200).json({
-        hasAttendance: true,
-        attendance,
+        status: 'success',
+        message: 'User has attended this event',
+        data: {
+            hasAttendance: true,
+            attendance,
+        },
     });
 });
 

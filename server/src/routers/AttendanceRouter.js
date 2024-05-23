@@ -9,9 +9,9 @@ const {
 const Router = express.Router();
 
 Router.get('/event/:id', GetAttendanceByEventId);
-Router.get('/:id', GetAttendanceId);
-Router.get('/user/:id', GetAttendanceByUserId);
 Router.get('/event/:eventCode/user/:userId', CheckUserAttendance);
+Router.get('/user/:id', GetAttendanceByUserId);
+Router.get('/:id', GetAttendanceId);
 Router.post('/create', CreateAttendance);
 
 module.exports = Router;
