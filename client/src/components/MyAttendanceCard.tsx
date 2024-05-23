@@ -29,23 +29,14 @@ export default function MyAttendanceCard(props: { data: Data }) {
         })();
     }, []);
     return (
-        <TouchableOpacity
-            className=' bg-white p-4 rounded-[14px] flex-1 mx-2 flex-row justify-between items-center'
-            // onPress={() => {
-            //     router.navigate({
-            //         pathname: 'AttendanceDetail',
-            //         params: { eventId: data.eventId, id: data._id }
-
-            //     })
-            // }}
-        >
+        <TouchableOpacity className=' bg-white p-4 rounded-[14px] flex-1 mx-2 flex-row justify-between items-center'>
             <View className='flex-row items-center'>
                 <View className='p-1 bg-primary-500/10 mr-2 rounded-[6px]'>
                     <Ionicons name='checkmark-done' size={24} color={appColors.primary} />
                 </View>
                 <View className='ml-2'>
                     <TextComponent className='font-inter700 text-base max-w-[70%]' numberOfLines={2}>
-                        {event.eventName} Lorem ipsum dolor sit amet.
+                        {event.eventName}
                     </TextComponent>
                     <TextComponent className='text-sm text-grayText'>
                         {format(new Date(data.attendanceTime), 'MMM dd, yyyy')}

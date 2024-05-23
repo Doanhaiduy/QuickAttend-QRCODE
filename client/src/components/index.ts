@@ -16,6 +16,7 @@ import StatisticalCard from './StatisticalCard';
 import TextComponent from './TextComponent';
 import TodayListEvent from './TodayListEvent';
 import ListAttendanceHome from './ListAttendanceHome';
+import LanguageItem from './LanguageItem';
 
 export {
     ButtonComponent,
@@ -36,4 +37,5 @@ export {
     AttendancePersonItem,
     TodayListEvent,
     ListAttendanceHome,
+    LanguageItem,
 };

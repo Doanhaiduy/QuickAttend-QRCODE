@@ -23,6 +23,7 @@ import LoadingModal from '@/modals/LoadingModal';
 import * as Location from 'expo-location';
 import { getDistance } from 'geolib';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 export default function ScanQRScreen() {
     const [permission, requestPermission] = useCameraPermissions();
@@ -37,6 +38,9 @@ export default function ScanQRScreen() {
 
     const modalizeSuccessRef = React.useRef<Modalize>(null);
     const modalizeCancelRef = React.useRef<Modalize>(null);
+
+    const { t } = useTranslation();
+
     let location:
         | {
               lat: number;
@@ -76,20 +80,20 @@ export default function ScanQRScreen() {
             }
         } catch (error) {
             console.log(error);
-            return 'Not found location';
+            return t('scanQR.notFoundLocation');
         }
     };
 
     const getCurrentLocation: any = async () => {
         const permission = await Location.requestForegroundPermissionsAsync();
         if (!permission.canAskAgain || permission.status === 'denied') {
-            Alert.alert('Permission Required', 'Please enable location permission to use this feature', [
+            Alert.alert(t('scanQR.permissionRequired'), t('scanQR.enableLocationPermission'), [
                 {
-                    text: 'Close',
+                    text: t('scanQR.close'),
                     onPress: () => router.back(),
                 },
                 {
-                    text: 'Open Settings',
+                    text: t('scanQR.openSettings'),
                     onPress: () => Linking.openSettings(),
                 },
             ]);
@@ -105,14 +109,14 @@ export default function ScanQRScreen() {
     const handleVerificationCode = () => {
         const dataParse = JSON.parse(data as string);
         if (privateCode === '') {
-            setError('Please enter the private code');
+            setError(t('scanQR.enterPrivateCode'));
             return;
         }
         if (privateCode.toLocaleUpperCase() !== dataParse.privateCode.toLocaleUpperCase()) {
-            setError('The private code is incorrect');
+            setError(t('scanQR.privateCodeIncorrect'));
             return;
         } else {
-            Alert.alert('Verified', 'Please scan the QR code to check in');
+            Alert.alert(t('scanQR.verified'), t('scanQR.scanQRCodeToCheckIn'));
             setError('');
             setPrivateCode('');
             setIsPrivate(false);
@@ -124,9 +128,16 @@ export default function ScanQRScreen() {
     }
     if (!permission.granted) {
         return (
-            <ContainerComponent back title='Scan QR'>
-                <Text>We need your permission to show the camera</Text>
-                <ButtonComponent onPress={requestPermission} title='grant permission' size='large' type='primary' />
+            <ContainerComponent back title={t('scanQR.scanQRTitle')}>
+                <SectionComponent className='items-center'>
+                    <Text className='text-base font-medium'>{t('scanQR.permissionRequiredMessage')}</Text>
+                    <ButtonComponent
+                        onPress={requestPermission}
+                        title={t('scanQR.grantPermissionButtonTitle')}
+                        size='medium'
+                        type='primary'
+                    />
+                </SectionComponent>
             </ContainerComponent>
         );
     }
@@ -134,7 +145,7 @@ export default function ScanQRScreen() {
     const validCheck = async (dataDecrypt: any) => {
         const dataParse = JSON.parse(data as string);
         if (dataDecrypt?.eventCode !== dataParse?.eventCode) {
-            setErrorModal('Invalid QR code');
+            setErrorModal(t('scanQR.invalidQRCode'));
             setIsLoading(false);
             onOpenCancel();
             return false;
@@ -154,13 +165,11 @@ export default function ScanQRScreen() {
             { latitude: dataDecrypt?.location?.latitude, longitude: dataDecrypt?.location?.longitude }
         );
 
-        console.log('Distance: ', distance, dataDecrypt?.distanceLimit);
-
         if (distance > dataDecrypt?.distanceLimit && dataDecrypt?.distanceLimit !== 0) {
             setErrorModal(
-                `You are too far from the event location, you need to be closer ${
-                    distance - dataDecrypt?.distanceLimit
-                }(m) to attendance!`
+                `${t('scanQR.tooFarFromEventLocation')} ${distance - dataDecrypt?.distanceLimit}(m) ${t(
+                    'scanQR.toAttendance'
+                )}`
             );
             setIsLoading(false);
             onOpenCancel();
@@ -173,7 +182,6 @@ export default function ScanQRScreen() {
     const handelAddAttendance = async (dataDecrypt: any) => {
         setIsLoading(true);
         const checked = await validCheck(dataDecrypt);
-        console.log('location', location);
         if (checked) {
             try {
                 const data = {
@@ -206,7 +214,7 @@ export default function ScanQRScreen() {
         try {
             const parsedData = JSON.parse(data);
             if (!parsedData.data) {
-                setErrorModal('Invalid QR code');
+                setErrorModal(t('scanQR.invalidQRCode'));
                 onOpenCancel();
                 return;
             }
@@ -216,26 +224,24 @@ export default function ScanQRScreen() {
                 setDataScan(dataDecrypt);
                 handelAddAttendance(dataDecrypt);
             } else {
-                setErrorModal('Invalid QR code');
+                setErrorModal(t('scanQR.invalidQRCode'));
                 onOpenCancel();
             }
         } catch (error: any) {
-            setErrorModal('Invalid QR code');
+            setErrorModal(t('scanQR.invalidQRCode'));
             onOpenCancel();
         }
     };
 
     return (
-        <ContainerComponent back title='Scan QR'>
+        <ContainerComponent back title={t('scanQR.scanQRTitle')}>
             {isPrivate ? (
                 <SectionComponent className=''>
-                    <TextComponent className='text-xl font-bold '>Enter Private Code</TextComponent>
-                    <TextComponent className=' my-5 text-sm'>
-                        Please enter the private code given to you by the event organizer.
-                    </TextComponent>
+                    <TextComponent className='text-xl font-bold '>{t('scanQR.enterPrivateCodeTitle')}</TextComponent>
+                    <TextComponent className=' my-5 text-sm'>{t('scanQR.enterPrivateCodeDescription')}</TextComponent>
                     <InputComponent
-                        placeholder='Enter the Private Code'
-                        label='Private Code'
+                        placeholder={t('scanQR.privateCodePlaceholder')}
+                        label={t('scanQR.privateCodeLabel')}
                         value={privateCode}
                         onChange={(val) => {
                             setPrivateCode(val);
@@ -244,7 +250,12 @@ export default function ScanQRScreen() {
                     {error && <TextComponent className='text-error text-left'>{error}</TextComponent>}
 
                     <SectionComponent className='px-0'>
-                        <ButtonComponent title='Confirm' onPress={handleVerificationCode} type='primary' size='large' />
+                        <ButtonComponent
+                            title={t('scanQR.confirmButtonTitle')}
+                            onPress={handleVerificationCode}
+                            type='primary'
+                            size='large'
+                        />
                     </SectionComponent>
                 </SectionComponent>
             ) : (
@@ -284,17 +295,17 @@ export default function ScanQRScreen() {
                         </View>
                         <View className='justify-center items-center'>
                             <TextComponent className='text-center text-xl font-bold'>
-                                Successful attendance
+                                {t('scanQR.successfulAttendanceTitle')}
                             </TextComponent>
                             <TextComponent className='mt-2 text-center text-sm max-w-[70%] '>
-                                You have successfully taken attendance for{' '}
+                                {t('scanQR.successfulAttendanceDescription')}{' '}
                                 <TextComponent className='font-bold'>{dataScan?.eventName}</TextComponent>
                             </TextComponent>
                         </View>
 
                         <View>
                             <ButtonComponent
-                                title='Done'
+                                title={t('scanQR.doneButtonTitle')}
                                 onPress={async () => {
                                     modalizeSuccessRef.current?.close();
                                     router.dismissAll();
@@ -322,9 +333,11 @@ export default function ScanQRScreen() {
                             <Ionicons name='close-circle' size={100} color={appColors.error2} />
                         </View>
                         <View className='justify-center items-center'>
-                            <TextComponent className='text-center text-xl font-bold'>Failed attendance</TextComponent>
+                            <TextComponent className='text-center text-xl font-bold'>
+                                {t('scanQR.failedAttendanceTitle')}
+                            </TextComponent>
                             <TextComponent className='mt-2 text-center text-sm max-w-[70%] '>
-                                You have failed to take attendance! Please try again.
+                                {t('scanQR.failedAttendanceDescription')}
                             </TextComponent>
                             <TextComponent className='mt-2 text-center text-sm max-w-[70%] text-error'>
                                 {errorModal}
@@ -334,7 +347,7 @@ export default function ScanQRScreen() {
                         <View className='flex-row justify-center'>
                             <SpaceComponent width={6} />
                             <ButtonComponent
-                                title='Try Again'
+                                title={t('scanQR.tryAgainButtonTitle')}
                                 onPress={async () => {
                                     modalizeCancelRef.current?.close();
                                     await sleep(1000);
@@ -347,7 +360,7 @@ export default function ScanQRScreen() {
                     </View>
                 </Modalize>
             </Portal>
-            <LoadingModal visible={isLoading} message='Analyzing QR code...' />
+            <LoadingModal visible={isLoading} message={t('scanQR.analyzingQRMessage')} />
         </ContainerComponent>
     );
 }

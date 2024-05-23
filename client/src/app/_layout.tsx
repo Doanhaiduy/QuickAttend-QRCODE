@@ -9,6 +9,10 @@ import Splash from '../components/Splash';
 import store from '../redux/store';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Host } from 'react-native-portalize';
+import '@utils/i18n';
+import i18next from '@utils/i18n';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export { ErrorBoundary } from 'expo-router';
 
 SplashScreen.preventAutoHideAsync();
@@ -30,6 +34,17 @@ export default function RootLayout() {
         Inter900: require('../../assets/fonts/Inter-Black.ttf'),
         ...FontAwesome.font,
     });
+
+    useEffect(() => {
+        const getLanguage = async () => {
+            const lang = await AsyncStorage.getItem('language');
+            if (lang) {
+                i18next.changeLanguage(lang);
+            }
+        };
+
+        getLanguage();
+    }, []);
 
     useEffect(() => {
         if (error) throw error;

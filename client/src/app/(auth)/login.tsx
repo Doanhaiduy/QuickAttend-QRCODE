@@ -22,6 +22,7 @@ import {
 } from '@/components';
 import LoadingModal from '@/modals/LoadingModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
 
 const schema = z.object({
     email: schemasCustom.email,
@@ -46,6 +47,7 @@ export default function LoginScreen() {
 
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
+    const { t } = useTranslation();
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         setIsLoading(true);
@@ -55,7 +57,7 @@ export default function LoginScreen() {
             dispatch(setAuthData(res.data));
             await AsyncStorage.setItem('auth', JSON.stringify(res.data));
             await AsyncStorage.setItem('IsFirstTime', 'false');
-            Alert.alert('Success', 'Login successfully');
+            Alert.alert('Success', t('successLogin'));
             setIsLoading(false);
         } catch (error: any) {
             setIsLoading(false);
@@ -72,11 +74,12 @@ export default function LoginScreen() {
             <SectionComponent>
                 <Image source={require('../../assets/images/logo.png')} className='w-[80px] h-[80px]' />
                 <SpaceComponent height={20} />
-                <TextComponent className='text-[28px] font-inter700'>Welcome Back 👋 </TextComponent>
+                <TextComponent className='text-[28px] font-inter700'>{t('login.welcomeBack')} </TextComponent>
                 <TextComponent className='text-[28px] font-inter700'>
-                    to <TextComponent className='text-primary-500 font-inter700'>QuickAttend</TextComponent>
+                    {t('login.toQuickAttend')}{' '}
+                    <TextComponent className='text-primary-500 font-inter700'>QuickAttend</TextComponent>
                 </TextComponent>
-                <TextComponent className='text-sm text-grayText'>Hello there, login to continue</TextComponent>
+                <TextComponent className='text-sm text-grayText'>{t('login.helloLoginToContinue')}</TextComponent>
             </SectionComponent>
             <SpaceComponent height={4} />
             <SectionComponent>
@@ -88,7 +91,7 @@ export default function LoginScreen() {
                             value={value}
                             onChange={onChange}
                             onBlur={onBlur}
-                            placeholder='Enter Email'
+                            placeholder={t('login.enterEmail')}
                             label='Email'
                             err={errors.email?.message}
                         />
@@ -102,8 +105,8 @@ export default function LoginScreen() {
                             value={value}
                             onChange={onChange}
                             onBlur={onBlur}
-                            placeholder='Enter Password'
-                            label='Password'
+                            placeholder={t('login.enterPassword')}
+                            label={t('login.password')}
                             isPassword
                             err={errors.password?.message}
                         />
@@ -111,16 +114,21 @@ export default function LoginScreen() {
                 />
 
                 <Link href='/forgot' className='text-primary-500 text-sm text-right mt-[-6px]'>
-                    Forgot password?
+                    {t('login.forgotPassword')}
                 </Link>
 
                 <TextComponent className='text-error text-sm text-center mt-4'>{errors.root?.message}</TextComponent>
             </SectionComponent>
             <SectionComponent>
-                <ButtonComponent size='large' title='Login' type='primary' onPress={handleSubmit(onSubmit)} />
+                <ButtonComponent
+                    size='large'
+                    title={t('login.login')}
+                    type='primary'
+                    onPress={handleSubmit(onSubmit)}
+                />
                 <SpaceComponent height={20} />
                 <TextComponent className='text-sm text-grayText text-center'>
-                    Or continue with social account
+                    {t('login.orContinueWithSocialAccount')}
                 </TextComponent>
                 <SpaceComponent height={20} />
                 <ButtonComponent
@@ -136,10 +144,10 @@ export default function LoginScreen() {
             <SpaceComponent height={68} />
             <SectionComponent>
                 <TextComponent className='text-sm text-center'>
-                    Don't have an account?
+                    {t('login.dontHaveAccount')}
                     <SpaceComponent width={2} />
                     <Link href='/signup' className='text-primary-500 '>
-                        SignUp
+                        {t('login.signUp')}
                     </Link>
                 </TextComponent>
             </SectionComponent>

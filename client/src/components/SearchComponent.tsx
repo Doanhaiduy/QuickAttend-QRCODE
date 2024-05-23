@@ -6,6 +6,7 @@ import axios from 'axios';
 import useDebounce from '@/hooks/useDebounce';
 import ButtonComponent from './ButtonComponent';
 import SectionComponent from './SectionComponent';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     handleChooseLocation: (val: string) => void;
@@ -17,6 +18,8 @@ export default function SearchComponent(props: Props) {
     const [recentSearches, setRecentSearches] = useState<string[]>([]);
     const [value, setValue] = useState('' as string);
     const debounceValue = useDebounce(value, 500);
+
+    const { t } = useTranslation();
 
     const handleSearchLocation = async () => {
         try {
@@ -47,7 +50,7 @@ export default function SearchComponent(props: Props) {
                 <ButtonComponent
                     type='success'
                     size='small'
-                    title='Get current location'
+                    title={t('map.getCurrentLocation')}
                     onPress={getCurrent}
                     icon={<Ionicons name='location' size={24} color='#fff' />}
                     iconFlex='right'
@@ -56,10 +59,10 @@ export default function SearchComponent(props: Props) {
             <InputComponent
                 value={value}
                 onChange={(val) => setValue(val)}
-                placeholder='Search Location...'
+                placeholder={t('map.searchLocationPlaceholder')}
                 multiline
                 // height={70}
-                label='Location'
+                label={t('map.locationLabel')}
                 iconRight={
                     <Pressable onPress={handleSearchLocation}>
                         <Ionicons name='search' size={24} color='#000' />
@@ -89,7 +92,7 @@ export default function SearchComponent(props: Props) {
                     ))}
                 {recentSearches.length === 0 && debounceValue && (
                     <View className='px-2 py-4 text-lg border-b border-gray-200'>
-                        <Text>No result found</Text>
+                        <Text>{t('map.noResultFound')}</Text>
                     </View>
                 )}
             </View>

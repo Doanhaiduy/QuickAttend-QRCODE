@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Alert, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { z } from 'zod';
@@ -31,6 +32,7 @@ export default function EditProfileScreen() {
 
     const auth = useSelector(authSelector);
     const dispatch = useDispatch();
+    const { t } = useTranslation();
 
     const {
         control,
@@ -59,7 +61,7 @@ export default function EditProfileScreen() {
             const newAuthData = { ...auth, ...newData };
             await AsyncStorage.setItem('auth', JSON.stringify(newAuthData));
             dispatch(setAuthData(newAuthData));
-            Alert.alert('Success', 'Update profile successfully');
+            Alert.alert('Success', t('editProfile.successAlertMessage'));
             router.back();
             setIsLoading(false);
         } catch (error: any) {
@@ -85,14 +87,14 @@ export default function EditProfileScreen() {
     };
 
     return (
-        <ContainerComponent isScroll back title='Edit Profile'>
+        <ContainerComponent isScroll back title={t('editProfile.editProfileTitle')}>
             <SectionComponent>
                 <Controller
                     control={control}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <InputComponent
-                            label='Full Name'
-                            placeholder='Enter your full name'
+                            label={t('editProfile.fullNameLabel')}
+                            placeholder={t('editProfile.fullNamePlaceholder')}
                             value={value}
                             onChange={onChange}
                             onBlur={onBlur}
@@ -106,9 +108,9 @@ export default function EditProfileScreen() {
                     control={control}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <InputComponent
-                            label='Email'
                             isDisabled
-                            placeholder='Enter your email'
+                            label='Email'
+                            placeholder={t('editProfile.emailPlaceholder')}
                             value={value}
                             onChange={onChange}
                             onBlur={onBlur}
@@ -121,8 +123,8 @@ export default function EditProfileScreen() {
                     control={control}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <InputComponent
-                            label='Phone'
-                            placeholder='Enter your phone number'
+                            label={t('editProfile.phoneLabel')}
+                            placeholder={t('editProfile.phonePlaceholder')}
                             value={value || otherData?.phone || ''}
                             onChange={onChange}
                             onBlur={onBlur}
@@ -135,8 +137,8 @@ export default function EditProfileScreen() {
                     control={control}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <InputComponent
-                            label='Username'
-                            placeholder='Enter your username'
+                            label={t('editProfile.usernameLabel')}
+                            placeholder={t('editProfile.usernamePlaceholder')}
                             value={value}
                             onChange={onChange}
                             onBlur={onBlur}
@@ -150,8 +152,8 @@ export default function EditProfileScreen() {
                     control={control}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <InputComponent
-                            label='Address'
-                            placeholder='Enter your address'
+                            label={t('editProfile.addressLabel')}
+                            placeholder={t('editProfile.addressPlaceholder')}
                             value={value || otherData?.address || ''}
                             onChange={onChange}
                             onBlur={onBlur}
@@ -161,7 +163,12 @@ export default function EditProfileScreen() {
                     name='address'
                 />
                 {errors.root && <TextComponent className='text-error'>{errors.root.message}</TextComponent>}
-                <ButtonComponent title='Save' type='primary' size='large' onPress={handleSubmit(onSubmit)} />
+                <ButtonComponent
+                    title={t('editProfile.saveButtonTitle')}
+                    type='primary'
+                    size='large'
+                    onPress={handleSubmit(onSubmit)}
+                />
             </SectionComponent>
             <LoadingModal visible={isLoading} />
         </ContainerComponent>

@@ -16,6 +16,7 @@ import { Link, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Image, Pressable, StyleSheet } from 'react-native';
 import { z } from 'zod';
 
@@ -51,13 +52,14 @@ export default function SignUpScreen() {
 
     const [isCheck, setIsCheck] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const { t } = useTranslation();
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         setIsLoading(true);
         try {
             if (!isCheck) {
                 setIsLoading(false);
-                setError('root', { type: 'manual', message: 'Please agree to the terms and conditions' });
+                setError('root', { type: 'manual', message: t('signUp.pleaseAgreeToTerms') });
             } else {
                 const { fullName, email, password } = data;
                 const res = await authenticationAPI.HandleAuthentication(
@@ -83,7 +85,7 @@ export default function SignUpScreen() {
             }
         } catch (error) {
             console.log(error);
-            setError('email', { type: 'manual', message: 'Email already exists' });
+            setError('email', { type: 'manual', message: t('signUp.emailAlreadyExists') });
             setIsLoading(false);
         }
     };
@@ -94,11 +96,12 @@ export default function SignUpScreen() {
             <SectionComponent>
                 <Image source={require('../../assets/images/logo.png')} className='w-[80px] h-[80px]' />
                 <SpaceComponent height={20} />
-                <TextComponent className='text-[28px] font-inter700'>Register Account</TextComponent>
+                <TextComponent className='text-[28px] font-inter700'>{t('signUp.registerAccount')}</TextComponent>
                 <TextComponent className='text-[28px] font-inter700'>
-                    to <TextComponent className='text-primary-500 font-inter700'>QuickAttend</TextComponent>
+                    {t('signUp.toQuickAttend')}{' '}
+                    <TextComponent className='text-primary-500 font-inter700'>QuickAttend</TextComponent>
                 </TextComponent>
-                <TextComponent className='text-sm text-grayText'>Hello there, Register to continue</TextComponent>
+                <TextComponent className='text-sm text-grayText'>{t('signUp.helloRegisterToContinue')}</TextComponent>
             </SectionComponent>
             <SpaceComponent height={4} />
             <SectionComponent>
@@ -110,8 +113,8 @@ export default function SignUpScreen() {
                             value={value}
                             onChange={onChange}
                             onBlur={onBlur}
-                            placeholder='Enter Full Name'
-                            label='Full Name'
+                            placeholder={t('signUp.enterFullName')}
+                            label={t('signUp.fullNameLabel')}
                             err={errors.fullName?.message}
                         />
                     )}
@@ -124,7 +127,7 @@ export default function SignUpScreen() {
                             value={value}
                             onChange={onChange}
                             onBlur={onBlur}
-                            placeholder='Enter Email'
+                            placeholder={t('signUp.enterEmail')}
                             label='Email'
                             err={errors.email?.message}
                         />
@@ -139,8 +142,8 @@ export default function SignUpScreen() {
                             value={value}
                             onChange={onChange}
                             onBlur={onBlur}
-                            placeholder='Enter Password'
-                            label='Password'
+                            placeholder={t('signUp.enterPassword')}
+                            label={t('signUp.passwordLabel')}
                             isPassword
                             err={errors.password?.message}
                         />
@@ -155,8 +158,8 @@ export default function SignUpScreen() {
                             value={value}
                             onChange={onChange}
                             onBlur={onBlur}
-                            placeholder='Confirm Password'
-                            label='Confirm Password'
+                            placeholder={t('signUp.confirmPasswordPlaceholder')}
+                            label={t('signUp.confirmPasswordLabel')}
                             isPassword
                             err={errors.confirmPassword?.message}
                         />
@@ -166,20 +169,25 @@ export default function SignUpScreen() {
                 <Pressable className='flex-row max-w-[90%] ' onPress={() => setIsCheck(!isCheck)}>
                     <Checkbox value={isCheck} onValueChange={setIsCheck} className='mr-2' />
                     <TextComponent className='font-inter'>
-                        I agree to the{' '}
+                        {t('signUp.agreeToTerms')}{' '}
                         <Link href={'/'} className='text-primary-500'>
-                            Terms & Conditions & Privacy Policy
+                            {t('signUp.termsAndConditions')}
                         </Link>{' '}
-                        set out by this site.
+                        {t('signUp.setOutByThisSite')}
                     </TextComponent>
                 </Pressable>
             </SectionComponent>
             {errors.root && <TextComponent className='text-error text-center'>{errors.root.message}</TextComponent>}
             <SectionComponent>
-                <ButtonComponent size='large' type='primary' onPress={handleSubmit(onSubmit)} title='Register' />
+                <ButtonComponent
+                    size='large'
+                    type='primary'
+                    onPress={handleSubmit(onSubmit)}
+                    title={t('signUp.register')}
+                />
                 <SpaceComponent height={20} />
                 <TextComponent className='text-sm text-grayText text-center'>
-                    Or continue with social account
+                    {t('signUp.orContinueWithSocialAccount')}
                 </TextComponent>
                 <SpaceComponent height={20} />
                 <ButtonComponent
@@ -192,14 +200,14 @@ export default function SignUpScreen() {
             </SectionComponent>
             <SectionComponent>
                 <TextComponent className='text-sm text-center'>
-                    Already have an account?
+                    {t('signUp.alreadyHaveAccount')}
                     <SpaceComponent width={2} />
                     <Link href='/login' className='text-primary-500 '>
-                        Login
+                        {t('signUp.login')}
                     </Link>
                 </TextComponent>
             </SectionComponent>
-            <LoadingModal visible={isLoading} message='Registering...' />
+            <LoadingModal visible={isLoading} message={t('signUp.registering')} />
         </ContainerComponent>
     );
 }

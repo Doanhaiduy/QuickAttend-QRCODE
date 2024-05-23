@@ -5,6 +5,7 @@ import LoadingModal from '@/modals/LoadingModal';
 import { setAuthData } from '@/redux/reducers/authReducer';
 import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, Image, Pressable, StyleSheet, View } from 'react-native';
 import { OtpInput } from 'react-native-otp-entry';
 import { useDispatch } from 'react-redux';
@@ -16,13 +17,14 @@ export default function VerificationScreen() {
     const [error, setError] = React.useState('');
 
     const dispatch = useDispatch();
+    const { t } = useTranslation();
 
     const handleVerify = async (inputCode: string) => {
         setIsLoading(true);
         console.log(code, inputCode);
         if (code !== inputCode) {
             setIsLoading(false);
-            setError('Invalid code');
+            setError(t('verification.invalidCode'));
             return;
         }
 
@@ -36,7 +38,7 @@ export default function VerificationScreen() {
                 console.log(res);
                 dispatch(setAuthData(res.data));
                 setIsLoading(false);
-                Alert.alert('Success', 'Register successfully');
+                Alert.alert('Success', t('verification.registerSuccess'));
             }
             if (type === 'forgot') {
                 setIsLoading(false);
@@ -48,7 +50,7 @@ export default function VerificationScreen() {
                 });
             }
         } catch (error) {
-            setError('Something went wrong');
+            setError(t('verification.somethingWentWrong'));
             setIsLoading(false);
         }
     };
@@ -56,9 +58,11 @@ export default function VerificationScreen() {
     return (
         <ContainerComponent isAuth isScroll back>
             <SectionComponent>
-                <TextComponent className='text-[28px] font-inter700 mb-2'>Enter Verification Code</TextComponent>
+                <TextComponent className='text-[28px] font-inter700 mb-2'>
+                    {t('verification.enterVerificationCode')}
+                </TextComponent>
                 <TextComponent className=' text-grayText text-base'>
-                    We have sent the code verification to your email address
+                    {t('verification.verificationCodeSent')}
                 </TextComponent>
             </SectionComponent>
             <SectionComponent className='w-[100%] h-[250px]'>
@@ -82,16 +86,21 @@ export default function VerificationScreen() {
                     }}
                 />
                 <View className='flex-row items-end self-end mt-4'>
-                    <TextComponent className='mr-1'>Didn't receive the code?</TextComponent>
+                    <TextComponent className='mr-1'>{t('verification.didNotReceiveCode')}</TextComponent>
                     <Pressable className='' onPress={() => {}}>
-                        <TextComponent className='text-primary-500'>Resend</TextComponent>
+                        <TextComponent className='text-primary-500'>{t('verification.resend')}</TextComponent>
                     </Pressable>
                 </View>
                 {error && <TextComponent className='text-error mt-2 text-center'>{error}</TextComponent>}
             </SectionComponent>
             <SpaceComponent height={80} />
             <SectionComponent>
-                <ButtonComponent title='Verify' onPress={() => handleVerify(otp)} size='large' type='primary' />
+                <ButtonComponent
+                    title={t('verification.verify')}
+                    onPress={() => handleVerify(otp)}
+                    size='large'
+                    type='primary'
+                />
             </SectionComponent>
             <LoadingModal visible={isLoading} />
         </ContainerComponent>

@@ -5,9 +5,12 @@ import EventCard from './EventCard';
 import eventAPI from '@/apis/eventApi';
 import { useSelector } from 'react-redux';
 import { authSelector } from '@/redux/reducers/authReducer';
+import { useTranslation } from 'react-i18next';
 
 export default function TodayListEvent(props: { date: string }) {
     const [data, setData] = useState<any[]>([]);
+    const { t } = useTranslation();
+
     const { date } = props;
     const auth = useSelector(authSelector);
     useEffect(() => {
@@ -31,7 +34,7 @@ export default function TodayListEvent(props: { date: string }) {
                 renderItem={({ item, index }) => <EventCard data={item} />}
                 contentContainerStyle={{ marginHorizontal: -8 }}
                 ListHeaderComponent={() => (
-                    <TextComponent className='text-lg font-inter500 ml-4 mb-4'>Today Event</TextComponent>
+                    <TextComponent className='text-lg font-inter500 ml-4 mb-4'>{t('home.todayEvent')}</TextComponent>
                 )}
                 ItemSeparatorComponent={() => <View className='h-4 w-4' />}
                 numColumns={2}
@@ -39,7 +42,7 @@ export default function TodayListEvent(props: { date: string }) {
             />
             {data.length === 0 && (
                 <View className='flex-1 justify-center items-center'>
-                    <TextComponent className='text-lg text-gray-400'>No event</TextComponent>
+                    <TextComponent className='text-lg text-gray-400'>{t('home.noEvent')}</TextComponent>
                 </View>
             )}
         </>

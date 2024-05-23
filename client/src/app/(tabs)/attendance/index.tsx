@@ -18,6 +18,7 @@ import { FontAwesome, Ionicons, Octicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Modal, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
@@ -41,6 +42,7 @@ export default function AttendanceScreen() {
     const modalizeRef = React.useRef<Modalize>(null);
 
     const auth = useSelector(authSelector);
+    const { t } = useTranslation();
 
     useEffect(() => {
         fetchData();
@@ -102,7 +104,7 @@ export default function AttendanceScreen() {
                     if (checkTimeStatus(new Date(res.data.startAt), new Date(res.data.endAt)) === TimeStatus.Ongoing) {
                         const checkHasAttendance = await checkAttendance();
                         if (checkHasAttendance) {
-                            setError('You have already checked in');
+                            setError(t('attendance.errorAlreadyCheckedIn'));
                             return;
                         }
                         setModalVisible(false);
@@ -115,14 +117,14 @@ export default function AttendanceScreen() {
                             },
                         });
                     } else {
-                        setError('Event is not ongoing');
+                        setError(t('attendance.errorNotOngoing'));
                     }
                 }
             } catch (error) {
-                setError('Event code is not valid');
+                setError(t('attendance.errorInvalidCode'));
             }
         } else {
-            setError('Event code is not valid');
+            setError(t('attendance.errorInvalidCode'));
         }
     };
 
@@ -130,7 +132,7 @@ export default function AttendanceScreen() {
         <ContainerComponent
             handleRefresh={handleRefresh}
             isScroll
-            title='Attendance'
+            title={t('attendance.attendanceTitle')}
             iconRight={
                 <Pressable onPress={onOpen}>
                     <Octicons name='diff-added' size={24} color='black' />
@@ -210,7 +212,9 @@ export default function AttendanceScreen() {
                 ) : (
                     <SectionComponent className='items-center justify-center'>
                         <FontAwesome name='frown-o' size={74} color={appColors.black} />
-                        <TextComponent className='font-medium text-lg'>No event found!</TextComponent>
+                        <TextComponent className='font-medium text-lg'>
+                            {t('attendance.noEventFoundMessage')}
+                        </TextComponent>
                     </SectionComponent>
                 )}
             </SectionComponent>
@@ -234,7 +238,9 @@ export default function AttendanceScreen() {
                             }}
                         >
                             <Ionicons name='create-sharp' size={24} color='black' />
-                            <TextComponent className='text-base font-medium ml-2'>Create Event</TextComponent>
+                            <TextComponent className='text-base font-medium ml-2'>
+                                {t('attendance.createEventOption')}
+                            </TextComponent>
                         </TouchableOpacity>
                         <TouchableOpacity
                             className='flex-row pb-2 items-center'
@@ -244,7 +250,9 @@ export default function AttendanceScreen() {
                             }}
                         >
                             <Ionicons name='checkbox' size={22} color='black' />
-                            <TextComponent className='text-base font-medium ml-2'>Attendance </TextComponent>
+                            <TextComponent className='text-base font-medium ml-2'>
+                                {t('attendance.attendanceOption')}
+                            </TextComponent>
                         </TouchableOpacity>
                     </View>
                 </Modalize>
@@ -260,13 +268,15 @@ export default function AttendanceScreen() {
             >
                 <View className='flex-1 bg-black/80'>
                     <View className='bg-white h-1/3  my-auto mx-5 rounded-[30px] p-5'>
-                        <TextComponent className='text-xl font-bold text-center'>Enter the Event Code</TextComponent>
+                        <TextComponent className='text-xl font-bold text-center'>
+                            {t('attendance.enterEventCodeTitle')}
+                        </TextComponent>
                         <TextComponent className=' my-5 text-sm'>
-                            Please enter the code that was given to you by the event organizer to check in:
+                            {t('attendance.enterEventCodeDescription')}
                         </TextComponent>
                         <InputComponent
-                            placeholder='Enter the Event Code'
-                            label='Event Code'
+                            placeholder={t('attendance.eventCodePlaceholder')}
+                            label={t('attendance.eventCodePlaceholder')}
                             value={eventCode}
                             err={error}
                             onChange={(val) => {
@@ -276,13 +286,18 @@ export default function AttendanceScreen() {
                         />
                         <View className='flex-row items-center justify-center mt-4'>
                             <ButtonComponent
-                                title='Cancel'
+                                title={t('attendance.cancelButtonTitle')}
                                 onPress={() => setModalVisible(false)}
                                 type='error'
                                 size='small'
                             />
                             <SpaceComponent width={8} />
-                            <ButtonComponent title='Continue' onPress={handleContinue} type='success' size='small' />
+                            <ButtonComponent
+                                title={t('attendance.continueButtonTitle')}
+                                onPress={handleContinue}
+                                type='success'
+                                size='small'
+                            />
                         </View>
                     </View>
                 </View>

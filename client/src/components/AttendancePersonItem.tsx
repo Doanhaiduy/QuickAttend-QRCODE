@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import TextComponent from './TextComponent';
 import userAPI from '@/apis/userApi';
 import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 interface Data {
     attendanceTime: string;
@@ -14,6 +15,7 @@ interface Data {
 export default function AttendancePersonItem(props: { data: Data }) {
     const { data } = props;
     const [user, setUser] = useState<any>({});
+    const { t } = useTranslation();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -48,12 +50,12 @@ export default function AttendancePersonItem(props: { data: Data }) {
                 </View>
             </View>
             <View className='flex-row items-start mt-3 justify-between'>
-                <View className='flex-row items-start max-w-[50%] '>
-                    <TextComponent className='text-sm font-medium'>Location: </TextComponent>
-                    <TextComponent className='text-sm'>{data.locationName || 'No location'}</TextComponent>
+                <View className='flex-row items-start max-w-[40%] '>
+                    <TextComponent className='text-sm font-medium'>{t('home.locationLabel')} </TextComponent>
+                    <TextComponent className='text-sm'>{data.locationName || t('home.noLocation')}</TextComponent>
                 </View>
                 <View className='flex-row items-center'>
-                    <TextComponent className='text-sm font-medium'>distance: </TextComponent>
+                    <TextComponent className='text-sm font-medium'>{t('home.distanceLabel')} </TextComponent>
                     <TextComponent className='text-sm'>{data.distance} (m)</TextComponent>
                 </View>
             </View>

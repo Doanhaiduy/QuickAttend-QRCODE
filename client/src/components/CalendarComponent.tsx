@@ -3,10 +3,12 @@ import React from 'react';
 import TextComponent from './TextComponent';
 import SpaceComponent from './SpaceComponent';
 import { generateWeekDates } from '@/helpers';
+import { useTranslation } from 'react-i18next';
 
 export default function CalendarComponent(props: { onDatePress?: (date: string) => void; date: string }) {
     const { onDatePress, date } = props;
-    const weekDates = generateWeekDates();
+    const { t } = useTranslation();
+    const weekDates = generateWeekDates(t('lang'));
     console.log();
     return (
         <View>

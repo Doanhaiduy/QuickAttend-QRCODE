@@ -11,6 +11,7 @@ import { sleep } from '@/helpers';
 import { ButtonComponent, ContainerComponent, InputComponent, SectionComponent, TextComponent } from '@/components';
 import LoadingModal from '@/modals/LoadingModal';
 import authenticationAPI from '@/apis/authApi';
+import { useTranslation } from 'react-i18next';
 
 const schema = z
     .object({
@@ -34,6 +35,7 @@ export default function NewPasswordScreen() {
     });
 
     const [isLoading, setIsLoading] = React.useState(false);
+    const { t } = useTranslation();
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         setIsLoading(true);
@@ -45,7 +47,7 @@ export default function NewPasswordScreen() {
                 'post'
             );
             setIsLoading(false);
-            Alert.alert('Success', 'Password updated successfully');
+            Alert.alert('Success', t('forgot.successPasswordUpdated'));
             router.navigate('/login');
         } catch (error: any) {
             setIsLoading(false);
@@ -55,8 +57,12 @@ export default function NewPasswordScreen() {
     return (
         <ContainerComponent isAuth isScroll back>
             <SectionComponent>
-                <TextComponent className='text-[28px] font-inter700 mb-2'>Enter New Password</TextComponent>
-                <TextComponent className=' text-grayText text-base'>Please enter your new password</TextComponent>
+                <TextComponent className='text-[28px] font-inter700 mb-2'>
+                    {t('newPassword.enterNewPassword')}
+                </TextComponent>
+                <TextComponent className=' text-grayText text-base'>
+                    {t('newPassword.pleaseEnterNewPassword')}
+                </TextComponent>
             </SectionComponent>
             <SectionComponent className='w-[100%] h-[240px]'>
                 <Image source={require('../../assets/images/new-password.png')} className='w-full h-full' />
@@ -69,8 +75,8 @@ export default function NewPasswordScreen() {
                             onBlur={onBlur}
                             onChange={onChange}
                             value={value}
-                            placeholder='Enter New Password'
-                            label='New Password'
+                            placeholder={t('newPassword.enterNewPasswordPlaceholder')}
+                            label={t('newPassword.newPasswordLabel')}
                             err={errors.password?.message}
                             isPassword
                         />
@@ -85,8 +91,8 @@ export default function NewPasswordScreen() {
                             onBlur={onBlur}
                             onChange={onChange}
                             value={value}
-                            placeholder='Re-enter New Password'
-                            label='Confirm New Password'
+                            placeholder={t('newPassword.reenterNewPasswordPlaceholder')}
+                            label={t('newPassword.confirmNewPasswordLabel')}
                             err={errors.confirmPassword?.message}
                             isPassword
                         />
@@ -96,7 +102,12 @@ export default function NewPasswordScreen() {
             </SectionComponent>
             {errors.root && <TextComponent className='text-error text-center'>{errors.root.message}</TextComponent>}
             <SectionComponent>
-                <ButtonComponent title='Update Password' onPress={handleSubmit(onSubmit)} size='large' type='primary' />
+                <ButtonComponent
+                    title={t('newPassword.updatePassword')}
+                    onPress={handleSubmit(onSubmit)}
+                    size='large'
+                    type='primary'
+                />
             </SectionComponent>
             <LoadingModal visible={isLoading} />
         </ContainerComponent>

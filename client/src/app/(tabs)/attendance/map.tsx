@@ -9,6 +9,7 @@ import Geocoder from 'react-native-geocoding';
 import LoadingModal from '@/modals/LoadingModal';
 import { useSelector } from 'react-redux';
 import { authSelector } from '@/redux/reducers/authReducer';
+import { useTranslation } from 'react-i18next';
 Geocoder.init(process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY!, { language: 'en' });
 
 export default function MapScreen() {
@@ -20,6 +21,7 @@ export default function MapScreen() {
     const { lat, long, eventName, securityCode, description, dateStart, dateEnd, check, distanceLimit } =
         useLocalSearchParams();
     const auth = useSelector(authSelector);
+    const { t } = useTranslation();
 
     useEffect(() => {
         (async () => {
@@ -27,16 +29,21 @@ export default function MapScreen() {
             const permission = await Location.requestForegroundPermissionsAsync();
             console.log(permission);
             if (!permission.canAskAgain || permission.status === 'denied') {
-                Alert.alert('Permission Required', 'Please enable location permission to use this feature', [
-                    {
-                        text: 'Close',
-                        onPress: () => router.back(),
-                    },
-                    {
-                        text: 'Open Settings',
-                        onPress: () => Linking.openSettings(),
-                    },
-                ]);
+                // Alert.alert(t('map.permissionRequired'), t('map.pleaseEnableLocationPermission'), [
+                //     {
+                //         text: t('map.close'),
+                //         onPress: () => router.back(),
+                //     },
+                //     {
+                //         text: t('map.openSettings'),
+                //         onPress: () => Linking.openSettings(),
+                //     },
+                // ]);
+                setLocation({
+                    lat: 21.028511,
+                    long: 105.804817,
+                });
+                setIsLoading(false);
             } else {
                 if (permission.status === 'granted') {
                     if (lat && long) {
@@ -61,16 +68,17 @@ export default function MapScreen() {
         const permission = await Location.requestForegroundPermissionsAsync();
         console.log(permission);
         if (!permission.canAskAgain || permission.status === 'denied') {
-            Alert.alert('Permission Required', 'Please enable location permission to use this feature', [
+            Alert.alert(t('map.permissionRequired'), t('map.pleaseEnableLocationPermission'), [
                 {
-                    text: 'Close',
+                    text: t('map.close'),
                     onPress: () => router.back(),
                 },
                 {
-                    text: 'Open Settings',
+                    text: t('map.openSettings'),
                     onPress: () => Linking.openSettings(),
                 },
             ]);
+            router.back();
             setIsLoading(false);
         }
         if (permission.status === 'granted') {
@@ -120,7 +128,7 @@ export default function MapScreen() {
     };
 
     return (
-        <ContainerComponent isScroll back title='Choose Location'>
+        <ContainerComponent isScroll back title={t('map.chooseLocation')}>
             <SectionComponent className='pb-0'>
                 <SearchComponent handleChooseLocation={handleChooseLocation} getCurrent={handleGetCurrentLocation} />
             </SectionComponent>
@@ -149,8 +157,8 @@ export default function MapScreen() {
                                 longitude: location?.long || 0,
                             }}
                             // image={require('../../../assets/images/avatar.jpg')}
-                            title={auth.fullName || 'You'}
-                            description="You're here"
+                            title={auth.fullName || t('map.you')}
+                            description={t('map.youAreHere')}
                             draggable
                             onDragEnd={(e) => {
                                 setLocation({
@@ -178,14 +186,14 @@ export default function MapScreen() {
                     <View className='absolute top-[70%] w-full  items-center justify-center'>
                         <ButtonComponent
                             onPress={handleSubmitLocation}
-                            title='Submit Location'
+                            title={t('map.submitLocation')}
                             size='medium'
                             type='primary'
                         />
                     </View>
                 </>
             </SectionComponent>
-            <LoadingModal visible={isLoading} message='Loading map...' />
+            <LoadingModal visible={isLoading} message={t('map.loadingMap')} />
         </ContainerComponent>
     );
 }

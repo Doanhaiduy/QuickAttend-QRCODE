@@ -5,6 +5,7 @@ import { authSelector, setAuthData } from '@/redux/reducers/authReducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Redirect, router } from 'expo-router';
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +14,8 @@ export default function OnBoardingScreen() {
     const [index, setIndex] = React.useState(0);
     const auth = useSelector(authSelector);
     const dispatch = useDispatch();
+
+    const { t } = useTranslation();
 
     const checkAuth = async () => {
         const res = await AsyncStorage.getItem('auth');
@@ -93,10 +96,10 @@ export default function OnBoardingScreen() {
                     ]}
                 >
                     <TouchableOpacity onPress={() => router.replace('/login')}>
-                        <TextComponent className='text-gray-600'>Skip</TextComponent>
+                        <TextComponent className='text-gray-600'>{t('onBoarding.skip')}</TextComponent>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => (index < 2 ? setIndex(index + 1) : router.replace('/login'))}>
-                        <TextComponent className='text-gray-800 font-bold'>Next</TextComponent>
+                        <TextComponent className='text-gray-800 font-bold'>{t('onBoarding.next')}</TextComponent>
                     </TouchableOpacity>
                 </View>
             </View>

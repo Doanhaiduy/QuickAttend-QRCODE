@@ -3,10 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import { AttendancePersonItem, ContainerComponent, SectionComponent, SpaceComponent } from '@/components';
 import attendanceAPI from '@/apis/attendanceApi';
+import { useTranslation } from 'react-i18next';
 
 export default function ListScreen() {
     const { id } = useLocalSearchParams();
     const [list, setList] = useState<any[]>([]);
+    const { t } = useTranslation();
 
     const fetchList = async () => {
         try {
@@ -21,9 +23,11 @@ export default function ListScreen() {
         fetchList();
     }, []);
     return (
-        <ContainerComponent isScroll title='List Attendance' back handleRefresh={fetchList}>
+        <ContainerComponent isScroll title={t('attendance.listAttendanceTitle')} back handleRefresh={fetchList}>
             <SectionComponent>
-                <Text className='text-lg font-bold'>Quantity: {list.length}</Text>
+                <Text className='text-lg font-bold'>
+                    {t('attendance.quantity')} {list.length}
+                </Text>
             </SectionComponent>
             <SectionComponent className='bg-white'>
                 <FlatList
@@ -38,7 +42,7 @@ export default function ListScreen() {
                 />
                 {list.length === 0 && (
                     <View className='flex-1 justify-center items-center'>
-                        <Text className='text-lg text-gray-400'>No attendance</Text>
+                        <Text className='text-lg text-gray-400'>{t('attendance.noAttendance')}</Text>
                     </View>
                 )}
             </SectionComponent>

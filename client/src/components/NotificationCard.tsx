@@ -3,6 +3,7 @@ import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { appColors } from '@/constants/appColors';
 import TextComponent from './TextComponent';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     type: 'Auth' | 'Event' | 'Profile';
@@ -10,6 +11,8 @@ interface Props {
 
 export default function NotificationCard(props: Props) {
     const { type } = props;
+    const { t } = useTranslation();
+
     return (
         <TouchableOpacity className='py-3 flex-row gap-4 items-start border-b-[0.5px] border-gray-200 w-full '>
             <View className='p-2 bg-primary-500/10 rounded-full h-[40px] w-[40px] items-center justify-center'>
@@ -19,12 +22,12 @@ export default function NotificationCard(props: Props) {
             </View>
             <View className='pr-[40px]'>
                 <TextComponent className='text-base font-bold' numberOfLines={1}>
-                    You update your profile picture
+                    {t('notification.title')}
                 </TextComponent>
                 <TextComponent className='text-[12px] my-1' numberOfLines={2}>
-                    You just update your profile picture ou just update your profile picture
+                    {t('notification.description')}
                 </TextComponent>
-                <TextComponent className='text-[11px] text-grayText'>Just Now</TextComponent>
+                <TextComponent className='text-[11px] text-grayText'>{t('notification.justNow')}</TextComponent>
             </View>
         </TouchableOpacity>
     );

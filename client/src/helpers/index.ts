@@ -24,7 +24,7 @@ export const obfuscateEmail = (email: string): string => {
     });
 };
 
-export const generateWeekDates = () => {
+export const generateWeekDates = (lang: string) => {
     const weekDates = [];
     const today = new Date();
     const currentDay = today.getDay();
@@ -36,7 +36,7 @@ export const generateWeekDates = () => {
         const date = new Date(startOfWeek);
         date.setDate(startOfWeek.getDate() + i);
 
-        const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+        const dayName = date.toLocaleDateString(lang || 'en-US', { weekday: 'short' });
         const dateNumber = date.getDate();
         const dateFormat = date.toISOString().split('T')[0];
 

@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import TextComponent from './TextComponent';
-import { format } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 interface Data {
     title: string;
@@ -19,7 +20,7 @@ interface Props {
 
 export default function DetailsAttendanceCard(props: Props) {
     const { type, color, onPress, data } = props;
-    console.log(data);
+    const { t } = useTranslation();
 
     return (
         <Pressable onPress={onPress} className='p-4 bg-white shadow-xl rounded-[18px] my-3'>
@@ -39,22 +40,29 @@ export default function DetailsAttendanceCard(props: Props) {
                         </TextComponent>
                     </View>
                 </View>
-                <TextComponent className='text-lg font-inter700'>{format(data?.startAt, 'MMM dd, yyyy')}</TextComponent>
+                <TextComponent className='text-lg font-inter700'>
+                    {format(data?.startAt, 'MMM dd, yyyy')} -{' '}
+                    <TextComponent className='text-base font-medium'>
+                        ({formatDistanceToNow(data?.startAt, { addSuffix: true })})
+                    </TextComponent>
+                </TextComponent>
                 <View className='h-[0.5px] w-full bg-gray-200 my-5' />
             </View>
             <View className='flex-row items-start justify-center gap-1'>
                 <View className=' mr-4'>
-                    <TextComponent className='text-base font-inter700'>Time</TextComponent>
+                    <TextComponent className='text-base font-inter700'>{t('attendance.timeLabel')}</TextComponent>
                     <TextComponent className='text-sm '>{format(data?.startAt, 'p')}</TextComponent>
                 </View>
                 <View className='flex-1'>
-                    <TextComponent className='text-base font-inter700'>Location</TextComponent>
-                    <TextComponent className='text-sm '>{data?.location || 'No location'}</TextComponent>
+                    <TextComponent className='text-base font-inter700'>{t('attendance.locationLabel')}</TextComponent>
+                    <TextComponent className='text-sm '>{data?.location || t('attendance.noLocation')}</TextComponent>
                 </View>
                 <View className='flex-1'>
-                    <TextComponent className='text-base font-inter700'>Description</TextComponent>
+                    <TextComponent className='text-base font-inter700'>
+                        {t('attendance.descriptionLabel')}
+                    </TextComponent>
                     <TextComponent className='text-sm' numberOfLines={1}>
-                        {data?.description || 'No description'}
+                        {data?.description || t('attendance.noDescription')}
                     </TextComponent>
                 </View>
             </View>

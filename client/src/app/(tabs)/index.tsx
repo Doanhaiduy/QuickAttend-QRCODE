@@ -38,6 +38,7 @@ export default function HomeScreen() {
 
     const dispatch = useDispatch();
     const auth = useSelector(authSelector);
+
     useEffect(() => {
         checkTokenExpire();
     }, []);

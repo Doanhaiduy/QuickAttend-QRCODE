@@ -6,6 +6,8 @@ import { router } from 'expo-router';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import TextComponent from './TextComponent';
+import { useTranslation } from 'react-i18next';
+// import { vi } from 'date-fns/locale';
 
 interface Data {
     _id: string;

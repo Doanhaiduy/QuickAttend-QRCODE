@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, Image, Platform, Pressable, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -16,12 +17,13 @@ export default function ProfileScreen() {
 
     const auth = useSelector(authSelector);
     const dispatch = useDispatch();
+    const { t } = useTranslation();
 
     const pickImage = async () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
         if (permissionResult.granted === false) {
-            alert('Permission to access camera roll is required!');
+            alert(t('profile.cameraPermissionAlert'));
             return;
         }
 
@@ -63,14 +65,13 @@ export default function ProfileScreen() {
                 const newAuthData = { ...auth, imageURL: res?.data?.imageURL };
                 await AsyncStorage.setItem('auth', JSON.stringify(newAuthData));
                 dispatch(setAuthData(newAuthData));
-                Alert.alert('Success', 'Update avatar successfully');
+                Alert.alert('Success', t('profile.successAlertMessage'));
                 setIsLoading(false);
             } catch (err) {
                 console.log(err);
                 setIsLoading(false);
             }
         } else {
-            console.log('No image selected');
             setIsLoading(false);
         }
     };
@@ -105,7 +106,7 @@ export default function ProfileScreen() {
                 <ButtonComponent
                     type='primary'
                     size='large'
-                    title='Edit profile'
+                    title={t('profile.editProfileButton')}
                     onPress={() => {
                         router.push({
                             pathname: '/profile/editProfile',
@@ -114,12 +115,19 @@ export default function ProfileScreen() {
                 />
             </SectionComponent>
             <SectionComponent>
-                <TouchableOpacity className='flex-row flex-1 justify-between py-3 items-center border-b-[0.5px] border-gray-100'>
+                <TouchableOpacity
+                    className='flex-row flex-1 justify-between py-3 items-center border-b-[0.5px] border-gray-100'
+                    onPress={() => {
+                        router.push({
+                            pathname: '/profile/language',
+                        });
+                    }}
+                >
                     <View className='flex-row items-center gap-4'>
                         <View className='justify-center items-center p-4 bg-gray-500/10 rounded-full'>
-                            <Ionicons name='person' size={20} color='black' />
+                            <Ionicons name='language' size={20} color='black' />
                         </View>
-                        <TextComponent className='text-base font-inter700'>My Profile</TextComponent>
+                        <TextComponent className='text-base font-inter700'>{t('profile.languageButton')}</TextComponent>
                     </View>
                     <Ionicons name='chevron-forward' size={24} color='black' />
                 </TouchableOpacity>
@@ -128,7 +136,7 @@ export default function ProfileScreen() {
                         <View className='justify-center items-center p-4 bg-gray-500/10 rounded-full'>
                             <Ionicons name='settings' size={20} color='black' />
                         </View>
-                        <TextComponent className='text-base font-inter700'>Setting</TextComponent>
+                        <TextComponent className='text-base font-inter700'>{t('profile.settingsButton')}</TextComponent>
                     </View>
                     <Ionicons name='chevron-forward' size={24} color='black' />
                 </TouchableOpacity>
@@ -137,7 +145,9 @@ export default function ProfileScreen() {
                         <View className='justify-center items-center p-4 bg-gray-500/10 rounded-full'>
                             <Ionicons name='help-circle' size={20} color='black' />
                         </View>
-                        <TextComponent className='text-base font-inter700'>Terms & Conditions</TextComponent>
+                        <TextComponent className='text-base font-inter700'>
+                            {t('profile.termsAndConditionsButton')}
+                        </TextComponent>
                     </View>
                     <Ionicons name='chevron-forward' size={20} color='black' />
                 </TouchableOpacity>
@@ -146,7 +156,9 @@ export default function ProfileScreen() {
                         <View className='justify-center items-center p-4 bg-gray-500/10 rounded-full'>
                             <Ionicons name='shield-checkmark' size={20} color='black' />
                         </View>
-                        <TextComponent className='text-base font-inter700'>Privacy Policy</TextComponent>
+                        <TextComponent className='text-base font-inter700'>
+                            {t('profile.privacyPolicyButton')}
+                        </TextComponent>
                     </View>
                     <Ionicons name='chevron-forward' size={24} color='black' />
                 </TouchableOpacity>
@@ -158,12 +170,12 @@ export default function ProfileScreen() {
                         <View className='justify-center items-center p-4 bg-error2/10 rounded-full'>
                             <Ionicons name='log-out' size={20} color={appColors.error2} />
                         </View>
-                        <TextComponent className='text-base font-inter700'>Log out</TextComponent>
+                        <TextComponent className='text-base font-inter700'>{t('profile.logoutButton')}</TextComponent>
                     </View>
                     <Ionicons name='chevron-forward' size={24} color='black' />
                 </TouchableOpacity>
             </SectionComponent>
-            <LoadingModal visible={isLoading} message='Uploading...' />
+            <LoadingModal visible={isLoading} message={t('profile.uploadingMessage')} />
         </ContainerComponent>
     );
 }
