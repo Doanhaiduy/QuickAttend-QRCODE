@@ -1,5 +1,4 @@
-import { Alert, Button, Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import attendanceAPI from '@apis/attendanceApi';
 import {
     ButtonComponent,
     ContainerComponent,
@@ -7,22 +6,22 @@ import {
     SectionComponent,
     SpaceComponent,
     TextComponent,
-} from '@/components';
-import { CameraView, useCameraPermissions } from 'expo-camera';
+} from '@components/index';
+import { appColors } from '@constants/appColors';
 import { Ionicons } from '@expo/vector-icons';
+import { decryptData, sleep } from '@helpers/index';
+import LoadingModal from '@modals/LoadingModal';
+import { authSelector } from '@redux/reducers/authReducer';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { router, useLocalSearchParams } from 'expo-router';
-import { appColors } from '@/constants/appColors';
-import { Portal } from 'react-native-portalize';
+import React, { useEffect, useState } from 'react';
+import { Alert, Image, Linking, StyleSheet, Text, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { decryptData, sleep } from '@/helpers';
-import attendanceAPI from '@/apis/attendanceApi';
+import { Portal } from 'react-native-portalize';
 import { useSelector } from 'react-redux';
-import { authSelector } from '@/redux/reducers/authReducer';
-import LoadingModal from '@/modals/LoadingModal';
-
+import axios from 'axios';
 import * as Location from 'expo-location';
 import { getDistance } from 'geolib';
-import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 
 export default function ScanQRScreen() {
@@ -269,7 +268,7 @@ export default function ScanQRScreen() {
                 >
                     <View className='flex-1 items-center justify-center'>
                         <Image
-                            source={require('@/assets/images/scanner-action.png')}
+                            source={require('@assets/images/scanner-action.png')}
                             style={{ width: 350, height: 350, alignSelf: 'center' }}
                         />
                     </View>

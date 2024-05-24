@@ -67,7 +67,8 @@
         "login": "Đăng nhập",
         "emailAlreadyExists": "Email đã tồn tại",
         "pleaseAgreeToTerms": "Vui lòng đồng ý với các điều khoản",
-        "registering": "Đang đăng ký..."
+        "registering": "Đang đăng ký...",
+        "registerSuccess": "Đăng ký thành công"
     },
     "verification": {
         "enterVerificationCode": "Nhập mã xác minh",
@@ -76,6 +77,7 @@
         "resend": "Gửi lại",
         "verify": "Xác minh",
         "registerSuccess": "Đăng ký thành công",
+        "verificationSuccess": "Xác minh thành công",
         "invalidCode": "Mã không hợp lệ",
         "somethingWentWrong": "Đã có vấn đề gì xảy ra"
     },
@@ -243,7 +245,7 @@
     },
     "notification": {
         "title": "Bạn đã cập nhật ảnh đại diện",
-        "description": "Bạn vừa cập nhật ảnh đại diện của mình",
+        "description": "Bạn vừa cập nhật ảnh đại diện của mình thành công, nhấn để xem",
         "justNow": "Vừa xong"
     },
     "modalWelcome": {

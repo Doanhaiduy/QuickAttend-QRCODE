@@ -1,14 +1,12 @@
-import { appColors } from '@/constants/appColors';
-import { checkTimeStatus } from '@/helpers';
+import { appColors } from '@constants/appColors';
 import { MaterialIcons } from '@expo/vector-icons';
+import { checkTimeStatus } from '@helpers/index';
+import getDateFnsLocale from '@utils/dateFns';
 import { format } from 'date-fns';
 import { router } from 'expo-router';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import TextComponent from './TextComponent';
-import { useTranslation } from 'react-i18next';
-import getDateFnsLocale from '@/utils/dateFns';
-// import { vi } from 'date-fns/locale';
 
 interface Data {
     _id: string;

@@ -1,9 +1,9 @@
-import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import { appColors } from '@constants/appColors';
 import { Ionicons } from '@expo/vector-icons';
-import { appColors } from '@/constants/appColors';
-import TextComponent from './TextComponent';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import TextComponent from './TextComponent';
 
 interface Props {
     type: 'Auth' | 'Event' | 'Profile';

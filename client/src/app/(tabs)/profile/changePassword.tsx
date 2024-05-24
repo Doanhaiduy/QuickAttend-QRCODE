@@ -1,16 +1,22 @@
-import { Alert, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
-import { ButtonComponent, ContainerComponent, InputComponent, SectionComponent, TextComponent } from '@/components';
-import { schemasCustom } from '@/utils/zod';
-import { z } from 'zod';
+import authenticationAPI from '@apis/authApi';
+import {
+    ButtonComponent,
+    ContainerComponent,
+    InputComponent,
+    SectionComponent,
+    TextComponent,
+} from '@components/index';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import LoadingModal from '@modals/LoadingModal';
+import { authSelector } from '@redux/reducers/authReducer';
+import { schemasCustom } from '@utils/zod';
 import { router } from 'expo-router';
+import React from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import authenticationAPI from '@/apis/authApi';
+import { Alert, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
-import { authSelector } from '@/redux/reducers/authReducer';
-import LoadingModal from '@/modals/LoadingModal';
+import { z } from 'zod';
 
 const schema = z
     .object({

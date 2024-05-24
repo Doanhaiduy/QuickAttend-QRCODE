@@ -1,10 +1,10 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import TextComponent from './TextComponent';
-import userAPI from '@/apis/userApi';
+import userAPI from '@apis/userApi';
+import getDateFnsLocale from '@utils/dateFns';
 import { format } from 'date-fns';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import getDateFnsLocale from '@/utils/dateFns';
+import { Image, StyleSheet, View } from 'react-native';
+import TextComponent from './TextComponent';
 
 interface Data {
     attendanceTime: string;

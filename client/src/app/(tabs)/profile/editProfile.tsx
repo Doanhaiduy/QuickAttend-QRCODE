@@ -1,10 +1,16 @@
-import userAPI from '@/apis/userApi';
-import { ButtonComponent, ContainerComponent, InputComponent, SectionComponent, TextComponent } from '@/components';
-import LoadingModal from '@/modals/LoadingModal';
-import { authSelector, setAuthData } from '@/redux/reducers/authReducer';
-import { schemasCustom } from '@/utils/zod';
+import userAPI from '@apis/userApi';
+import {
+    ButtonComponent,
+    ContainerComponent,
+    InputComponent,
+    SectionComponent,
+    TextComponent,
+} from '@components/index';
 import { zodResolver } from '@hookform/resolvers/zod';
+import LoadingModal from '@modals/LoadingModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { authSelector, setAuthData } from '@redux/reducers/authReducer';
+import { schemasCustom } from '@utils/zod';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';

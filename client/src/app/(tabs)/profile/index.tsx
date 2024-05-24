@@ -1,10 +1,10 @@
-import userAPI from '@/apis/userApi';
-import { ButtonComponent, ContainerComponent, SectionComponent, TextComponent } from '@/components';
-import { appColors } from '@/constants/appColors';
-import LoadingModal from '@/modals/LoadingModal';
-import { authSelector, logout, setAuthData } from '@/redux/reducers/authReducer';
+import userAPI from '@apis/userApi';
+import { ButtonComponent, ContainerComponent, SectionComponent, TextComponent } from '@components/index';
+import { appColors } from '@constants/appColors';
 import { Feather, Ionicons } from '@expo/vector-icons';
+import LoadingModal from '@modals/LoadingModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { authSelector, logout, setAuthData } from '@redux/reducers/authReducer';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 import { useState } from 'react';

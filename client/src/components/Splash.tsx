@@ -1,10 +1,10 @@
-import { ActivityIndicator, ImageBackground, StyleSheet, View } from 'react-native';
 import React from 'react';
+import { ActivityIndicator, ImageBackground, StyleSheet, View } from 'react-native';
 
 export default function Splash() {
     return (
         <ImageBackground
-            source={require('../assets/images/splash.png')}
+            source={require('@assets/images/splash.png')}
             resizeMode='cover'
             className='flex-1 justify-center items-center'
         >

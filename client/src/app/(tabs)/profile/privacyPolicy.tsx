@@ -1,7 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { ContainerComponent, SectionComponent, TextComponent } from '@components/index';
 import React from 'react';
-import { ContainerComponent, SectionComponent, TextComponent } from '@/components';
 import { useTranslation } from 'react-i18next';
+import { StyleSheet } from 'react-native';
 
 export default function PrivacyPolicyScreen() {
     const { t } = useTranslation();

@@ -1,5 +1,5 @@
-import { StyleSheet, Text } from 'react-native';
 import React from 'react';
+import { StyleSheet, Text } from 'react-native';
 
 interface Props extends React.ComponentProps<typeof Text> {
     children: React.ReactNode;

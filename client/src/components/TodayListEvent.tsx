@@ -1,11 +1,11 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import eventAPI from '@apis/eventApi';
+import { authSelector } from '@redux/reducers/authReducer';
 import React, { useEffect, useState } from 'react';
-import TextComponent from './TextComponent';
-import EventCard from './EventCard';
-import eventAPI from '@/apis/eventApi';
-import { useSelector } from 'react-redux';
-import { authSelector } from '@/redux/reducers/authReducer';
 import { useTranslation } from 'react-i18next';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import EventCard from './EventCard';
+import TextComponent from './TextComponent';
 
 export default function TodayListEvent(props: { date: string }) {
     const [data, setData] = useState<any[]>([]);

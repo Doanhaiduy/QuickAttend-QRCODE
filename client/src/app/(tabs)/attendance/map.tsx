@@ -1,15 +1,15 @@
-import { ButtonComponent, ContainerComponent, SearchComponent, SectionComponent } from '@/components';
+import { ButtonComponent, ContainerComponent, SearchComponent, SectionComponent } from '@components/index';
 import * as Location from 'expo-location';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Alert, Image, Linking, Platform, StyleSheet, Text, View } from 'react-native';
+import { Alert, Image, Linking, Platform, StyleSheet, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-
-import Geocoder from 'react-native-geocoding';
-import LoadingModal from '@/modals/LoadingModal';
-import { useSelector } from 'react-redux';
-import { authSelector } from '@/redux/reducers/authReducer';
+import LoadingModal from '@modals/LoadingModal';
+import { authSelector } from '@redux/reducers/authReducer';
 import { useTranslation } from 'react-i18next';
+import Geocoder from 'react-native-geocoding';
+import { useSelector } from 'react-redux';
+
 Geocoder.init(process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY!, { language: 'en' });
 
 export default function MapScreen() {
@@ -171,7 +171,6 @@ export default function MapScreen() {
                                 latitude: location?.lat || 0,
                                 longitude: location?.long || 0,
                             }}
-                            // image={require('../../../assets/images/avatar.jpg')}
                             title={auth.fullName || t('map.you')}
                             description={t('map.youAreHere')}
                             draggable

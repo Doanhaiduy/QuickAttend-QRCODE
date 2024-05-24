@@ -1,4 +1,4 @@
-import { Regex } from '@/helpers';
+import { Regex } from '@helpers/index';
 import { z } from 'zod';
 
 type passwordType = 'Login' | 'SignUp';

@@ -1,8 +1,8 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import React, { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { appColors } from '../constants/appColors';
 import clsx from 'clsx';
+import React, { useState } from 'react';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { appColors } from '../constants/appColors';
 import TextComponent from './TextComponent';
 
 interface Props {

@@ -67,7 +67,8 @@
         "login": "Login",
         "emailAlreadyExists": "Email already exists",
         "pleaseAgreeToTerms": "Please agree to the terms and conditions",
-        "registering": "Registering..."
+        "registering": "Registering...",
+        "registerSuccess": "Register successfully"
     },
     "verification": {
         "enterVerificationCode": "Enter Verification Code",
@@ -76,6 +77,7 @@
         "resend": "Resend",
         "verify": "Verify",
         "registerSuccess": "Register successfully",
+        "verificationSuccess": "Verification successfully",
         "invalidCode": "Invalid code",
         "somethingWentWrong": "Something went wrong"
     },

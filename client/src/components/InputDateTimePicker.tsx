@@ -1,10 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import { appColors } from '@constants/appColors';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import TextComponent from './TextComponent';
+import getDateFnsLocale from '@utils/dateFns';
 import { format } from 'date-fns';
-import { appColors } from '@/constants/appColors';
-import getDateFnsLocale from '@/utils/dateFns';
+import React, { useState } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import TextComponent from './TextComponent';
 
 interface Props {
     type: 'date' | 'time';

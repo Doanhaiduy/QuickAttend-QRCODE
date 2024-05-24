@@ -1,5 +1,5 @@
-import * as dateFnsLocales from 'date-fns/locale';
 import { Locale } from 'date-fns';
+import * as dateFnsLocales from 'date-fns/locale';
 
 import i18n from './i18n';
 

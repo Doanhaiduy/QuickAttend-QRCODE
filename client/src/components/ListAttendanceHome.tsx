@@ -1,8 +1,8 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import MyAttendanceCard from './MyAttendanceCard';
 import TextComponent from './TextComponent';
-import { useTranslation } from 'react-i18next';
 
 export default function ListAttendanceHome(props: { data: any[] }) {
     const { data } = props;

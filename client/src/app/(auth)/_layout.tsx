@@ -1,5 +1,5 @@
-import { authSelector, setAuthData } from '@/redux/reducers/authReducer';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import { authSelector, setAuthData } from '@redux/reducers/authReducer';
 import { Redirect, Stack } from 'expo-router';
 import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';

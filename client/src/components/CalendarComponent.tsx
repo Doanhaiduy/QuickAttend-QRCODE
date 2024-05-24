@@ -1,9 +1,9 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { generateWeekDates } from '@helpers/index';
 import React, { useEffect, useRef } from 'react';
-import TextComponent from './TextComponent';
-import SpaceComponent from './SpaceComponent';
-import { generateWeekDates } from '@/helpers';
 import { useTranslation } from 'react-i18next';
+import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import SpaceComponent from './SpaceComponent';
+import TextComponent from './TextComponent';
 
 export default function CalendarComponent(props: { onDatePress?: (date: string) => void; date: string }) {
     const { onDatePress, date } = props;

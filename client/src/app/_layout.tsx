@@ -1,17 +1,17 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import '@utils/i18n';
+import i18next from '@utils/i18n';
 import { useFonts } from 'expo-font';
 import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Host } from 'react-native-portalize';
 import 'react-native-reanimated';
 import { Provider } from 'react-redux';
 import Splash from '../components/Splash';
 import store from '../redux/store';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Host } from 'react-native-portalize';
-import '@utils/i18n';
-import i18next from '@utils/i18n';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export { ErrorBoundary } from 'expo-router';
 

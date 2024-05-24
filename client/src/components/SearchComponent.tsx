@@ -1,12 +1,12 @@
-import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import InputComponent from './InputComponent';
+import useDebounce from '@/hooks/useDebounce';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
-import useDebounce from '@/hooks/useDebounce';
-import ButtonComponent from './ButtonComponent';
-import SectionComponent from './SectionComponent';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import ButtonComponent from './ButtonComponent';
+import InputComponent from './InputComponent';
+import SectionComponent from './SectionComponent';
 
 interface Props {
     handleChooseLocation: (val: string) => void;

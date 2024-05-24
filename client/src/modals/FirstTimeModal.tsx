@@ -1,8 +1,7 @@
-import { ButtonComponent, SpaceComponent, TextComponent } from '@/components';
-import { appColors } from '@/constants/appColors';
+import { ButtonComponent, SpaceComponent, TextComponent } from '@components/index';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Image, Modal, StyleSheet, View } from 'react-native';
+import { Image, Modal, StyleSheet, View } from 'react-native';
 interface Props {
     visible: boolean;
     onClose: () => void;

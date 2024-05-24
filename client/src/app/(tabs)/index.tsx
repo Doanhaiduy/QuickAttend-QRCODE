@@ -1,22 +1,21 @@
-import attendanceAPI from '@/apis/attendanceApi';
+import attendanceAPI from '@apis/attendanceApi';
 import {
     CalendarComponent,
     ContainerComponent,
-    EventCard,
     ListAttendanceHome,
-    MyAttendanceCard,
     SectionComponent,
     SpaceComponent,
     TextComponent,
     TodayListEvent,
-} from '@/components';
-import FirstTimeModal from '@/modals/FirstTimeModal';
-import { authSelector, logout } from '@/redux/reducers/authReducer';
-import { Ionicons, Octicons } from '@expo/vector-icons';
+} from '@components/index';
+import { appColors } from '@constants/appColors';
+import { Ionicons } from '@expo/vector-icons';
+import FirstTimeModal from '@modals/FirstTimeModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { authSelector, logout } from '@redux/reducers/authReducer';
 import { router } from 'expo-router';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { FlatList, Image, Pressable, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Image, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 const saveModalState = async () => {
@@ -100,10 +99,15 @@ export default function HomeScreen() {
                         <TextComponent>@{auth.username}</TextComponent>
                     </View>
                 </View>
-                <View>
-                    <Pressable>
-                        <Octicons name='diff-added' size={24} color='black' />
-                    </Pressable>
+                <View className='self-start'>
+                    <TouchableOpacity
+                        className='p-2 bg-primary-500/10 rounded-full'
+                        onPress={() => {
+                            router.navigate('/notification');
+                        }}
+                    >
+                        <Ionicons name='notifications-outline' size={24} color={appColors.primary} />
+                    </TouchableOpacity>
                 </View>
             </SectionComponent>
             <SectionComponent>

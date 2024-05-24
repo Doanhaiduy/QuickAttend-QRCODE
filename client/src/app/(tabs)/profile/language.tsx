@@ -1,22 +1,21 @@
-import { FlatList, StyleSheet } from 'react-native';
+import { ButtonComponent, ContainerComponent, LanguageItem, SectionComponent } from '@components/index';
 import React, { useEffect, useState } from 'react';
-import { ButtonComponent, ContainerComponent, LanguageItem, SectionComponent } from '@/components';
-// import { handleChangeLanguage, i18n } from '@/utils/i18n';
+import { FlatList, StyleSheet } from 'react-native';
+import { sleep } from '@helpers/index';
+import LoadingModal from '@modals/LoadingModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useTranslation } from 'react-i18next';
-import { sleep } from '@/helpers';
 import { router } from 'expo-router';
-import LoadingModal from '@/modals/LoadingModal';
+import { useTranslation } from 'react-i18next';
 const language = [
     {
         id: 'vi',
         name: 'Vietnamese (VI)',
-        image: require('@/assets/images/language-vi.png'),
+        image: require('@assets/images/language-vi.png'),
     },
     {
         id: 'en',
         name: 'English (EN)',
-        image: require('@/assets/images/language-en.png'),
+        image: require('@assets/images/language-en.png'),
     },
 ];
 

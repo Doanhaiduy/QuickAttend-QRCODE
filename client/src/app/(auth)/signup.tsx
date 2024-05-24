@@ -1,4 +1,4 @@
-import authenticationAPI from '@/apis/authApi';
+import authenticationAPI from '@apis/authApi';
 import {
     ButtonComponent,
     ContainerComponent,
@@ -6,11 +6,11 @@ import {
     SectionComponent,
     SpaceComponent,
     TextComponent,
-} from '@/components';
-import LoadingModal from '@/modals/LoadingModal';
-import { schemasCustom } from '@/utils/zod';
+} from '@components/index';
 import { Ionicons } from '@expo/vector-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
+import LoadingModal from '@modals/LoadingModal';
+import { schemasCustom } from '@utils/zod';
 import Checkbox from 'expo-checkbox';
 import { Link, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -95,7 +95,7 @@ export default function SignUpScreen() {
             <KeyboardAwareScrollView>
                 <StatusBar style='dark' />
                 <SectionComponent>
-                    <Image source={require('../../assets/images/logo.png')} className='w-[80px] h-[80px]' />
+                    <Image source={require('@assets/images/logo.png')} className='w-[80px] h-[80px]' />
                     <SpaceComponent height={20} />
                     <TextComponent className='text-[28px] font-inter700'>{t('signUp.registerAccount')}</TextComponent>
                     <TextComponent className='text-[28px] font-inter700'>

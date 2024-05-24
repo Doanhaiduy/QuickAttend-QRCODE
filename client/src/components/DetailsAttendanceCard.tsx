@@ -1,10 +1,9 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
-import TextComponent from './TextComponent';
 import { format, formatDistanceToNow } from 'date-fns';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import getDateFnsLocale from '@/utils/dateFns';
+import { Pressable, StyleSheet, View } from 'react-native';
+import TextComponent from './TextComponent';
+import getDateFnsLocale from '@utils/dateFns';
 interface Data {
     title: string;
     startAt: string;

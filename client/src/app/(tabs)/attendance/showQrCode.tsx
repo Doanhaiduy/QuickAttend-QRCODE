@@ -1,7 +1,7 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
-import { ButtonComponent, ContainerComponent, SectionComponent, SpaceComponent } from '@/components';
+import { ButtonComponent, ContainerComponent, SectionComponent, SpaceComponent } from '@components/index';
 import { router, useLocalSearchParams } from 'expo-router';
+import React from 'react';
+import { Image, StyleSheet } from 'react-native';
 
 export default function ShowQrCodeScreen() {
     const { QrCode } = useLocalSearchParams();

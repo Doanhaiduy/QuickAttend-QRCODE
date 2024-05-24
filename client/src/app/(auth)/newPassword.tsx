@@ -1,16 +1,21 @@
 import React from 'react';
 import { Alert, Image, StyleSheet } from 'react-native';
-
-import { router, useLocalSearchParams } from 'expo-router';
-import { z } from 'zod';
+import authenticationAPI from '@apis/authApi';
+import {
+    ButtonComponent,
+    ContainerComponent,
+    InputComponent,
+    SectionComponent,
+    TextComponent,
+} from '@components/index';
 import { zodResolver } from '@hookform/resolvers/zod';
+import LoadingModal from '@modals/LoadingModal';
+import { schemasCustom } from '@utils/zod';
+import { router, useLocalSearchParams } from 'expo-router';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { schemasCustom } from '@/utils/zod';
-import { ButtonComponent, ContainerComponent, InputComponent, SectionComponent, TextComponent } from '@/components';
-import LoadingModal from '@/modals/LoadingModal';
-import authenticationAPI from '@/apis/authApi';
 import { useTranslation } from 'react-i18next';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { z } from 'zod';
 
 const schema = z
     .object({
@@ -69,7 +74,7 @@ export default function NewPasswordScreen() {
                     </TextComponent>
                 </SectionComponent>
                 <SectionComponent className='w-[100%] h-[240px]'>
-                    <Image source={require('../../assets/images/new-password.png')} className='w-full h-full' />
+                    <Image source={require('@assets/images/new-password.png')} className='w-full h-full' />
                 </SectionComponent>
                 <SectionComponent>
                     <Controller

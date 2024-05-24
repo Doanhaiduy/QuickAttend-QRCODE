@@ -1,9 +1,9 @@
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import enLang from '../locales/en.json';
 import viLang from '../locales/vi.json';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const resources = {
     en: {

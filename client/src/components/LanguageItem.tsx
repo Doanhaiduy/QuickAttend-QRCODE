@@ -1,8 +1,8 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { appColors } from '@constants/appColors';
+import { FontAwesome6 } from '@expo/vector-icons';
 import React from 'react';
-import { FontAwesome6, Ionicons } from '@expo/vector-icons';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import TextComponent from './TextComponent';
-import { appColors } from '@/constants/appColors';
 
 interface Props {
     name: string;

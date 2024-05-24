@@ -1,7 +1,7 @@
 import { Link, Stack } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
-import TextComponent from '../components/TextComponent';
 import { useTranslation } from 'react-i18next';
+import { StyleSheet, View } from 'react-native';
+import TextComponent from '../components/TextComponent';
 
 export default function NotFoundScreen() {
     const { t } = useTranslation();

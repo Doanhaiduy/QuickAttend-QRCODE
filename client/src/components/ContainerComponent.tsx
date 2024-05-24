@@ -1,3 +1,4 @@
+import { appColors } from '@constants/appColors';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
@@ -14,7 +15,6 @@ import {
     ViewStyle,
 } from 'react-native';
 import TextComponent from './TextComponent';
-import { appColors } from '@/constants/appColors';
 
 interface Props extends React.ComponentProps<typeof View> {
     children: React.ReactNode;

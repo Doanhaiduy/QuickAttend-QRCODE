@@ -1,9 +1,9 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import attendanceAPI from '@apis/attendanceApi';
+import { AttendancePersonItem, ContainerComponent, SectionComponent, SpaceComponent } from '@components/index';
 import { useLocalSearchParams } from 'expo-router';
-import { AttendancePersonItem, ContainerComponent, SectionComponent, SpaceComponent } from '@/components';
-import attendanceAPI from '@/apis/attendanceApi';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 export default function ListScreen() {
     const { id } = useLocalSearchParams();

@@ -1,8 +1,8 @@
-import { ContainerComponent, TextComponent } from '@/components';
-import { appColors } from '@/constants/appColors';
-import { appInfos } from '@/constants/appInfos';
-import { authSelector, setAuthData } from '@/redux/reducers/authReducer';
+import { ContainerComponent, TextComponent } from '@components/index';
+import { appColors } from '@constants/appColors';
+import { appInfos } from '@constants/appInfos';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { authSelector, setAuthData } from '@redux/reducers/authReducer';
 import { Redirect, router } from 'expo-router';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -53,7 +53,7 @@ export default function OnBoardingScreen() {
                     activeDotColor={appColors.primary}
                 >
                     <Image
-                        source={require('../assets/images/onboarding-1.png')}
+                        source={require('@assets/images/onboarding-1.png')}
                         style={{
                             flex: 1,
                             width: appInfos.sizes.WIDTH,
@@ -62,7 +62,7 @@ export default function OnBoardingScreen() {
                         }}
                     />
                     <Image
-                        source={require('../assets/images/onboarding-2.png')}
+                        source={require('@assets/images/onboarding-2.png')}
                         style={{
                             flex: 1,
                             width: appInfos.sizes.WIDTH,
@@ -71,7 +71,7 @@ export default function OnBoardingScreen() {
                         }}
                     />
                     <Image
-                        source={require('../assets/images/onboarding-3.png')}
+                        source={require('@assets/images/onboarding-3.png')}
                         style={{
                             flex: 1,
                             width: appInfos.sizes.WIDTH,

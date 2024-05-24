@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import TextComponent from './TextComponent';
 import { useTranslation } from 'react-i18next';
+import { StyleSheet, View } from 'react-native';
+import TextComponent from './TextComponent';
 
 interface Props {
     type: 'Total' | 'Upcoming' | 'Ongoing' | 'Expired';

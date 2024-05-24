@@ -1,12 +1,11 @@
-import { appColors } from '@/constants/appColors';
+import eventAPI from '@apis/eventApi';
+import { appColors } from '@constants/appColors';
 import { Ionicons } from '@expo/vector-icons';
+import getDateFnsLocale from '@utils/dateFns';
+import { format } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import TextComponent from './TextComponent';
-import { format } from 'date-fns';
-import eventAPI from '@/apis/eventApi';
-import { router } from 'expo-router';
-import getDateFnsLocale from '@/utils/dateFns';
 
 interface Data {
     _id: string;

@@ -1,6 +1,6 @@
-import { authSelector } from '@/redux/reducers/authReducer';
 import { Fontisto, Ionicons } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { authSelector } from '@redux/reducers/authReducer';
 import { Redirect, Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';

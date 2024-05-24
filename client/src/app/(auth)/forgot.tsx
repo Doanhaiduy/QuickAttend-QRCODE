@@ -1,7 +1,4 @@
-import React from 'react';
-import { Image, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Regex } from '@/helpers';
+import authenticationAPI from '@apis/authApi';
 import {
     ButtonComponent,
     ContainerComponent,
@@ -9,10 +6,13 @@ import {
     SectionComponent,
     SpaceComponent,
     TextComponent,
-} from '@/components';
-import authenticationAPI from '@/apis/authApi';
-import LoadingModal from '@/modals/LoadingModal';
+} from '@components/index';
+import { Regex } from '@helpers/index';
+import LoadingModal from '@modals/LoadingModal';
+import { useRouter } from 'expo-router';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Image, StyleSheet } from 'react-native';
 
 export default function ForgotScreen() {
     const [email, setEmail] = React.useState('haiduytbt2k3@gmail.com');
@@ -60,7 +60,7 @@ export default function ForgotScreen() {
                 </TextComponent>
             </SectionComponent>
             <SectionComponent className='w-[100%] h-[250px]'>
-                <Image source={require('../../assets/images/forgot.png')} className='w-full h-full' />
+                <Image source={require('@assets/images/forgot.png')} className='w-full h-full' />
             </SectionComponent>
             <SpaceComponent height={20} />
             <SectionComponent>

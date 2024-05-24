@@ -1,5 +1,4 @@
-import eventAPI from '@/apis/eventApi';
-import IEvent from '@/models/event';
+import eventAPI from '@apis/eventApi';
 import {
     ButtonComponent,
     ContainerComponent,
@@ -7,21 +6,22 @@ import {
     InputDateTimePicker,
     SectionComponent,
     TextComponent,
-} from '@/components';
-import { appColors } from '@/constants/appColors';
-import LoadingModal from '@/modals/LoadingModal';
-import { authSelector } from '@/redux/reducers/authReducer';
+} from '@components/index';
+import { appColors } from '@constants/appColors';
 import { Ionicons } from '@expo/vector-icons';
+import LoadingModal from '@modals/LoadingModal';
+import IEvent from '@models/event';
+import { authSelector } from '@redux/reducers/authReducer';
 import axios from 'axios';
 import { format } from 'date-fns-tz';
 import Checkbox from 'expo-checkbox';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Alert, KeyboardAvoidingView, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { Alert, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useSelector } from 'react-redux';
 
 export default function CreateEventScreen() {
     const {

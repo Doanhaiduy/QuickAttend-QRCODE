@@ -1,17 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Link } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { Alert, Image, StyleSheet } from 'react-native';
-import { z } from 'zod';
-
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-
-import { useDispatch } from 'react-redux';
-import { schemasCustom } from '@/utils/zod';
-import authenticationAPI from '@/apis/authApi';
-import { setAuthData } from '@/redux/reducers/authReducer';
+import authenticationAPI from '@apis/authApi';
 import {
     ButtonComponent,
     ContainerComponent,
@@ -19,10 +6,21 @@ import {
     SectionComponent,
     SpaceComponent,
     TextComponent,
-} from '@/components';
-import LoadingModal from '@/modals/LoadingModal';
+} from '@components/index';
+import { Ionicons } from '@expo/vector-icons';
+import { zodResolver } from '@hookform/resolvers/zod';
+import LoadingModal from '@modals/LoadingModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setAuthData } from '@redux/reducers/authReducer';
+import { schemasCustom } from '@utils/zod';
+import { Link } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Alert, Image, StyleSheet } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { z } from 'zod';
 
 const schema = z.object({
     email: schemasCustom.email,
@@ -57,7 +55,7 @@ export default function LoginScreen() {
             dispatch(setAuthData(res.data));
             await AsyncStorage.setItem('auth', JSON.stringify(res.data));
             // await AsyncStorage.setItem('IsFirstTime', 'false');
-            Alert.alert('Success', t('successLogin'));
+            Alert.alert('Success', t('login.successLogin'));
             setIsLoading(false);
         } catch (error: any) {
             setIsLoading(false);
@@ -72,7 +70,7 @@ export default function LoginScreen() {
         <ContainerComponent isAuth isScroll>
             <StatusBar style='dark' />
             <SectionComponent>
-                <Image source={require('../../assets/images/logo.png')} className='w-[80px] h-[80px]' />
+                <Image source={require('@assets/images/logo.png')} className='w-[80px] h-[80px]' />
                 <SpaceComponent height={20} />
                 <TextComponent className='text-[28px] max-w-[80%] font-inter700'>
                     {t('login.welcomeBack')}{' '}

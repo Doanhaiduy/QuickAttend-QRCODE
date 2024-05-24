@@ -1,23 +1,26 @@
-import authenticationAPI from '@/apis/authApi';
-import { ButtonComponent, ContainerComponent, SectionComponent, SpaceComponent, TextComponent } from '@/components';
-import { appColors } from '@/constants/appColors';
-import LoadingModal from '@/modals/LoadingModal';
-import { setAuthData } from '@/redux/reducers/authReducer';
+import authenticationAPI from '@apis/authApi';
+import {
+    ButtonComponent,
+    ContainerComponent,
+    SectionComponent,
+    SpaceComponent,
+    TextComponent,
+} from '@components/index';
+import { appColors } from '@constants/appColors';
+import LoadingModal from '@modals/LoadingModal';
 import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, Image, Pressable, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { OtpInput } from 'react-native-otp-entry';
-import { useDispatch } from 'react-redux';
-import { set } from 'zod';
+
 export default function VerificationScreen() {
     const { fullName, email, password, code, type } = useLocalSearchParams();
     const [otp, setOtp] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
     const [error, setError] = React.useState('');
 
-    const dispatch = useDispatch();
     const { t } = useTranslation();
 
     const handleVerify = async (inputCode: string) => {
@@ -36,8 +39,6 @@ export default function VerificationScreen() {
                     { fullName, email, password },
                     'post'
                 );
-                console.log(res);
-                dispatch(setAuthData(res.data));
                 setIsLoading(false);
                 Alert.alert('Success', t('verification.registerSuccess'));
             }
@@ -49,6 +50,7 @@ export default function VerificationScreen() {
                         email,
                     },
                 });
+                Alert.alert('Success', t('verification.verificationSuccess'));
             }
         } catch (error) {
             setError(t('verification.somethingWentWrong'));
@@ -68,7 +70,7 @@ export default function VerificationScreen() {
                     </TextComponent>
                 </SectionComponent>
                 <SectionComponent className='w-[100%] h-[250px]'>
-                    <Image source={require('../../assets/images/verification.png')} className='w-full h-full' />
+                    <Image source={require('@assets/images/verification.png')} className='w-full h-full' />
                 </SectionComponent>
                 <SpaceComponent height={20} />
                 <SectionComponent>

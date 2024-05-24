@@ -1,5 +1,6 @@
-import attendanceAPI from '@/apis/attendanceApi';
-import eventAPI from '@/apis/eventApi';
+import { TimeStatus } from '@/types/Auth';
+import attendanceAPI from '@apis/attendanceApi';
+import eventAPI from '@apis/eventApi';
 import {
     ButtonComponent,
     ContainerComponent,
@@ -9,12 +10,11 @@ import {
     SpaceComponent,
     StatisticalCard,
     TextComponent,
-} from '@/components';
-import { appColors } from '@/constants/appColors';
-import { checkTimeStatus } from '@/helpers';
-import { authSelector } from '@/redux/reducers/authReducer';
-import { TimeStatus } from '@/types/Auth';
+} from '@components/index';
+import { appColors } from '@constants/appColors';
 import { FontAwesome, Ionicons, Octicons } from '@expo/vector-icons';
+import { checkTimeStatus } from '@helpers/index';
+import { authSelector } from '@redux/reducers/authReducer';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';

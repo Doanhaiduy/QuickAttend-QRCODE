@@ -1,14 +1,20 @@
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { ButtonComponent, ContainerComponent, SectionComponent, SpaceComponent, TextComponent } from '@/components';
-import { router, useLocalSearchParams } from 'expo-router';
+import eventAPI from '@apis/eventApi';
+import {
+    ButtonComponent,
+    ContainerComponent,
+    SectionComponent,
+    SpaceComponent,
+    TextComponent,
+} from '@components/index';
 import { Ionicons } from '@expo/vector-icons';
-import eventAPI from '@/apis/eventApi';
-import IEvent from '@/models/event';
+import { checkTimeStatus } from '@helpers/index';
+import IEvent from '@models/event';
+import getDateFnsLocale from '@utils/dateFns';
 import { format } from 'date-fns';
-import { checkTimeStatus } from '@/helpers';
+import { router, useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import getDateFnsLocale from '@/utils/dateFns';
+import { StyleSheet, View } from 'react-native';
 
 export default function EventDetails() {
     const { eventId, id } = useLocalSearchParams();
@@ -29,6 +35,21 @@ export default function EventDetails() {
         };
         fetchEvent();
     }, [eventId]);
+
+    const getType = () => {
+        const type = checkTimeStatus(new Date(event?.startAt ?? new Date()), new Date(event?.endAt ?? new Date()));
+        switch (type) {
+            case 'Upcoming':
+                return t('attendance.upcomingButtonTitle');
+            case 'Ongoing':
+                return t('attendance.ongoingButtonTitle');
+            case 'Expired':
+                return t('attendance.expiredButtonTitle');
+            default:
+                return '';
+        }
+    };
+
     return (
         <ContainerComponent back isScroll title={`${t('detailsEvent.eventDetailsTitle')} ${id}`}>
             <SectionComponent className=''>
@@ -74,9 +95,7 @@ export default function EventDetails() {
                     <TextComponent className='text-[12px] text-grayText mb-[2px]'>
                         {t('detailsEvent.status')}
                     </TextComponent>
-                    <TextComponent className='text-base text-blackText'>
-                        {checkTimeStatus(new Date(event?.startAt ?? new Date()), new Date(event?.endAt ?? new Date()))}
-                    </TextComponent>
+                    <TextComponent className='text-base text-blackText'>{getType()}</TextComponent>
                 </View>
                 <View className='py-3 pb-1 border-b-[0.5px] border-gray-200'>
                     <TextComponent className='text-[12px] text-grayText mb-[2px]'>
