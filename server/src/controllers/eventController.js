@@ -9,8 +9,8 @@ const handleCreateQrCode = async (data) => {
         try {
             const jsonData = JSON.stringify(data);
             const encryptedData = encryptData(jsonData, process.env.ENCRYPT_KEY);
-            const decryptedData = decryptData(encryptedData, process.env.ENCRYPT_KEY);
-            console.log('Decrypted data:', decryptedData);
+            // const decryptedData = decryptData(encryptedData, process.env.ENCRYPT_KEY);
+            // console.log('Decrypted data:', decryptedData);
             let qr = await QRCode.toDataURL(
                 JSON.stringify({ data: encryptedData, message: 'https://doanhaiduy.website' }),
                 {
